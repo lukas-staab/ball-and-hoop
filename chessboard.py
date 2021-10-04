@@ -18,10 +18,10 @@ def calibrate_chessboard(dir_path, image_format, square_size, width, height):
     objpoints = []  # 3d point in real world space
     imgpoints = []  # 2d points in image plane.
 
-    images = pathlib.Path(dir_path).glob(f'*.{image_format}')
+    images = pathlib.Path(dir_path).glob('*.' + image_format)
     print(str(len(list(images))) + " images found.")
     if len(list(images)) == 0:
-        return
+        exit(1)
     # Iterate through all images
     for fname in images:
         img = cv2.imread(str(fname))
