@@ -17,8 +17,9 @@ def calibrate_chessboard(dir_path, image_format, square_size, width, height):
     # Arrays to store object points and image points from all the images.
     objpoints = []  # 3d point in real world space
     imgpoints = []  # 2d points in image plane.
-
-    images = pathlib.Path(dir_path).glob('*.' + image_format)
+    path = pathlib.Path(dir_path)
+    images = path.glob('*.' + image_format)
+    print("Path exists? -> " + str(path.exists()))
     print(str(len(list(images))) + " images found.")
     if len(list(images)) == 0:
         exit(1)
