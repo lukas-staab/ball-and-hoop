@@ -21,14 +21,13 @@ def calibrate_chessboard(dir_path, image_format, square_size, width, height):
     images = path.glob('*.' + image_format)
     print("Path exists? -> " + str(path.exists()))
     print(str(len(list(images))) + " images found.")
-    if len(list(images)) == 0:
-        exit(1)
     # Iterate through all images
     for fname in images:
         img = cv2.imread(str(fname))
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         # Find the chess board corners
+        print("Find chessboardcorners")
         ret, corners = cv2.findChessboardCorners(gray, (width, height), None)
 
         # If found, add object points, image points (after refining them)
@@ -39,6 +38,7 @@ def calibrate_chessboard(dir_path, image_format, square_size, width, height):
             imgpoints.append(corners2)
 
     # Calibrate camera
+    print("Calculate Camera Calibration");
     ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
 
     return [ret, mtx, dist, rvecs, tvecs]
