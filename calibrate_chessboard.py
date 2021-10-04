@@ -2,7 +2,7 @@ from chessboard import calibrate_chessboard
 from utils import load_coefficients, save_coefficients
 
 # Parameters
-IMAGES_DIR = '~/ball-hoop-picam/storage/chessboard-calibration/'
+IMAGES_DIR = '/home/pi/ball-hoop-picam/storage/chessboard-calibration'
 IMAGES_FORMAT = 'png'
 SQUARE_SIZE = 1.5
 WIDTH = 10
