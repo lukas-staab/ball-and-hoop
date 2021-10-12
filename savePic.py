@@ -12,7 +12,7 @@ rawCapture = PiRGBArray(camera, size=(640, 480))
 # allow the camera to warmup
 time.sleep(0.1)
 
-name = input("Filename: ")
+name = input("File number: ")
 
 # capture frames from the camera
 camera.capture(rawCapture, format="bgr", use_video_port=True)

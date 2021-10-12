@@ -21,6 +21,7 @@ def calibrate_chessboard(dir_path, image_format, square_size, width, height):
     images = path.glob(f'*.{image_format}')
     print("Path exists? -> " + str(path.exists()))
     # Iterate through all images
+    gray = []
     for fname in images:
         img = cv2.imread(str(fname))
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
