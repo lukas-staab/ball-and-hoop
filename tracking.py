@@ -65,9 +65,9 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         if radius > 10:
             # draw the circle and centroid on the frame,
             # then update the list of tracked points
-            cv2.circle(image, (int(x), int(y)), int(radius),
+            cv2.circle(undistort, (int(x), int(y)), int(radius),
                        (0, 255, 255), 2)
-            cv2.circle(image, center, 5, (0, 0, 255), -1)
+            cv2.circle(undistort, center, 5, (0, 0, 255), -1)
     # update the points queue
     pts.appendleft(center)
 
@@ -80,10 +80,10 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         # otherwise, compute the thickness of the line and
         # draw the connecting lines
         thickness = int(np.sqrt(buffer / float(i + 1)) * 2.5)
-        cv2.line(image, pts[i - 1], pts[i], (0, 0, 255), thickness)
+        cv2.line(undistort, pts[i - 1], pts[i], (0, 0, 255), thickness)
 
     # show the frame
-    cv2.imshow("Frame", image)
+    cv2.imshow("Frame", undistort)
     key = cv2.waitKey(1) & 0xFF
     # clear the stream in preparation for the next frame
     rawCapture.truncate(0)
