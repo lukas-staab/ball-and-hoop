@@ -31,6 +31,8 @@ pts = deque(maxlen=buffer)
 
 time.sleep(0.1)
 
+fps = 0
+millis = time.time_ns()
 # capture frames from the camera
 for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
     # grab the raw NumPy array representing the image, then initialize the timestamp
@@ -88,3 +90,10 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     # if the `q` key was pressed, break from the loop
     if key == ord("q"):
         break
+
+    fps += 1
+    if time.time_ns() > millis + 1000:
+        millis = round(time.time() * 1000)
+        print("Current FPS=" + str(fps))
+        fps = 0
+
