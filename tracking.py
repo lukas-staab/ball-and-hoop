@@ -93,7 +93,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
     fps += 1
     if time.time_ns() > millis + 1000:
-        millis = round(time.time() * 1000)
+        millis = time.time_ns()
         print("Current FPS=" + str(fps))
+        print("time: " + str(time.time_ns()))
         fps = 0
 
