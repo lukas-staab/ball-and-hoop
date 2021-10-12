@@ -22,7 +22,7 @@ rawCapture = PiRGBArray(camera, size=(640, 480))
 # list of tracked points
 greenLower = (29, 86, 6)
 greenUpper = (64, 255, 255)
-pts = deque(maxlen=args["buffer"])
+pts = deque(maxlen=10)
 
 
 [camera_matrix, dist_matrix] = utils.load_coefficients('./calibration_chessboard.yml')
