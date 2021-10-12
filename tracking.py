@@ -44,7 +44,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     mask = cv2.erode(mask, None, iterations=2)
     mask = cv2.dilate(mask, None, iterations=2)
     # show the frame
-    cv2.imshow("Frame", mask)
+    show = cv2.cvtColor(mask, cv2.COLOR_HSV2RGB)
+    cv2.imshow("Frame", show)
     key = cv2.waitKey(1) & 0xFF
     # clear the stream in preparation for the next frame
     rawCapture.truncate(0)
