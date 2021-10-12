@@ -5,8 +5,8 @@ from utils import load_coefficients, save_coefficients
 IMAGES_DIR = '/home/pi/ball-hoop-picam/storage/chessboard-calibration'
 IMAGES_FORMAT = 'png'
 SQUARE_SIZE = 1.5
-WIDTH = 10
-HEIGHT = 7
+WIDTH = 9
+HEIGHT = 6
 
 # Calibrate
 ret, mtx, dist, rvecs, tvecs = calibrate_chessboard(
