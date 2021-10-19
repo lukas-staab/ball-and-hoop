@@ -59,7 +59,7 @@ camera.close()
 print("[INFO] sampling THREADED frames from `picamera` module...")
 vs = PiVideoStream(resolution=frameSize, framerate=args['num_frames']).start()
 time.sleep(2.0)
-fps = vs.fps
+fps = vs.fpsIn
 nano = time.time_ns()
 # loop over some frames...this time using the threaded stream
 while time.time_ns() <= nano + 2_000_000_000:

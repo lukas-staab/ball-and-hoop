@@ -19,7 +19,8 @@ class PiVideoStream:
         # if the thread should be stopped
         self.frame = None
         self.stopped = False
-        self.fps = FPS().start()
+        self.fpsIn = FPS().start()
+        self.fpsOut = FPS().start()
 
     def start(self):
         # start the thread to read frames from the video stream
@@ -33,18 +34,20 @@ class PiVideoStream:
             # preparation for the next frame
             self.frame = f.array
             self.rawCapture.truncate(0)
-            self.fps.update()
+            self.fpsIn.update()
             # if the thread indicator variable is set, stop the thread
             # and resource camera resources
             if self.stopped:
                 self.stream.close()
                 self.rawCapture.close()
                 self.camera.close()
-                self.fps.stop()
+                self.fpsIn.stop()
+                self.fpsOut.stop()
                 return
 
     def read(self):
         # return the frame most recently read
+        self.fpsOut.update()
         return self.frame
 
     def stop(self):
