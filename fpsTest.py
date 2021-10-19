@@ -59,7 +59,6 @@ camera.close()
 print("[INFO] sampling THREADED frames from `picamera` module...")
 vs = PiVideoStream(resolution=frameSize, framerate=args['num_frames']).start()
 time.sleep(2.0)
-fps = vs.fpsIn
 nano = time.time_ns()
 # loop over some frames...this time using the threaded stream
 while time.time_ns() <= nano + 2_000_000_000:
@@ -74,8 +73,8 @@ while time.time_ns() <= nano + 2_000_000_000:
     # update the FPS counter
 # stop the timer and display FPS information
 vs.stop()
-print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
-print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
+print("[INFO] elasped time: {:.2f}".format(vs.fpsIn.elapsed()))
+print("[INFO] approx. FPS: {:.2f}".format(vs.fpsIn.fps()))
 # do a bit of cleanup
 cv2.destroyAllWindows()
 
