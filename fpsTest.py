@@ -73,8 +73,9 @@ while time.time_ns() <= nano + 2_000_000_000:
         key = cv2.waitKey(1) & 0xFF
     # update the FPS counter
 # stop the timer and display FPS information
+vs.stop()
 print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
 print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
 # do a bit of cleanup
 cv2.destroyAllWindows()
-vs.stop()
+
