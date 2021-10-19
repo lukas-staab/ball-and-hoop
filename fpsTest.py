@@ -18,9 +18,9 @@ ap.add_argument("-d", "--display", type=int, default=-1,
 args = vars(ap.parse_args())
 # initialize the camera and stream
 camera = PiCamera()
-camera.resolution = (640, 480)
+camera.resolution = (320, 240)
 camera.framerate = 90
-rawCapture = PiRGBArray(camera, size=(640, 480))
+rawCapture = PiRGBArray(camera, size=(320, 240))
 stream = camera.capture_continuous(rawCapture, format="bgr",
                                    use_video_port=True)
 # allow the camera to warmup and start the FPS counter
@@ -62,7 +62,7 @@ time.sleep(2.0)
 fps = FPS().start()
 nano = time.time_ns()
 # loop over some frames...this time using the threaded stream
-while nano > nano + 2_000_000_000:
+while nano > nano + 2_000_000:
     # grab the frame from the threaded video stream and resize it
     # to have a maximum width of 400 pixels
     frame = vs.read()
