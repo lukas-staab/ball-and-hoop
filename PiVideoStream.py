@@ -1,12 +1,14 @@
 # import the necessary packages
+from imutils.video import FPS
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 from threading import Thread
 import cv2
 
+
 class PiVideoStream:
 
-    def __init__(self, resolution=(320, 240), framerate=32):
+    def __init__(self, resolution=(320, 240), framerate=120):
         # initialize the camera and stream
         self.camera = PiCamera()
         self.camera.resolution = resolution
@@ -17,6 +19,7 @@ class PiVideoStream:
         # if the thread should be stopped
         self.frame = None
         self.stopped = False
+        self.fps = FPS().start()
 
     def start(self):
         # start the thread to read frames from the video stream
@@ -30,12 +33,14 @@ class PiVideoStream:
             # preparation for the next frame
             self.frame = f.array
             self.rawCapture.truncate(0)
+            self.fps.update()
             # if the thread indicator variable is set, stop the thread
             # and resource camera resources
             if self.stopped:
                 self.stream.close()
                 self.rawCapture.close()
                 self.camera.close()
+                self.fps.stop()
                 return
 
     def read(self):
@@ -45,3 +50,6 @@ class PiVideoStream:
     def stop(self):
         # indicate that the thread should be stopped
         self.stopped = True
+
+    def fps(self):
+        return self.fps

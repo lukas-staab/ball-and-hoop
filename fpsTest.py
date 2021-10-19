@@ -8,7 +8,7 @@ import argparse
 import imutils
 import time
 import cv2
-
+frameSize = (320, 240)
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-n", "--num-frames", type=int, default=100,
@@ -18,9 +18,9 @@ ap.add_argument("-d", "--display", type=int, default=-1,
 args = vars(ap.parse_args())
 # initialize the camera and stream
 camera = PiCamera()
-camera.resolution = (320, 240)
-camera.framerate = 90
-rawCapture = PiRGBArray(camera, size=(320, 240))
+camera.resolution = frameSize
+camera.framerate = args['num_frames']
+rawCapture = PiRGBArray(camera, size=frameSize)
 stream = camera.capture_continuous(rawCapture, format="bgr",
                                    use_video_port=True)
 # allow the camera to warmup and start the FPS counter
@@ -57,9 +57,9 @@ camera.close()
 # created a *threaded *video stream, allow the camera sensor to warmup,
 # and start the FPS counter
 print("[INFO] sampling THREADED frames from `picamera` module...")
-vs = PiVideoStream().start()
+vs = PiVideoStream(resolution=frameSize, framerate=args['num_frames']).start()
 time.sleep(2.0)
-fps = FPS().start()
+fps = vs.fps()
 nano = time.time_ns()
 # loop over some frames...this time using the threaded stream
 while time.time_ns() > nano + 2_000_000:
@@ -72,9 +72,7 @@ while time.time_ns() > nano + 2_000_000:
         cv2.imshow("Frame", frame)
         key = cv2.waitKey(1) & 0xFF
     # update the FPS counter
-    fps.update()
 # stop the timer and display FPS information
-fps.stop()
 print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
 print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
 # do a bit of cleanup
