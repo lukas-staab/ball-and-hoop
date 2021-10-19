@@ -4,12 +4,11 @@ from collections import deque
 import imutils as imutils
 from picamera.array import PiRGBArray
 from picamera import PiCamera
+from threading import Thread
 import time
-import argparse
 import cv2
 import utils
 import numpy as np
-import pathlib
 
 # initialize the camera and grab a reference to the raw camera capture
 camera = PiCamera()
@@ -25,7 +24,6 @@ greenLower = (29, 86, 6)
 greenUpper = (64, 255, 255)
 buffer = 10
 pts = deque(maxlen=buffer)
-
 
 [camera_matrix, dist_matrix] = utils.load_coefficients('./calibration_chessboard.yml')
 
@@ -97,4 +95,3 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         millis = time.time_ns()
         print("Current FPS=" + str(fps))
         fps = 0
-
