@@ -62,7 +62,7 @@ time.sleep(2.0)
 fps = FPS().start()
 nano = time.time_ns()
 # loop over some frames...this time using the threaded stream
-while time.time_ns() > nano + 2_000_000:
+while time.time_ns() <= nano + 2_000_000_000:
     # grab the frame from the threaded video stream and resize it
     # to have a maximum width of 400 pixels
     frame = vs.read()
