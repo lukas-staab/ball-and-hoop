@@ -3,7 +3,7 @@ from __future__ import print_function
 from imutils.video import FPS
 from picamera.array import PiRGBArray
 from picamera import PiCamera
-import PiVideoStream
+from PiVideoStream import PiVideoStream
 import argparse
 import imutils
 import time
