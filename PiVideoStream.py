@@ -51,5 +51,3 @@ class PiVideoStream:
         # indicate that the thread should be stopped
         self.stopped = True
 
-    def fps(self):
-        return self.fps
