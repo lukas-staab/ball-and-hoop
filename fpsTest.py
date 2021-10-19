@@ -73,6 +73,7 @@ while time.time_ns() <= nano + 2_000_000_000:
     # update the FPS counter
 # stop the timer and display FPS information
 vs.stop()
+time.sleep(1.0)
 print("[INFO] elasped time: {:.2f}".format(vs.fpsIn.elapsed()))
 print("[INFO] approx. FPS: {:.2f}".format(vs.fpsIn.fps()))
 # do a bit of cleanup
