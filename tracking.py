@@ -20,9 +20,9 @@ ap.add_argument("-e", "--encode", type=int, default=1,
 ap.add_argument("-rot", "--rotation", type=int, default=0,
                 help="Rotate multiple of 90 degree")
 # ---------------------------------------------------
-ap.add_argument("-d", "--display", type=int, default=-1,
+ap.add_argument("-d", "--display", type=int, default=0,
                 help="Whether or not frames should be displayed")
-ap.add_argument("-t", "--time", type=int, default=5,
+ap.add_argument("-t", "--time", type=int, default=-1,
                 help="Time in seconds")
 
 args = vars(ap.parse_args())
@@ -97,12 +97,12 @@ while True:
         cv2.line(undistort, pts[i - 1], pts[i], (0, 0, 255), thickness)
 
     # show the frame
-    if args['display'] == -1:
+    if args['display'] != 0:
         cv2.imshow("Frame", undistort)
         key = cv2.waitKey(1) & 0xFF
         if key == ord("q"):
             break
-    if time.time() - start_time > int(args['time']):
+    if args['time'] != -1 and time.time() - start_time > int(args['time']):
         break
     # clear the stream in preparation for the next frame
     # if the `q` key was pressed, break from the loop
