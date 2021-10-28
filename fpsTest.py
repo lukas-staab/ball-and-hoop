@@ -14,7 +14,7 @@ import cv2
 frameSize = (320, 240)
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-n", "--num-frames", type=int, default=100,
+ap.add_argument("-n", "--num-frames", type=int, default=60,
                 help="# of frames to loop over for FPS test")
 ap.add_argument("-d", "--display", type=int, default=-1,
                 help="Whether or not frames should be displayed")
@@ -26,7 +26,7 @@ camera = PiCamera()
 camera.resolution = frameSize
 camera.framerate = args['num_frames']
 # rawCapture = PiRGBArray(camera, size=frameSize)
-rawCapture = io.BytesIO()
+rawCapture = PiRGBArray()
 
 # allow the camera to warmup and start the FPS counter
 print("[INFO] sampling frames from `picamera` module...")
