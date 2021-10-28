@@ -41,6 +41,7 @@ cam = PiVideoStream(resolution_no=args['resolution'],
                     framerate=args['fps'], rotation=args['rotation'], encode=args['encode'])
 cam.start()
 # allow the camera to warmup and start the FPS counter
+time.sleep(0.5)
 print("[START] counting frames from `picamera` module...")
 start_time = time.time()
 # capture frames from the camera
