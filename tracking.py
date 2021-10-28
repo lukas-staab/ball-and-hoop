@@ -1,21 +1,31 @@
 # import the necessary packages
 from collections import deque
-
 import imutils as imutils
-from picamera.array import PiRGBArray
-from picamera import PiCamera
-import time
-import cv2
 import utils
 import numpy as np
+from PiVideoStream import PiVideoStream
+import argparse
+import time
+import cv2
 
-# initialize the camera and grab a reference to the raw camera capture
-camera = PiCamera()
-camera.resolution = (640, 480)
-camera.framerate = 90
-rawCapture = PiRGBArray(camera, size=(640, 480))
-# allow the camera to warmup
 
+# construct the argument parse and parse the arguments
+ap = argparse.ArgumentParser()
+ap.add_argument("-f", "--fps", type=int, default=60,
+                help="# of frames to loop over for FPS test")
+ap.add_argument("-res", "--resolution", type=int, default=1,
+                help="Sizes from 0 to 4, default 1 (320x240)")
+ap.add_argument("-e", "--encode", type=int, default=1,
+                help="Encoding (yuv, bgr)")
+ap.add_argument("-rot", "--rotation", type=int, default=0,
+                help="Rotate multiple of 90 degree")
+# ---------------------------------------------------
+ap.add_argument("-d", "--display", type=int, default=-1,
+                help="Whether or not frames should be displayed")
+
+args = vars(ap.parse_args())
+
+# -----------------
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space, then initialize the
 # list of tracked points
@@ -26,15 +36,19 @@ pts = deque(maxlen=buffer)
 
 [camera_matrix, dist_matrix] = utils.load_coefficients('./calibration_chessboard.yml')
 
-time.sleep(0.1)
 
-fps = 0
-millis = time.time_ns()
+cam = PiVideoStream(resolution_no=args['resolution'],
+                    framerate=args['fps'], rotation=args['rotation'], encode=args['encode'])
+cam.start()
+# allow the camera to warmup and start the FPS counter
+print("[START] counting frames from `picamera` module...")
+start_time = time.time()
 # capture frames from the camera
-for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
+# capture frames from the camera
+while True:
     # grab the raw NumPy array representing the image, then initialize the timestamp
     # and occupied/unoccupied text
-    image = frame.array
+    image = cam.read()
     undistort = cv2.undistort(image, camera_matrix, dist_matrix)
     blurred = cv2.GaussianBlur(undistort, (11, 11), 0)
     hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
@@ -82,15 +96,16 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     # show the frame
     cv2.imshow("Frame", undistort)
     key = cv2.waitKey(1) & 0xFF
-    # clear the stream in preparation for the next frame
-    rawCapture.truncate(0)
-    # if the `q` key was pressed, break from the loop
     if key == ord("q"):
         break
+    # clear the stream in preparation for the next frame
+    # if the `q` key was pressed, break from the loop
 
-    fps += 1
-    # do every second
-    if time.time_ns() > millis + 1_000_000_000:
-        millis = time.time_ns()
-        print("Current FPS=" + str(fps))
-        fps = 0
+# stop the timer and display FPS information
+cam.stop()
+cam.print_stats()
+# do a bit of cleanup
+cv2.destroyAllWindows()
+
+
+

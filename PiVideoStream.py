@@ -12,7 +12,7 @@ import cv2
 class PiVideoStream:
 
     resolutions = {
-        0: (160, 120),
+        0: (160, 128),
         1: (320, 240),
         2: (640, 480),
         3: (1280, 920),
