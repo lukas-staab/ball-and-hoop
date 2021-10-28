@@ -11,16 +11,15 @@ import argparse
 import time
 import cv2
 
-frameSize = (640, 480)
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-f", "--num-frames", type=int, default=60,
                 help="# of frames to loop over for FPS test")
-ap.add_argument("-r", "--resolution", type=int, default=1,
+ap.add_argument("-res", "--resolution", type=int, default=1,
                 help="Sizes from 0 to 4, default 1 (320x240)")
 ap.add_argument("-e", "--encode", type=int, default=1,
                 help="Encoding (yuv, bgr)")
-ap.add_argument("-r", "--rotation", type=int, default=0,
+ap.add_argument("-rot", "--rotation", type=int, default=0,
                 help="Rotate multiple of 90 degree")
 # ---------------------------------------------------
 ap.add_argument("-t", "--time", type=int, default=5,
@@ -40,7 +39,6 @@ fps = FPS().start()
 # capture frames from the camera
 while time.time() - start_time > int(args['time']):
     # and occupied/unoccupied text
-
     image = cam.read()
     if args['display'] != -1:
         cv2.imshow("Frame", image)
