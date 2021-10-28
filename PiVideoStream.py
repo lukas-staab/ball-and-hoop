@@ -43,7 +43,7 @@ class PiVideoStream:
         self.stream = self.camera.capture_continuous(self.rawCapture, format=self.encodings[encode], use_video_port=True)
         # initialize the frame and the variable used to indicate
         # if the thread should be stopped
-        self.frame = None
+        self.raw_frame = None
         self.rotation = rotation
         self.stopped = False
         self.closed = False
@@ -62,10 +62,7 @@ class PiVideoStream:
         for f in self.stream:
             # grab the frame from the stream and clear the stream in
             # preparation for the next frame
-            img = f.array
-            if self.rotation != 0:
-                img = cv2.rotate(img, self.rotations[self.rotation])
-            self.frame = img
+            self.raw_frame = f.array
             self.rawCapture.truncate(0)
             self.fpsIn.update()
             # if the thread indicator variable is set, stop the thread
@@ -81,7 +78,10 @@ class PiVideoStream:
     def read(self):
         # return the frame most recently read
         self.fpsOut.update()
-        return self.frame
+        frame = self.raw_frame
+        if self.rotation != 0:
+            frame = cv2.rotate(frame, self.rotations[self.rotation])
+        return frame
 
     def stop(self):
         # indicate that the thread should be stopped
