@@ -11,7 +11,7 @@ import argparse
 import imutils
 import time
 import cv2
-frameSize = (320, 240)
+frameSize = (640, 480)
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-n", "--num-frames", type=int, default=60,
