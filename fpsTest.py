@@ -21,7 +21,7 @@ ap.add_argument("-t", "--time", type=int, default=5,
                 help="Time in seconds")
 ap.add_argument("-s", "--size", type=int, default=1,
                 help="Sizes from 0 to 4, default 1 (320x240)")
-ap.add_argument("-e", "--encode", type=int, default=0,
+ap.add_argument("-e", "--encode", type=int, default=1,
                 help="Encoding (yuv, bgr)")
 ap.add_argument("-r", "--rotate", type=int, default=0,
                 help="Rotate multiple of 90 degree")
@@ -37,9 +37,9 @@ encodings = {
    1: 'bgr'
 }
 rotates = {
-    1: cv2.cv2.ROTATE_90_CLOCKWISE,
-    2: cv2.cv2.ROTATE_180,
-    3: cv2.cv2.ROTATE_90_COUNTERCLOCKWISE,
+    1: cv2.ROTATE_90_CLOCKWISE,
+    2: cv2.ROTATE_180,
+    3: cv2.ROTATE_90_COUNTERCLOCKWISE,
 }
 
 args = vars(ap.parse_args())
