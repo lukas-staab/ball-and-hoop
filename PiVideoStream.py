@@ -1,6 +1,7 @@
 # import the necessary packages
 from imutils.video import FPS
 from picamera.array import PiRGBArray
+from picamera.array import PiYUVArray
 from picamera import PiCamera
 from threading import Thread
 import cv2
@@ -8,22 +9,48 @@ import cv2
 
 class PiVideoStream:
 
-    def __init__(self, resolution=(320, 240), framerate=120):
+    resolutions = {
+        0: (160, 120),
+        1: (320, 240),
+        2: (640, 480),
+        3: (1280, 920),
+        4: (1600, 1200),
+    }
+
+    rotations = {
+        1: cv2.ROTATE_90_CLOCKWISE,
+        2: cv2.ROTATE_180,
+        3: cv2.ROTATE_90_COUNTERCLOCKWISE,
+    }
+
+    encodings = {
+        0: 'yuv',
+        1: 'bgr'
+    }
+
+    def __init__(self, resolution_no=1, framerate=30, rotation=0, encode=1):
+        resolution = self.resolutions[resolution_no]
         # initialize the camera and stream
         self.camera = PiCamera()
         self.camera.resolution = resolution
         self.camera.framerate = framerate
-        self.rawCapture = PiRGBArray(self.camera, size=resolution)
-        self.stream = self.camera.capture_continuous(self.rawCapture, format="bgr", use_video_port=True)
+        if self.encodings[encode] == 'bgr':
+            self.rawCapture = PiRGBArray(self.camera, size=resolution)
+        else:
+            self.rawCapture = PiYUVArray(self.camera, size=resolution)
+        self.stream = self.camera.capture_continuous(self.rawCapture, format=self.encodings[encode], use_video_port=True)
         # initialize the frame and the variable used to indicate
         # if the thread should be stopped
         self.frame = None
         self.stopped = False
-        self.fpsIn = FPS().start()
-        self.fpsOut = FPS().start()
+        self.fpsIn = FPS()
+        self.fpsOut = FPS()
+        self.rotation = rotation
 
     def start(self):
         # start the thread to read frames from the video stream
+        self.fpsIn.start()
+        self.fpsOut.start()
         Thread(target=self.update, args=()).start()
         return self
 
@@ -32,7 +59,10 @@ class PiVideoStream:
         for f in self.stream:
             # grab the frame from the stream and clear the stream in
             # preparation for the next frame
-            self.frame = f.array
+            img = f.array
+            if self.rotation != 0:
+                img = cv2.rotate(img, self.rotations[self.rotation])
+            self.frame = img
             self.rawCapture.truncate(0)
             self.fpsIn.update()
             # if the thread indicator variable is set, stop the thread

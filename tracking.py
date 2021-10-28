@@ -4,7 +4,6 @@ from collections import deque
 import imutils as imutils
 from picamera.array import PiRGBArray
 from picamera import PiCamera
-from threading import Thread
 import time
 import cv2
 import utils
