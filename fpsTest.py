@@ -22,7 +22,9 @@ ap.add_argument("-t", "--time", type=int, default=5,
 ap.add_argument("-s", "--size", type=int, default=1,
                 help="Sizes from 0 to 4, default 1 (320x240)")
 ap.add_argument("-e", "--encode", type=int, default=0,
-                help="Encoding (yuv, bgr")
+                help="Encoding (yuv, bgr)")
+ap.add_argument("-r", "--rotate", type=int, default=0,
+                help="Rotate multiple of 90 degree")
 sizes = {
     0: (160, 120),
     1: (320, 240),
@@ -34,6 +36,12 @@ encodings = {
    0: 'yuv',
    1: 'bgr'
 }
+rotates = {
+    1: cv2.cv2.ROTATE_90_CLOCKWISE,
+    2: cv2.cv2.ROTATE_180,
+    3: cv2.cv2.ROTATE_90_COUNTERCLOCKWISE,
+}
+
 args = vars(ap.parse_args())
 # initialize the camera and stream
 camera = PiCamera()
@@ -54,7 +62,12 @@ fps = FPS().start()
 for frame in camera.capture_continuous(rawCapture, format=encoding, use_video_port=True):
     # and occupied/unoccupied text
     image = frame.array
+    if args['rotate'] != 0:
+        image = cv2.rotate(image, rotates[args['rotate']])
     fps.update()
+    if args['display'] != -1:
+        cv2.imshow("Frame", image)
+        key = cv2.waitKey(1) & 0xFF
     # show the frame
     rawCapture.truncate(0)
     # if the `q` key was pressed, break from the loop
