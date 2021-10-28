@@ -37,7 +37,7 @@ print("[INFO] sampling frames from `picamera` module...")
 start_time = time.time()
 fps = FPS().start()
 # capture frames from the camera
-while time.time() - start_time > int(args['time']):
+while time.time() - start_time <= int(args['time']):
     # and occupied/unoccupied text
     image = cam.read()
     if args['display'] != -1:
