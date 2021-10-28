@@ -49,8 +49,8 @@ class PiVideoStream:
 
     def start(self):
         # start the thread to read frames from the video stream
-        self.fpsIn.start()
-        self.fpsOut.start()
+        self.fpsIn = self.fpsIn.start()
+        self.fpsOut = self.fpsOut.start()
         Thread(target=self.update, args=()).start()
         return self
 
@@ -72,7 +72,6 @@ class PiVideoStream:
                 self.rawCapture.close()
                 self.camera.close()
                 self.fpsIn.stop()
-                self.fpsOut.stop()
                 return
 
     def read(self):
@@ -83,4 +82,5 @@ class PiVideoStream:
     def stop(self):
         # indicate that the thread should be stopped
         self.stopped = True
+        self.fpsOut.stop()
 
