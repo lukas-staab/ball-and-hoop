@@ -31,7 +31,7 @@ args = vars(ap.parse_args())
 
 cam = PiVideoStream(resolution_no=args['resolution'],
                     framerate=args['num_frames'], rotation=args['rotation'], encode=args['encode'])
-
+cam.start()
 # allow the camera to warmup and start the FPS counter
 print("[INFO] sampling frames from `picamera` module...")
 start_time = time.time()

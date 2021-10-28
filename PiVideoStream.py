@@ -1,4 +1,6 @@
 # import the necessary packages
+import time
+
 from imutils.video import FPS
 from picamera.array import PiRGBArray
 from picamera.array import PiYUVArray
@@ -42,10 +44,11 @@ class PiVideoStream:
         # initialize the frame and the variable used to indicate
         # if the thread should be stopped
         self.frame = None
+        self.rotation = rotation
         self.stopped = False
+        self.closed = False
         self.fpsIn = FPS()
         self.fpsOut = FPS()
-        self.rotation = rotation
 
     def start(self):
         # start the thread to read frames from the video stream
@@ -72,6 +75,7 @@ class PiVideoStream:
                 self.rawCapture.close()
                 self.camera.close()
                 self.fpsIn.stop()
+                self.closed = True
                 return
 
     def read(self):
@@ -83,6 +87,8 @@ class PiVideoStream:
         # indicate that the thread should be stopped
         self.stopped = True
         self.fpsOut.stop()
+        while not self.closed:
+            time.sleep(1)
 
     def print_stats(self):
         if not self.stopped:
