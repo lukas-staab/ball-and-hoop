@@ -26,7 +26,7 @@ camera = PiCamera()
 camera.resolution = frameSize
 camera.framerate = args['num_frames']
 # rawCapture = PiRGBArray(camera, size=frameSize)
-rawCapture = PiRGBArray()
+rawCapture = PiRGBArray(camera)
 
 # allow the camera to warmup and start the FPS counter
 print("[INFO] sampling frames from `picamera` module...")
