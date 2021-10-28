@@ -40,7 +40,7 @@ fps = FPS().start()
 while time.time() - start_time <= int(args['time']):
     # and occupied/unoccupied text
     image = cam.read()
-    time.sleep(0.25)
+    time.sleep(1/(args['fps']))
     if args['display'] != -1:
         cv2.imshow("Frame", image)
         key = cv2.waitKey(1) & 0xFF
