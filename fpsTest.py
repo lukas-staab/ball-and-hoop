@@ -13,7 +13,7 @@ import cv2
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-f", "--num-frames", type=int, default=60,
+ap.add_argument("-f", "--fps", type=int, default=60,
                 help="# of frames to loop over for FPS test")
 ap.add_argument("-res", "--resolution", type=int, default=1,
                 help="Sizes from 0 to 4, default 1 (320x240)")
@@ -30,7 +30,7 @@ ap.add_argument("-d", "--display", type=int, default=-1,
 args = vars(ap.parse_args())
 
 cam = PiVideoStream(resolution_no=args['resolution'],
-                    framerate=args['num_frames'], rotation=args['rotation'], encode=args['encode'])
+                    framerate=args['fps'], rotation=args['rotation'], encode=args['encode'])
 cam.start()
 # allow the camera to warmup and start the FPS counter
 print("[INFO] sampling frames from `picamera` module...")
