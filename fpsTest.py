@@ -47,9 +47,6 @@ while time.time() - start_time > int(args['time']):
 
 # stop the timer and display FPS information
 cam.stop()
-time.sleep(0.1)
-fps = cam.fpsIn
-print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
-print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
+cam.print_stats()
 # do a bit of cleanup
 cv2.destroyAllWindows()

@@ -84,3 +84,12 @@ class PiVideoStream:
         self.stopped = True
         self.fpsOut.stop()
 
+    def print_stats(self):
+        if not self.stopped:
+            print("[ERROR] thread not closed (yet)")
+            return
+        print("[IN] elasped time: {:.2f}".format(self.fpsIn.elapsed()))
+        print("[IN] approx. FPS: {:.2f}".format(self.fpsIn.fps()))
+        print("[OUT] elasped time: {:.2f}".format(self.fpsOut.elapsed()))
+        print("[OUT] approx. FPS: {:.2f}".format(self.fpsOut.fps()))
+
