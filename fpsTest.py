@@ -21,8 +21,8 @@ ap.add_argument("-t", "--time", type=int, default=5,
                 help="Time in seconds")
 ap.add_argument("-s", "--size", type=int, default=1,
                 help="Sizes from 0 to 4, default 1 (320x240)")
-ap.add_argument("-e", "--encode", type=ascii, default="rgb",
-                help="Encoding (rgb, yuv, bgr")
+ap.add_argument("-e", "--encode", type=int, default=0,
+                help="Encoding (yuv, bgr")
 sizes = {
     0: (160, 120),
     1: (320, 240),
@@ -30,13 +30,18 @@ sizes = {
     3: (1280, 920),
     4: (1600, 1200),
 }
+encodings = {
+   0: 'yuv',
+   1: 'bgr'
+}
 args = vars(ap.parse_args())
 # initialize the camera and stream
 camera = PiCamera()
 camera.resolution = sizes.get(args['size'])
 camera.framerate = args['num_frames']
 # rawCapture = PiRGBArray(camera, size=frameSize)
-if args['encode'] == 'yuv':
+encoding = encodings[args['encode']]
+if encoding == 'yuv':
     rawCapture = PiYUVArray(camera)
 else:
     rawCapture = PiRGBArray(camera)
@@ -46,7 +51,7 @@ print("[INFO] sampling frames from `picamera` module...")
 start_time = time.time()
 fps = FPS().start()
 # capture frames from the camera
-for frame in camera.capture_continuous(rawCapture, format=args['encode'], use_video_port=True):
+for frame in camera.capture_continuous(rawCapture, format=encoding, use_video_port=True):
     # and occupied/unoccupied text
     image = frame.array
     fps.update()
