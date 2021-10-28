@@ -4,7 +4,7 @@ from __future__ import print_function
 import io
 
 from imutils.video import FPS
-from picamera.array import PiRGBArray
+from picamera.array import PiYUVArray
 from picamera import PiCamera
 from PiVideoStream import PiVideoStream
 import argparse
@@ -26,14 +26,14 @@ camera = PiCamera()
 camera.resolution = frameSize
 camera.framerate = args['num_frames']
 # rawCapture = PiRGBArray(camera, size=frameSize)
-rawCapture = PiRGBArray(camera)
+rawCapture = PiYUVArray(camera)
 
 # allow the camera to warmup and start the FPS counter
 print("[INFO] sampling frames from `picamera` module...")
 start_time = time.time()
 fps = FPS().start()
 # capture frames from the camera
-for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
+for frame in camera.capture_continuous(rawCapture, format="yuv", use_video_port=True):
     # and occupied/unoccupied text
     image = frame.array
     fps.update()
