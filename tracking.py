@@ -97,7 +97,7 @@ while True:
         cv2.line(undistort, pts[i - 1], pts[i], (0, 0, 255), thickness)
 
     # show the frame
-    if args['display']:
+    if args['display'] == -1:
         cv2.imshow("Frame", undistort)
         key = cv2.waitKey(1) & 0xFF
         if key == ord("q"):
