@@ -7,9 +7,13 @@ port = "/dev/ttyAMA0"  # Raspberry Pi 2
 
 ser = serial.Serial(port, baudrate = 1200)
 print("starting")
+value = 1
 while True:
     time.sleep(1)
-    ser.write("A")
+    bArray = ord("A")
+    ser.write(value)
+    print('Send: ' + str(value))
+    value = value +1
     nbChars = ser.inWaiting()
     if nbChars > 0:
         data = ser.read(nbChars)
