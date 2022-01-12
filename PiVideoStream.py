@@ -7,6 +7,7 @@ from picamera.array import PiYUVArray
 from picamera import PiCamera
 from threading import Thread
 import cv2
+import multiprocessing
 
 
 class PiVideoStream:
@@ -54,7 +55,7 @@ class PiVideoStream:
         # start the thread to read frames from the video stream
         self.fpsIn = self.fpsIn.start()
         self.fpsOut = self.fpsOut.start()
-        Thread(target=self.update, args=()).start()
+        multiprocessing.Process(target=self.update, args=()).start()
         return self
 
     def update(self):
