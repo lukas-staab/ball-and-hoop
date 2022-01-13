@@ -1,9 +1,9 @@
 # import the necessary packages
 from collections import deque
 import imutils as imutils
-import utils
+from chessboard import utils
 import numpy as np
-from PiVideoStream import PiVideoStream
+from src.PiVideoStream import PiVideoStream
 import argparse
 import time
 import cv2
@@ -36,7 +36,7 @@ greenUpper = (64, 255, 255)
 buffer = 10
 pts = deque(maxlen=buffer)
 
-[camera_matrix, dist_matrix] = utils.load_coefficients('./calibration_chessboard.yml')
+[camera_matrix, dist_matrix] = utils.load_coefficients('../chessboard/calibration_chessboard.yml')
 
 
 cam = PiVideoStream(resolution_no=args['resolution'],

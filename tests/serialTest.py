@@ -13,7 +13,7 @@ while True:
     time.sleep(.1)
     ser.write(value.to_bytes(1, byteorder='big'))
     print('Send: ' + str(value))
-    value = (value +1) % 256
+    value = (value +1 ) % 256
     nbChars = ser.inWaiting()
     if nbChars > 0:
         data = ser.read(nbChars)

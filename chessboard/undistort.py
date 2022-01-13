@@ -2,7 +2,7 @@
 import utils
 import cv2
 
-[camera_matrix, dist_matrix] = utils.load_coefficients('./calibration_chessboard.yml')
+[camera_matrix, dist_matrix] = utils.load_coefficients('calibration_chessboard.yml')
 
 img = cv2.imread("./storage/chessboard-calibration/" + input("Chessboard Number: ") + ".png")
 
