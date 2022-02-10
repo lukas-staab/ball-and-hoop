@@ -11,6 +11,11 @@ touch ssh
 ```
 in the boot partition.
 Also make sure the used password on the PIs is not the default, especially if they are exposed in the (local) network later and an activated SSH-Server.
+And make sure your public key is copied to the raspberry pi. This can be done with the following command.
+```commandline
+ssh-copy-id pi@192.168.178.32
+```
+The default password of the pi is `rapsberry`. Please change it with the `passwd` command
 ## Software installation
 ### via Ansible 
 Make sure you have ansible installed on your local machine, and the RPis are in the same Network, and you know their IP address.
