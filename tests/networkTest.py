@@ -40,15 +40,17 @@ else:
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((args['server_ip'], args['port']))
         for i in range(1, 10):
-            now = datetime.utcnow()
-            s.sendall(str(now).encode())
-            receivedTime = s.recv(1024)
-            receivedNow = datetime.strptime(receivedTime.decode(), '%Y-%m-%d %H:%M:%S.%f')
-            diffs.append(receivedNow - now)
-    print(tabulate({'The delays:': diffs}, headers='keys'))
+            sendTime = datetime.utcnow()
+            s.sendall(str(sendTime).encode())
+            data = s.recv(1024)
+            receivedTime = datetime.utcnow()
+            diffs.append((receivedTime - sendTime).total_seconds() * 1000)
+    print('Round-Trip-Time (RTT) was measured')
+    print(tabulate({'RTT [ms]:': diffs}, headers='keys'))
     print('--------------')
     print(tabulate({
-        'The Min: ': [numpy.min(diffs)],
-        'The Average: ': [numpy.mean(diffs)],
-        'The Max: ': [numpy.max(diffs)],
+        'Einheiten': ['ms', 'Hz/"FPS"'],
+        'The Min': [numpy.min(diffs), int(1000/numpy.min(diffs))],
+        'The Average': [numpy.mean(diffs), int(1000/numpy.mean(diffs))],
+        'The Max': [numpy.max(diffs), int(1000/numpy.max(diffs))],
     }, headers='keys'))
