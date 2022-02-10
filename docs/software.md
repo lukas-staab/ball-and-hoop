@@ -1,10 +1,16 @@
 # Installation
 ## Operating System
-Install on every Raspberry Pi SD Card which shall be used Raspian OS. 
+Install on every Raspberry Pi SD Card, which shall be used, Raspian OS. 
 Details for installation can be found on their [website](https://www.raspberrypi.com/software/).
 
 Make sure the ssh server is enabled, and you know the password or can login via [ssh-key](https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server-de).
-Also make sure the used password on the PIs is not blank, especially if they are exposed in the (local) network later.
+The SSH-Server will be activated at boot if there is a (empty) file with the name `ssh` on the boot partition.
+Via commandline this can be done with 
+```commandline
+touch ssh
+```
+in the boot partition.
+Also make sure the used password on the PIs is not the default, especially if they are exposed in the (local) network later and an activated SSH-Server.
 ## Software installation
 ### via Ansible 
 Make sure you have ansible installed on your local machine, and the RPis are in the same Network, and you know their IP address.
@@ -25,10 +31,11 @@ sudo apt install git python3 python3-opencv python3-picamera
 ```
 clone the git repo 
 ```commandline
-git clone 
+git clone https://github.com/lukas-staab/ball-and-hoop.git
 ```
-install pip requirements (fix the python version)
+install pip requirements (one of them is enough)
 ```commandline
-python[37] -m pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 

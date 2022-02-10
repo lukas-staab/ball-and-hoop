@@ -1,22 +1,22 @@
 - hosts: rpi
   tasks:
-    - name: Install needed system packages
-      package:
-        name:
-          - git
-          - python3
-          - python3-opencv
-          - python3-picamera
+  - name: Install needed system packages
+    package:
+      name:
+        - git
+        - python3
+        - python3-opencv
+        - python3-picamera
+    become: yes
 
-    - name: install this repo on remote host
-      git:
-        repo: git@github.com:lukas-staab/ball-and-hoop.git
-        dest: ~/ball-and-hoop
-        clone: yes
-        version: master
+  - name: install this repo on remote host
+    git:
+      repo: https://github.com/lukas-staab/ball-and-hoop.git
+      dest: ~/ball-and-hoop
+      clone: yes
+      version: master
 
-    - name: Install pip requirements
-      pip:
-        name:
-          - pyserial
-    - name:
+  - name: Install pip requirements
+    pip:
+      requirements: ~/ball-and-hoop/requirements.txt
+      executable: pip3
