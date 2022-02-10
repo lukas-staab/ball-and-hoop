@@ -7,7 +7,7 @@ from tabulate import tabulate
 
 ap = argparse.ArgumentParser()
 # ---------------------------------------------------
-ap.add_argument("-i", "--server-ip", type=str, default="127.0.0.1",
+ap.add_argument("-i", "--server-ip", type=str, default="",
                 help="The Server IP address to connect to, do not use together with -s")
 ap.add_argument("-s", "--server", action='store_true', help="Use to start in server mode")  # server flag
 ap.add_argument("-p", "--port", type=int, default=9999, help="The port to listen at / to send to")
@@ -36,6 +36,7 @@ if args['server']:
             pass
 else:
     diffs = []
+    print(args['server_ip'])
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((args['server_ip'], args['port']))
         for i in range(1, 10):
