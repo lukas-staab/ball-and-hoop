@@ -1,6 +1,7 @@
 # import the necessary packages
 from picamera.array import PiRGBArray
 from picamera import PiCamera
+from chessboard import utils
 import time
 import cv2
 import numpy as np
@@ -10,16 +11,17 @@ camera = PiCamera()
 camera.resolution = (640, 480)
 camera.framerate = 90
 rawCapture = PiRGBArray(camera, size=(640, 480))
+[camera_matrix, dist_matrix] = utils.load_coefficients('../chessboard/calibration_chessboard.yml')
+
 # allow the camera to warmup
 time.sleep(0.1)
-
-name = input("File number: ")
 
 # capture frames from the camera
 camera.capture(rawCapture, format="bgr", use_video_port=True)
 # grab the raw NumPy array representing the image, then initialize the timestamp
 # and occupied/unoccupied text
 image = rawCapture.array
+undistort = cv2.undistort(image, camera_matrix, dist_matrix)
 
 # convert to hsv colorspace
 hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
@@ -33,7 +35,7 @@ kernel = np.ones((7, 7), np.uint8)
 mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
 mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
 segmented_img = cv2.bitwise_and(image, image, mask=mask)
-filename = "storage/hoop-calibration/" + name + ".png"
+filename = "storage/hoop-calibration/" + input("File name without .png: ") + ".png"
 # save the frame
 cv2.imwrite(filename, segmented_img)
 print("Saved")
