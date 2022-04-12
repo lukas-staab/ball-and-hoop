@@ -21,7 +21,7 @@ camera.capture(rawCapture, format="bgr", use_video_port=True)
 # grab the raw NumPy array representing the image, then initialize the timestamp
 # and occupied/unoccupied text
 image = rawCapture.array
-undistort = cv2.undistort(image, camera_matrix, dist_matrix)
+image = cv2.undistort(image, camera_matrix, dist_matrix)
 
 # convert to hsv colorspace
 hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
