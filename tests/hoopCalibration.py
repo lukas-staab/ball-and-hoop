@@ -2,7 +2,7 @@
 import chessboard
 from picamera.array import PiRGBArray
 from picamera import PiCamera
-from chessboard.utils import load_coefficients
+from ..chessboard.utils import load_coefficients
 import time
 import cv2
 import numpy as np

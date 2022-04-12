@@ -1,7 +1,7 @@
 # import the necessary packages
 from collections import deque
 import imutils as imutils
-from chessboard import utils
+from ..chessboard import utils
 import numpy as np
 from src.PiVideoStream import PiVideoStream
 import argparse
