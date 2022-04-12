@@ -12,7 +12,7 @@ camera.framerate = 90
 rawCapture = PiRGBArray(camera, size=(640, 480))
 # allow the camera to warmup
 
-[camera_matrix, dist_matrix] = utils.load_coefficients('../src/chessboard/calibration_chessboard.yml')
+[camera_matrix, dist_matrix] = utils.load_coefficients('../storage/chessboard-calibration/calibration_chessboard.yml')
 
 time.sleep(0.1)
 

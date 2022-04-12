@@ -17,4 +17,4 @@ ret, mtx, dist, rvecs, tvecs = calibrate_chessboard(
     HEIGHT
 )
 # Save coefficients into a file
-save_coefficients(mtx, dist, "calibration_chessboard.yml")
+save_coefficients(mtx, dist, "../../storage/chessboard-calibration/calibration_chessboard.yml")

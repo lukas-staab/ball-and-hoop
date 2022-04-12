@@ -36,7 +36,7 @@ greenUpper = (64, 255, 255)
 buffer = 10
 pts = deque(maxlen=buffer)
 
-[camera_matrix, dist_matrix] = utils.load_coefficients('chessboard/calibration_chessboard.yml')
+[camera_matrix, dist_matrix] = utils.load_coefficients('../storage/chessboard-calibration/calibration_chessboard.yml')
 
 
 cam = PiVideoStream(resolution_no=args['resolution'],
