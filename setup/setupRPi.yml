@@ -7,6 +7,9 @@
         - python3
         - python3-opencv
         - python3-picamera
+        #  https://stackoverflow.com/questions/53347759/importerror-libcblas-so-3-cannot-open-shared-object-file-no-such-file-or-dire
+        - libatlas-base-dev
+        - libjasper-dev
     become: yes
 
   - name: install this repo on remote host

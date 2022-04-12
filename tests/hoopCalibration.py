@@ -35,5 +35,5 @@ mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
 segmented_img = cv2.bitwise_and(image, image, mask=mask)
 filename = "storage/hoop-calibration/" + name + ".png"
 # save the frame
-cv2.imwrite(segmented_img, image)
+cv2.imwrite(filename, segmented_img)
 print("Saved")

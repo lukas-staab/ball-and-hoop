@@ -44,3 +44,5 @@ python3 -m pip install -r requirements.txt
 pip3 install -r requirements.txt
 ```
 
+
+TODO: make camera available, add some packages @manual install
