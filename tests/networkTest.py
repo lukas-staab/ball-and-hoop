@@ -46,7 +46,7 @@ else:
             receivedTime = datetime.utcnow()
             diffs.append((receivedTime - sendTime).total_seconds() * 1000)
     print('Round-Trip-Time (RTT) was measured')
-    print(tabulate({'RTT [ms]:': diffs}, headers='keys'))
+    # print(tabulate({'RTT [ms]:': diffs}, headers='keys'))
     print('--------------')
     print(tabulate({
         'Einheiten': ['ms', 'Hz/"FPS"'],
