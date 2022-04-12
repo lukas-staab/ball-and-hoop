@@ -3,7 +3,7 @@ from picamera.array import PiRGBArray
 from picamera import PiCamera
 import time
 import cv2
-from chessboard import utils
+from src.chessboard import utils
 
 # initialize the camera and grab a reference to the raw camera capture
 camera = PiCamera()
@@ -12,7 +12,7 @@ camera.framerate = 90
 rawCapture = PiRGBArray(camera, size=(640, 480))
 # allow the camera to warmup
 
-[camera_matrix, dist_matrix] = utils.load_coefficients('../chessboard/calibration_chessboard.yml')
+[camera_matrix, dist_matrix] = utils.load_coefficients('../src/chessboard/calibration_chessboard.yml')
 
 time.sleep(0.1)
 

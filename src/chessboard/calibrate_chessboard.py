@@ -1,5 +1,5 @@
-from chessboard import calibrate_chessboard
-from utils import load_coefficients, save_coefficients
+from src.chessboard import calibrate_chessboard
+from utils import save_coefficients
 
 # Parameters
 IMAGES_DIR = '/home/pi/ball-hoop-picam/storage/chessboard-calibration'
