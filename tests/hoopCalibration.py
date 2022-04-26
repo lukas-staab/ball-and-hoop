@@ -33,7 +33,7 @@ image_undis = cv2.undistort(image_raw, camera_matrix, dist_matrix)
 hsv = cv2.cvtColor(image_undis, cv2.COLOR_BGR2HSV)
 dirName = input("Base dir name: ")
 os.makedirs("storage/hoop-calibration/" + dirName + "/", exist_ok=True)
-for x in range(10, 250, 20):
+for x in range(10, 230, 5):
     # lower bound and upper bound for Orange color
     lower_bound = np.array([x, 20, 20])
     upper_bound = np.array([x+20, 255, 255])
