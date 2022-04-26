@@ -33,10 +33,10 @@ image_undis = cv2.undistort(image_raw, camera_matrix, dist_matrix)
 hsv = cv2.cvtColor(image_undis, cv2.COLOR_BGR2HSV)
 dirName = input("Base dir name: ")
 os.makedirs("storage/hoop-calibration/" + dirName + "/", exist_ok=True)
-for x in range(10, 230, 5):
+for x in range(0, 255, 5):
     # lower bound and upper bound for Orange color
     lower_bound = np.array([x, 20, 20])
-    upper_bound = np.array([x+20, 255, 255])
+    upper_bound = np.array([(x+20) % 255, 255, 255])
     # find the colors within the boundaries
     mask = cv2.inRange(hsv, lower_bound, upper_bound)
 
@@ -45,7 +45,7 @@ for x in range(10, 230, 5):
     mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
     segmented_img = cv2.bitwise_and(image_undis, image_undis, mask=mask)
 
-    path = "storage/hoop-calibration/" + dirName + "/" + str(x) + "-" + str(x+20) + ".png"
+    path = "storage/hoop-calibration/" + dirName + "/" + str(x) + "-" + str((x+20) % 255) + ".png"
     cv2.imwrite(path, segmented_img)
 pathRaw = "storage/hoop-calibration/" + dirName + "/raw.png"
 pathUndis = "storage/hoop-calibration/" + dirName + "/undistorted.png"
