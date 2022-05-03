@@ -40,19 +40,20 @@ col_upper = (120, 255, 255)
 buffer = 10
 pts = deque(maxlen=buffer)
 
-cam = PiVideoStream(resolution_no=args['resolution'],
-                    framerate=args['fps'], rotation=args['rotation'], encode=args['encode'])
-cam.start()
-# allow the camera to warmup and start the FPS counter
-time.sleep(0.5)
-print("[START] counting frames from `picamera` module...")
-start_time = time.time()
-# capture frames from the camera
-print("Searching for the hoop")
-image = cam.read()
-img_composer = ImageComposer(image)
-hoop = Hoop(img_composer.get_hsv())
 try:
+    cam = PiVideoStream(resolution_no=args['resolution'],
+                        framerate=args['fps'], rotation=args['rotation'], encode=args['encode'])
+    cam.start()
+    # allow the camera to warmup and start the FPS counter
+    time.sleep(1)
+    print("[START] counting frames from `picamera` module...")
+    start_time = time.time()
+    # capture frames from the camera
+    print("Searching for the hoop")
+    image = cam.read()
+    img_composer = ImageComposer(image)
+    hoop = Hoop(img_composer.get_hsv())
+    print("Loop-Search for the ball")
     while True:
         # grab the raw NumPy array representing the image, then initialize the timestamp
         # and occupied/unoccupied text
