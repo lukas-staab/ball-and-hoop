@@ -129,9 +129,9 @@ for (col_low, col_up) in ball_colors:
 cv2.imwrite(dirPath + "result.png", image_result)
 print("dumped pic saves to dir")
 
-cv2.imshow('image', image_result)
+# cv2.imshow('image', image_result)
 # waits for user to press any key
 # (this is necessary to avoid Python kernel form crashing)
-cv2.waitKey(0)
+# cv2.waitKey(0)
 # closing all open windows
-cv2.destroyAllWindows()
+# cv2.destroyAllWindows()
