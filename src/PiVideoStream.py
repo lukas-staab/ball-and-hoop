@@ -87,7 +87,7 @@ class PiVideoStream:
     def read(self):
         # return the frame most recently read
         self.fpsOut.update()
-        frame = self.raw_frame.copy()
+        frame = self.raw_frame
         if self.rotation != 0:
             frame = cv2.rotate(frame, self.rotations[self.rotation])
         return frame
