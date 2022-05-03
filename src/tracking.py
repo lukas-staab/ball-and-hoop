@@ -52,38 +52,42 @@ print("Searching for the hoop")
 image = cam.read()
 img_composer = ImageComposer(image)
 hoop = Hoop(img_composer.get_hsv())
+try:
+    while True:
+        # grab the raw NumPy array representing the image, then initialize the timestamp
+        # and occupied/unoccupied text
+        raw = cam.read()
+        img = ImageComposer(raw, do_undistortion=True, do_blurring=True, dirPath='storage/tracking/')
+        center_ball, radius, hoop_deg = hoop.find_ball(img.get_hsv(), 100, 120)
+        img.plot_hoop(hoop)
+        img.plot_ball(center_ball, radius)
+        # update the points queue
+        pts.appendleft(center_ball)
+        img.plot_line(pts)
+        img.save()
 
-while True:
-    # grab the raw NumPy array representing the image, then initialize the timestamp
-    # and occupied/unoccupied text
-    raw = cam.read()
-    img = ImageComposer(raw, do_undistortion=True, do_blurring=True, dirPath='storage/tracking/')
-    center_ball, radius, hoop_deg = hoop.find_ball(img.get_hsv(), 100, 120)
-    img.plot_hoop(hoop)
-    img.plot_ball(center_ball, radius)
-    # update the points queue
-    pts.appendleft(center_ball)
-    img.plot_line(pts)
-    img.save()
+        # loop over the set of tracked points, draw a line between last found center points
 
-    # loop over the set of tracked points, draw a line between last found center points
-
-    # show the frame
-    if args['display'] != 0:
-        cv2.imshow("Frame", img_composer.image())
-        key = cv2.waitKey(1) & 0xFF
-        if key == ord("q"):
+        # show the frame
+        if args['display'] != 0:
+            cv2.imshow("Frame", img_composer.image())
+            key = cv2.waitKey(1) & 0xFF
+            if key == ord("q"):
+                break
+        if args['time'] != -1 and time.time() - start_time > int(args['time']):
             break
-    if args['time'] != -1 and time.time() - start_time > int(args['time']):
-        break
-    # clear the stream in preparation for the next frame
-    # if the `q` key was pressed, break from the loop
-
-# stop the timer and display FPS information
-cam.stop()
-cam.print_stats()
-# do a bit of cleanup
-cv2.destroyAllWindows()
+        # clear the stream in preparation for the next frame
+        # if the `q` key was pressed, break from the loop
+except KeyboardInterrupt:
+    print('Interrupt detected!')
+except Exception as e:
+    print(e)
+finally:
+    # stop the timer and display FPS information
+    cam.stop()
+    cam.print_stats()
+    # do a bit of cleanup
+    cv2.destroyAllWindows()
 
 
 
