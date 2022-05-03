@@ -1,3 +1,5 @@
+import repackage
+repackage.up()
 # import the necessary packages
 from collections import deque
 from src.PiVideoStream import PiVideoStream
