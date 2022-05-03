@@ -89,7 +89,7 @@ class PiVideoStream:
         self.stopped = True
         self.fpsOut.stop()
         while not self.closed:
-            time.sleep(1)
+            time.sleep(0.1)
 
     def print_stats(self):
         if not self.stopped:

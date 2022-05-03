@@ -1,5 +1,4 @@
 import os
-
 import numpy as np
 import cv2
 from src.chessboard import utils
@@ -7,9 +6,11 @@ from src.chessboard import utils
 
 class ImageComposer:
     camera_matrix, dist_matrix = utils.load_coefficients(
-        '../storage/chessboard-calibration/calibration_chessboard.yml')
+        'storage/chessboard-calibration/calibration_chessboard.yml')
 
     def __init__(self, image_raw, do_undistortion=True, do_blurring=True, dirPath=None):
+        if image_raw is None or image_raw.empty():
+            raise Exception('Cannot work with empty/none image')
         self.idx = 0
         self.image_raw = image_raw
         self.image_history = [image_raw]
