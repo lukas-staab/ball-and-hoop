@@ -61,6 +61,7 @@ class PiVideoStream:
 
     def update(self):
         # keep looping infinitely until the thread is stopped
+        print('Cam is running!')
         try:
             for f in self.stream:
                 # grab the frame from the stream and clear the stream in
