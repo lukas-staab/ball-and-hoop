@@ -5,7 +5,6 @@ from imutils.video import FPS
 from picamera.array import PiRGBArray
 from picamera.array import PiYUVArray
 from picamera import PiCamera
-from threading import Thread
 import cv2
 import multiprocessing
 
@@ -71,11 +70,13 @@ class PiVideoStream:
                 # if the thread indicator variable is set, stop the thread
                 # and resource camera resources
                 if self.stopped:
+                    print('Cam tries to close resources...')
                     self.stream.close()
                     self.rawCapture.close()
                     self.camera.close()
                     self.fpsIn.stop()
                     self.closed = True
+                    print('All resources closed')
                     return
         except:
             self.stream.close()
@@ -94,10 +95,12 @@ class PiVideoStream:
 
     def stop(self):
         # indicate that the thread should be stopped
+        print('Cam is stopping...')
         self.stopped = True
         self.fpsOut.stop()
         while not self.closed:
             time.sleep(0.1)
+        print('Cam is stopped')
 
     def print_stats(self):
         if not self.stopped:
