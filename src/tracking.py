@@ -78,6 +78,8 @@ try:
             break
         # clear the stream in preparation for the next frame
         # if the `q` key was pressed, break from the loop
+except cv2.error as e:
+    print("CV2 error: " + e.msg)
 except KeyboardInterrupt:
     print('Interrupt detected!')
 except Exception as e:
