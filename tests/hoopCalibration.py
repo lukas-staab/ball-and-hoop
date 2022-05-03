@@ -7,9 +7,7 @@ from cv2 import FONT_HERSHEY_PLAIN
 import numpy as np
 import time
 import cv2
-import imutils as imutils
 import os
-from math import atan2
 from src.hoop.hoop import Hoop
 
 
