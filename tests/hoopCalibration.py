@@ -92,8 +92,12 @@ xc, yc, r, _ = cf.least_squares_circle(centers)
 center_hoop = (int(xc), int(yc))
 cv2.circle(image_result, center_hoop, int(r), (0, 255, 0), 2)
 cv2.line(image_result, center_hoop, (int(xc), int(yc) - int(r)), (255, 53, 184), 2)
-# red, yellow, dark blue
-ball_colors = ((0, 20), (15, 35), (90, 100), (100, 120))
+ball_colors = (
+    #(0, 20),  # red
+    #(15, 35),  # yellow
+    #(90, 100),  # light blue
+    (100, 120),  # dark blue
+)
 
 for (col_low, col_up) in ball_colors:
     mask_ball = cv2.inRange(hsv, (col_low, 20, 20), (col_up, 255, 255))
@@ -122,9 +126,9 @@ for (col_low, col_up) in ball_colors:
             cv2.line(image_result, center_hoop, center_ball, (255, 0, 0), 2)
             print((center_ball[0] - center_hoop[0], center_ball[1] - center_hoop[1]))
             deg = angle_of_vector((0, -r), (center_ball[0] - center_hoop[0], center_ball[1] - center_hoop[1]))
-            cv2.putText(image_result, str(round(deg, 2)), (center_ball[0], center_ball[1] - int(1.5 * radius)), fontFace=FONT_HERSHEY_PLAIN, color=(255, 0, 0),
+            cv2.putText(image_result, str(round(deg, 2)), (center_ball[0], center_ball[1] - int(1.5 * radius)),
+                        fontFace=FONT_HERSHEY_PLAIN, color=(255, 0, 0),
                         fontScale=1)
-
 
 cv2.imwrite(dirPath + "result.png", image_result)
 print("dumped pic saves to dir")
