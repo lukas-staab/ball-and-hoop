@@ -26,7 +26,7 @@ dirName = input("Base dir name: ")
 dirPath = "storage/hoop-calibration/" + dirName + "/"
 if not os.path.exists(dirPath):
     os.mkdir("storage/hoop-calibration/" + dirName + "/")
-
+    print('Take picture from raspi cam')
     # imports only work on raspi
     from picamera.array import PiRGBArray
     from picamera import PiCamera
@@ -47,20 +47,24 @@ if not os.path.exists(dirPath):
     # and occupied/unoccupied text
     image_raw = rawCapture.array
     image_undis = cv2.undistort(image_raw, camera_matrix, dist_matrix)
+    cv2.imwrite(dirPath + "raw.png", image_raw)
+    cv2.imwrite(dirPath + "undistorted.png", image_undis)
 else:
+    print('Take picture from ' + dirPath)
     image_raw = cv2.imread(dirPath + "raw.png")
     image_undis = cv2.imread(dirPath + "undistorted.png")
 
 # convert to hsv colorspace
 hsv = cv2.cvtColor(image_undis, cv2.COLOR_BGR2HSV)
 
-# lower bound and upper bound for Orange color
+# lower bound and upper bound for pink color
 lower_bound = np.array([150, 20, 20])
 upper_bound = np.array([190, 255, 255])
 # find the colors within the boundaries
 mask_hoop = cv2.inRange(hsv, lower_bound, upper_bound)
 mask_hoop = cv2.erode(mask_hoop, None, iterations=2)
 mask_hoop = cv2.dilate(mask_hoop, None, iterations=2)
+cv2.imwrite(dirPath + "masked-hoop.png", mask_hoop)
 
 cnts = cv2.findContours(mask_hoop.copy(), cv2.RETR_EXTERNAL,
                         cv2.CHAIN_APPROX_SIMPLE)
@@ -118,11 +122,10 @@ for (col_low, col_up) in ball_colors:
             cv2.line(image_result, center_hoop, center_ball, (255, 0, 0), 2)
             print((center_ball[0] - center_hoop[0], center_ball[1] - center_hoop[1]))
             deg = angle_of_vector((0, -r), (center_ball[0] - center_hoop[0], center_ball[1] - center_hoop[1]))
-            cv2.putText(image_result, str(round(deg, 2)), (center_ball[0], center_ball[1] - int(1.5 * radius)), fontFace=FONT_HERSHEY_PLAIN, color=(0, 255, 0),
+            cv2.putText(image_result, str(round(deg, 2)), (center_ball[0], center_ball[1] - int(1.5 * radius)), fontFace=FONT_HERSHEY_PLAIN, color=(255, 0, 0),
                         fontScale=1)
-cv2.imwrite(dirPath + "raw.png", image_raw)
-cv2.imwrite(dirPath + "undistorted.png", image_undis)
-cv2.imwrite(dirPath + "masked-hoop.png", mask_hoop)
+
+
 cv2.imwrite(dirPath + "result.png", image_result)
 print("dumped pic saves to dir")
 
