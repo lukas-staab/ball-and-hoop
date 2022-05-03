@@ -1,4 +1,5 @@
 # import the necessary packages
+import threading
 import time
 
 from imutils.video import FPS
@@ -54,7 +55,8 @@ class PiVideoStream:
         # start the thread to read frames from the video stream
         self.fpsIn = self.fpsIn.start()
         self.fpsOut = self.fpsOut.start()
-        multiprocessing.Process(target=self.update, args=()).start()
+        print('Trys to start ')
+        threading.Thread(target=self.update, args=()).start()
         return self
 
     def update(self):
