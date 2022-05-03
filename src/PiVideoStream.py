@@ -11,7 +11,6 @@ import multiprocessing
 
 
 class PiVideoStream:
-
     resolutions = {
         0: (160, 128),
         1: (320, 240),
@@ -41,7 +40,8 @@ class PiVideoStream:
             self.rawCapture = PiRGBArray(self.camera, size=resolution)
         else:
             self.rawCapture = PiYUVArray(self.camera, size=resolution)
-        self.stream = self.camera.capture_continuous(self.rawCapture, format=self.encodings[encode], use_video_port=True)
+        self.stream = self.camera.capture_continuous(self.rawCapture, format=self.encodings[encode],
+                                                     use_video_port=True)
         # initialize the frame and the variable used to indicate
         # if the thread should be stopped
         self.raw_frame = None
@@ -60,22 +60,29 @@ class PiVideoStream:
 
     def update(self):
         # keep looping infinitely until the thread is stopped
-        for f in self.stream:
-            # grab the frame from the stream and clear the stream in
-            # preparation for the next frame
-            if f is not None:
-                self.raw_frame = f.array
-                self.rawCapture.truncate(0)
-                self.fpsIn.update()
-            # if the thread indicator variable is set, stop the thread
-            # and resource camera resources
-            if self.stopped:
-                self.stream.close()
-                self.rawCapture.close()
-                self.camera.close()
-                self.fpsIn.stop()
-                self.closed = True
-                return
+        try:
+            for f in self.stream:
+                # grab the frame from the stream and clear the stream in
+                # preparation for the next frame
+                if f is not None:
+                    self.raw_frame = f.array
+                    self.rawCapture.truncate(0)
+                    self.fpsIn.update()
+                # if the thread indicator variable is set, stop the thread
+                # and resource camera resources
+                if self.stopped:
+                    self.stream.close()
+                    self.rawCapture.close()
+                    self.camera.close()
+                    self.fpsIn.stop()
+                    self.closed = True
+                    return
+        except:
+            self.stream.close()
+            self.rawCapture.close()
+            self.camera.close()
+            self.fpsIn.stop()
+            self.closed = True
 
     def read(self):
         # return the frame most recently read
@@ -100,4 +107,3 @@ class PiVideoStream:
         print("[IN] approx. FPS: {:.2f}".format(self.fpsIn.fps()))
         print("[OUT] elasped time: {:.2f}".format(self.fpsOut.elapsed()))
         print("[OUT] approx. FPS: {:.2f}".format(self.fpsOut.fps()))
-
