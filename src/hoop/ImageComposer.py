@@ -9,7 +9,7 @@ class ImageComposer:
         'storage/chessboard-calibration/calibration_chessboard.yml')
 
     def __init__(self, image_raw, do_undistortion=True, do_blurring=True, dirPath=None):
-        if image_raw is None or image_raw.empty():
+        if image_raw is None:
             raise Exception('Cannot work with empty/none image')
         self.idx = 0
         self.image_raw = image_raw
