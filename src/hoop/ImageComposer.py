@@ -7,7 +7,7 @@ from src.chessboard import utils
 
 class ImageComposer:
     camera_matrix, dist_matrix = utils.load_coefficients(
-        '../storage/chessboard-calibration/calibration_chessboard.yml')
+        'storage/chessboard-calibration/calibration_chessboard.yml')
 
     def __init__(self, image_raw, do_undistortion=True, do_blurring=True, dirPath=None):
         self.idx = 0

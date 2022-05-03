@@ -55,7 +55,7 @@ while True:
     # grab the raw NumPy array representing the image, then initialize the timestamp
     # and occupied/unoccupied text
     raw = cam.read()
-    img = ImageComposer(raw, do_undistortion=True, do_blurring=True)
+    img = ImageComposer(raw, do_undistortion=True, do_blurring=True, dirPath='storage/tracking/')
     center_ball, radius, hoop_deg = hoop.find_ball(img.get_hsv(), 100, 120)
     img.plot_hoop(hoop)
     img.plot_ball(center_ball, radius)
