@@ -3,3 +3,4 @@ numpy
 imutils
 tabulate
 repackage
+circle_fit

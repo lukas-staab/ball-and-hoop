@@ -1,15 +1,17 @@
 # import the necessary packages
 from collections import deque
-import imutils as imutils
-from src.chessboard import utils
-import numpy as np
 from src.PiVideoStream import PiVideoStream
 import argparse
 import time
 import cv2
 
+from src.hoop.ImageComposer import ImageComposer
+from src.hoop.hoop import Hoop
+
 
 # construct the argument parse and parse the arguments
+
+
 ap = argparse.ArgumentParser()
 ap.add_argument("-f", "--fps", type=int, default=60,
                 help="# of frames to loop over for FPS test")
@@ -31,13 +33,10 @@ args = vars(ap.parse_args())
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space, then initialize the
 # list of tracked points
-greenLower = (29, 86, 6)
-greenUpper = (64, 255, 255)
+col_lower = (100, 86, 6)
+col_upper = (120, 255, 255)
 buffer = 10
 pts = deque(maxlen=buffer)
-
-[camera_matrix, dist_matrix] = utils.load_coefficients('../storage/chessboard-calibration/calibration_chessboard.yml')
-
 
 cam = PiVideoStream(resolution_no=args['resolution'],
                     framerate=args['fps'], rotation=args['rotation'], encode=args['encode'])
@@ -47,58 +46,29 @@ time.sleep(0.5)
 print("[START] counting frames from `picamera` module...")
 start_time = time.time()
 # capture frames from the camera
-# capture frames from the camera
+print("Searching for the hoop")
+image = cam.read()
+img_composer = ImageComposer(image)
+hoop = Hoop(img_composer.get_hsv())
+
 while True:
     # grab the raw NumPy array representing the image, then initialize the timestamp
     # and occupied/unoccupied text
-    image = cam.read()
-    undistort = cv2.undistort(image, camera_matrix, dist_matrix)
-    blurred = cv2.GaussianBlur(undistort, (11, 11), 0)
-    hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
-    # construct a mask for the color "green", then perform
-    # a series of dilations and erosions to remove any small
-    # blobs left in the mask
-    mask = cv2.inRange(hsv, greenLower, greenUpper)
-    mask = cv2.erode(mask, None, iterations=2)
-    mask = cv2.dilate(mask, None, iterations=2)
-
-    cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
-                            cv2.CHAIN_APPROX_SIMPLE)
-    cnts = imutils.grab_contours(cnts)
-    # only proceed if at least one contour was found
-    center = None
-    if len(cnts) > 0:
-        # find the largest contour in the mask, then use
-        # it to compute the minimum enclosing circle and
-        # centroid
-        c = max(cnts, key=cv2.contourArea)
-        ((x, y), radius) = cv2.minEnclosingCircle(c)
-        M = cv2.moments(c)
-        center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
-        # only proceed if the radius meets a minimum size
-        if radius > 10:
-            # draw the circle and centroid on the frame,
-            # then update the list of tracked points
-            cv2.circle(undistort, (int(x), int(y)), int(radius),
-                       (0, 255, 255), 2)
-            cv2.circle(undistort, center, 5, (0, 0, 255), -1)
+    raw = cam.read()
+    img = ImageComposer(raw, do_undistortion=True, do_blurring=True)
+    center_ball, radius, hoop_deg = hoop.find_ball(img.get_hsv(), 100, 120)
+    img.plot_hoop(hoop)
+    img.plot_ball(center_ball, radius)
     # update the points queue
-    pts.appendleft(center)
+    pts.appendleft(center_ball)
+    img.plot_line(pts)
+    img.save()
 
-    # loop over the set of tracked points
-    for i in range(1, len(pts)):
-        # if either of the tracked points are None, ignore
-        # them
-        if pts[i - 1] is None or pts[i] is None:
-            continue
-        # otherwise, compute the thickness of the line and
-        # draw the connecting lines
-        thickness = int(np.sqrt(buffer / float(i + 1)) * 2.5)
-        cv2.line(undistort, pts[i - 1], pts[i], (0, 0, 255), thickness)
+    # loop over the set of tracked points, draw a line between last found center points
 
     # show the frame
     if args['display'] != 0:
-        cv2.imshow("Frame", undistort)
+        cv2.imshow("Frame", img_composer.image())
         key = cv2.waitKey(1) & 0xFF
         if key == ord("q"):
             break
