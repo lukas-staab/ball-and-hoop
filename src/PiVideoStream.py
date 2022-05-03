@@ -63,9 +63,10 @@ class PiVideoStream:
         for f in self.stream:
             # grab the frame from the stream and clear the stream in
             # preparation for the next frame
-            self.raw_frame = f.array
-            self.rawCapture.truncate(0)
-            self.fpsIn.update()
+            if f is not None:
+                self.raw_frame = f.array
+                self.rawCapture.truncate(0)
+                self.fpsIn.update()
             # if the thread indicator variable is set, stop the thread
             # and resource camera resources
             if self.stopped:
@@ -79,7 +80,7 @@ class PiVideoStream:
     def read(self):
         # return the frame most recently read
         self.fpsOut.update()
-        frame = self.raw_frame
+        frame = self.raw_frame.copy()
         if self.rotation != 0:
             frame = cv2.rotate(frame, self.rotations[self.rotation])
         return frame
