@@ -28,10 +28,10 @@ class ImageComposer:
         return self.image_history[-1]
 
     def plot_hoop(self, hoop, color=(255, 0, 0), thickness=2):
-        cv2.circle(self.image(), hoop.center, hoop.radius, color, thickness)
+        cv2.circle(self.image(), hoop.center, int(hoop.radius), color, thickness)
 
     def plot_ball(self, ball_center, ball_radius, color_outline=(0, 255, 0), color_center=(0, 255, 0)):
-        cv2.circle(self.image(), ball_center, ball_radius, color_outline, 2)
+        cv2.circle(self.image(), ball_center, int(ball_radius), color_outline, 2)
         cv2.circle(self.image(), ball_center, 3, color_center, -1)
 
     def apply_undistort(self):

@@ -1,15 +1,31 @@
 - hosts: rpi
+  handlers:
+  - name: wait-for-reboot
+    wait_for_connection:
+      delay: "5"
+      timeout: "300"
   tasks:
+  - name: apt update upgrade autoremove autoclean
+    apt:
+      name: '*'
+      state: latest
+      update_cache: true
+      cache_valid_time: 3600 # in seconds
+      autoremove: true
+    become: yes
+
   - name: Install needed system packages
-    package:
+    apt:
       name:
         - git
         - python3
+        - python3-pip
         - python3-opencv
         - python3-picamera
         #  https://stackoverflow.com/questions/53347759/importerror-libcblas-so-3-cannot-open-shared-object-file-no-such-file-or-dire
         - libatlas-base-dev
         - libjasper-dev
+      state: latest
     become: yes
 
   - name: install this repo on remote host
@@ -21,5 +37,36 @@
 
   - name: Install pip requirements
     pip:
-      requirements: ~/ball-and-hoop/requirements.txt
+      chdir: ~/ball-and-hoop/
+      requirements: requirements.txt
       executable: pip3
+
+  - name: Get Camera Config
+    shell: "raspi-config nonint get_legacy"
+    register: camera_status
+    changed_when: False
+  - name: Print Cam Status
+    debug:
+      msg: "{{ camera_status.stdout }}"
+
+  - name: Activate Pi Camera
+    when: camera_status.stdout != '0'
+    become: True
+    block:
+    - name: Enable Camera
+      shell: "raspi-config nonint do_legacy 0"
+    - name: Request reboot
+      set_fact:
+        need_reboot: True
+    - name: Access Set Fact
+      debug:
+        msg: "{{ ansible_facts.need_reboot }}"
+
+  - name: Do Reboot
+    become: True
+    shell: "sleep 1 && shutdown -r now +1"
+    async: 1
+    poll: 0
+    notify:
+      - wait-for-reboot
+    when: ansible_facts.need_reboot is defined and ansible_facts.need_reboot == True

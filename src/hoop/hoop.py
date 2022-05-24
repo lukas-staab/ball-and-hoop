@@ -1,4 +1,6 @@
 import math
+import time
+
 import imutils
 import numpy
 import numpy as np
@@ -16,12 +18,13 @@ class Hoop:
         self.hsv_image = hsv_image
         self.lower_hsv = lower_hsv
         self.upper_hsv = upper_hsv
-        self.center, self.radius, self.center_dots, self.radius_dots = self.find_hoop()
+        self.center, self.radius, self.center_dots, self.radius_dots, self.mask_hoop = self.find_hoop()
 
     def find_hoop(self):
         mask_hoop = cv2.inRange(self.hsv_image, self.lower_hsv, self.upper_hsv)
         mask_hoop = cv2.erode(mask_hoop, None, iterations=2)
         mask_hoop = cv2.dilate(mask_hoop, None, iterations=2)
+        self.mask_hoop = mask_hoop
         cnts = cv2.findContours(mask_hoop.copy(), cv2.RETR_EXTERNAL,
                                 cv2.CHAIN_APPROX_SIMPLE)
         cnts = imutils.grab_contours(cnts)
@@ -39,11 +42,12 @@ class Hoop:
                 center_dot = (int(m["m10"] / m["m00"]), int(m["m01"] / m["m00"]))
                 dots_center.append(center_dot)
                 dots_radius.append(radius)
-
+        if len(dots_radius) < 3:
+            raise RuntimeError('Not enough calibration points in the picture')
         xc, yc, radius_hoop, _ = cf.least_squares_circle(dots_center)
         center_hoop = (int(xc), int(yc))
 
-        return numpy.array(center_hoop), radius_hoop, dots_center, dots_radius
+        return numpy.array(center_hoop), radius_hoop, dots_center, dots_radius, mask_hoop
 
     def angle_in_hoop(self, center_ball):
         v1 = np.array((0, -self.radius))
@@ -64,6 +68,8 @@ class Hoop:
                                 cv2.CHAIN_APPROX_SIMPLE)
         cnts = imutils.grab_contours(cnts)
         if len(cnts) == 0:
+            cv2.imshow('debug', hsv)
+            time.sleep(5)
             raise RuntimeError('No ball found')
         # find the largest contour in the mask, then use
         # it to compute the minimum enclosing circle and

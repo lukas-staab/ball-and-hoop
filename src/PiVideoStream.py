@@ -1,13 +1,14 @@
 # import the necessary packages
+from importlib.util import find_spec
 import threading
 import time
-
-from imutils.video import FPS
-from picamera.array import PiRGBArray
-from picamera.array import PiYUVArray
-from picamera import PiCamera
 import cv2
-import multiprocessing
+from imutils.video import FPS
+
+if find_spec('picamera') is not None:
+    from picamera.array import PiRGBArray
+    from picamera.array import PiYUVArray
+    from picamera import PiCamera
 
 
 class PiVideoStream:
@@ -33,15 +34,21 @@ class PiVideoStream:
     def __init__(self, resolution_no=1, framerate=30, rotation=0, encode=1):
         resolution = self.resolutions[resolution_no]
         # initialize the camera and stream
-        self.camera = PiCamera()
-        self.camera.resolution = resolution
-        self.camera.framerate = framerate
-        if self.encodings[encode] == 'bgr':
-            self.rawCapture = PiRGBArray(self.camera, size=resolution)
+        self.isPi = find_spec('picamera') is not None
+        self.framerate = framerate
+        if self.isPi:
+            self.camera = PiCamera()
+            self.camera.resolution = resolution
+            self.camera.framerate = framerate
+            if self.encodings[encode] == 'bgr':
+                self.rawCapture = PiRGBArray(self.camera, size=resolution)
+            else:
+                self.rawCapture = PiYUVArray(self.camera, size=resolution)
+            self.stream = self.camera.capture_continuous(self.rawCapture,
+                                                         format=self.encodings[encode],
+                                                         use_video_port=True)
         else:
-            self.rawCapture = PiYUVArray(self.camera, size=resolution)
-        self.stream = self.camera.capture_continuous(self.rawCapture, format=self.encodings[encode],
-                                                     use_video_port=True)
+            self.stream = self.faker_stream_generator()
         # initialize the frame and the variable used to indicate
         # if the thread should be stopped
         self.raw_frame = None
@@ -55,7 +62,7 @@ class PiVideoStream:
         # start the thread to read frames from the video stream
         self.fpsIn = self.fpsIn.start()
         self.fpsOut = self.fpsOut.start()
-        print('Trys to start ')
+        print('Try to start cam...')
         threading.Thread(target=self.update, args=()).start()
         return self
 
@@ -67,8 +74,12 @@ class PiVideoStream:
                 # grab the frame from the stream and clear the stream in
                 # preparation for the next frame
                 if f is not None:
-                    self.raw_frame = f.array
-                    self.rawCapture.truncate(0)
+                    if self.isPi:
+                        self.raw_frame = f.array
+                        self.rawCapture.truncate(0)
+                    else:
+                        self.raw_frame = f
+                        time.sleep(1 / self.framerate)
                     self.fpsIn.update()
                 # if the thread indicator variable is set, stop the thread
                 # and resource camera resources
@@ -82,9 +93,10 @@ class PiVideoStream:
                     print('All resources closed')
                     return
         except:
-            self.stream.close()
-            self.rawCapture.close()
-            self.camera.close()
+            if self.isPi:
+                self.stream.close()
+                self.rawCapture.close()
+                self.camera.close()
             self.fpsIn.stop()
             self.closed = True
 
@@ -113,3 +125,13 @@ class PiVideoStream:
         print("[IN] approx. FPS: {:.2f}".format(self.fpsIn.fps()))
         print("[OUT] elasped time: {:.2f}".format(self.fpsOut.elapsed()))
         print("[OUT] approx. FPS: {:.2f}".format(self.fpsOut.fps()))
+
+    def faker_stream_generator(self):
+        cap = cv2.VideoCapture('storage/hoop-calibration/vid2/vid.h264_cutted.mp4')
+        while cap.isOpened():
+            success, frame = cap.read()
+            if success:
+                yield frame
+            else:
+                break
+        cap.release()
