@@ -45,20 +45,26 @@ try:
                         framerate=args['fps'], rotation=args['rotation'], encode=args['encode'])
     cam.start()
     # allow the camera to warmup and start the FPS counter
-    time.sleep(1)
-    print("[START] counting frames from `picamera` module...")
-    start_time = time.time()
+    time.sleep(0.25)
     # capture frames from the camera
     print("Searching for the hoop")
-    image = cam.read()
-    img_composer = ImageComposer(image)
-    hoop = Hoop(img_composer.get_hsv())
+    hoopFound = False
+    while not hoopFound:
+        try:
+            image = cam.read()
+            cv2.imshow('Debug', image)
+            img_composer = ImageComposer(image, do_undistortion=False, do_blurring=False)
+            hoop = Hoop(img_composer.get_hsv())
+        except RuntimeError as e:
+            print(e)
+        else:
+            hoopFound = True
     print("Loop-Search for the ball")
     while True:
         # grab the raw NumPy array representing the image, then initialize the timestamp
         # and occupied/unoccupied text
         raw = cam.read()
-        img = ImageComposer(raw, do_undistortion=True, do_blurring=True, dirPath='storage/tracking/')
+        img = ImageComposer(raw, do_undistortion=False, do_blurring=False, dirPath='storage/tracking/')
         center_ball, radius, hoop_deg = hoop.find_ball(img.get_hsv(), 100, 120)
         img.plot_hoop(hoop)
         img.plot_ball(center_ball, radius)
@@ -75,16 +81,16 @@ try:
             key = cv2.waitKey(1) & 0xFF
             if key == ord("q"):
                 break
-        if args['time'] != -1 and time.time() - start_time > int(args['time']):
-            break
         # clear the stream in preparation for the next frame
         # if the `q` key was pressed, break from the loop
 except cv2.error as e:
-    print("CV2 error: " + e.msg)
+    cam.stop()
+    raise e
 except KeyboardInterrupt:
     print('Interrupt detected!')
 except Exception as e:
-    print(e)
+    cam.stop()
+    raise e
 finally:
     # stop the timer and display FPS information
     cam.stop()

@@ -2,7 +2,15 @@
 ## Operating System
 Install on every Raspberry Pi SD Card, which shall be used, Raspian OS. 
 Details for installation can be found on their [website](https://www.raspberrypi.com/software/).
-
+### Install via raspi-imager
+Pick OS -> Other -> Raspberry Pi OS lite (no Desktop) or just pick the recommended (with Desktop)
+Press Strg+Shift+X for Advanced Options (or press the gear):
+    Hostname: rpi[1-3].local (pick one of the numbers)
+    Activate SSH and pick one of your SSH-Keys if wanted
+    Set username and password if wanted (you have to fixup these in ansible!)
+    Pick timezone and keyboard layout to your liking
+Pick your SD card and write the image!
+### Manuel set
 Make sure the ssh server is enabled, and you know the password or can login via [ssh-key](https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server-de).
 The SSH-Server will be activated at boot if there is a (empty) file with the name `ssh` on the boot partition.
 Via commandline this can be done with 
