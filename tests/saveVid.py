@@ -3,15 +3,15 @@ from time import sleep
 
 from picamera import PiCamera
 
-dirName = input("Base dir name: ")
-dirPath = "storage/hoop-calibration/" + dirName + "/"
-if not os.path.exists(dirPath):
-    os.mkdir("storage/hoop-calibration/" + dirName + "/")
+fileName = input("File name: ")
+dir = "storage/video/"
+if not os.path.exists(dir):
+    os.mkdir(dir)
 
 camera = PiCamera()
 camera.resolution = (320, 240)
 camera.framerate = 60
 
-camera.start_recording(dirPath + 'vid.h264')
+camera.start_recording(dir + fileName + 'vid.h264')
 sleep(10)
 camera.stop_recording()
