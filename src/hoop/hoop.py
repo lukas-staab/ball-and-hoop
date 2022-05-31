@@ -3,7 +3,7 @@ import imutils
 import numpy as np
 import cv2
 import circle_fit as cf
-import src.hoop.ImageComposer as ic
+import src.hoop.imageComposer as ic
 
 
 class Hoop:

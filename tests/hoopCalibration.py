@@ -8,8 +8,8 @@ import numpy as np
 import time
 import cv2
 import os
-from src.hoop.Hoop import Hoop
-from src.hoop.ImageComposer import ImageComposer
+from src.hoop.hoop import Hoop
+from src.hoop.imageComposer import ImageComposer
 
 
 dirName = input("Base dir name [00]:") or "00"
