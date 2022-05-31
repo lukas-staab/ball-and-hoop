@@ -1,15 +1,15 @@
+from __future__ import annotations
 import math
 import imutils
 import numpy as np
 import cv2
 import circle_fit as cf
-import src.ballandhoop.imageComposer
 
 
 class Hoop:
 
     def __init__(self,
-                 image_composer: src.ballandhoop.imageComposer.ImageComposer,
+                 image_composer: ImageComposer,
                  lower_hsv=np.array([150, 20, 20]),
                  upper_hsv=np.array([190, 255, 255]),
                  ):
