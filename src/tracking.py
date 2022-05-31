@@ -7,8 +7,8 @@ import argparse
 import time
 import cv2
 
-from src.hoop.imageComposer import ImageComposer
-from src.hoop.hoop import Hoop
+from src.imageComposer import ImageComposer
+from src.hoop import Hoop
 
 
 # construct the argument parse and parse the arguments

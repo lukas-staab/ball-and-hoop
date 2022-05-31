@@ -2,14 +2,12 @@
 import repackage
 repackage.up()
 # import the necessary packages
-from src.chessboard.utils import load_coefficients
-from cv2 import FONT_HERSHEY_PLAIN
 import numpy as np
 import time
 import cv2
 import os
-from src.hoop.hoop import Hoop
-from src.hoop.imageComposer import ImageComposer
+from src.hoop import Hoop
+from src.imageComposer import ImageComposer
 
 
 dirName = input("Base dir name [00]:") or "00"

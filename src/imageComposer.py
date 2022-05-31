@@ -1,8 +1,7 @@
 import os
 import numpy as np
 import cv2
-
-import src.hoop.hoop as h
+import src.hoop as h
 from src.chessboard import utils
 
 

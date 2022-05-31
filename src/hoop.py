@@ -3,13 +3,13 @@ import imutils
 import numpy as np
 import cv2
 import circle_fit as cf
-import src.hoop.imageComposer as ic
+import src.imageComposer
 
 
 class Hoop:
 
     def __init__(self,
-                 image_composer: ic.ImageComposer,
+                 image_composer: src.imageComposer.ImageComposer,
                  lower_hsv=np.array([150, 20, 20]),
                  upper_hsv=np.array([190, 255, 255]),
                  ):
