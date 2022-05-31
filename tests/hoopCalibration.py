@@ -44,7 +44,7 @@ imc = ImageComposer(image_raw, do_blurring=False, do_undistortion=True, debug_pa
 imc.save()
 # convert to hsv colorspace
 # search hoop
-hoop = Hoop(imc.get_hsv())
+hoop = Hoop(imc)
 hoop.find_hoop()
 imc.plot_hoop(hoop)
 imc.save()
