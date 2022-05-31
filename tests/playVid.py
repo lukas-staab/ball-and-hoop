@@ -3,7 +3,7 @@ import repackage
 repackage.up()
 from src.hoop.ImageComposer import ImageComposer
 from src.PiVideoStream import PiVideoStream
-from src.hoop.hoop import Hoop
+from src.hoop.Hoop import Hoop
 import time
 import cv2
 

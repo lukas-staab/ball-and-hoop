@@ -8,7 +8,7 @@ import numpy as np
 import time
 import cv2
 import os
-from src.hoop.hoop import Hoop
+from src.hoop.Hoop import Hoop
 from src.hoop.ImageComposer import ImageComposer
 
 

@@ -1,8 +1,5 @@
 import math
-import time
-
 import imutils
-import numpy
 import numpy as np
 import cv2
 import circle_fit as cf
