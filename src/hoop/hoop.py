@@ -6,14 +6,13 @@ import numpy
 import numpy as np
 import cv2
 import circle_fit as cf
-
-from src.hoop.ImageComposer import ImageComposer
+import src.hoop.ImageComposer as ic
 
 
 class Hoop:
 
     def __init__(self,
-                 image_composer: ImageComposer,
+                 image_composer: ic.ImageComposer,
                  lower_hsv=np.array([150, 20, 20]),
                  upper_hsv=np.array([190, 255, 255]),
                  ):
