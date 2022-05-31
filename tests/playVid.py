@@ -1,9 +1,9 @@
 import numpy as np
 import repackage
 repackage.up()
-from src.imageComposer import ImageComposer
+from src.ballandhoop.imageComposer import ImageComposer
 from src.PiVideoStream import PiVideoStream
-from src.hoop import Hoop
+from src.ballandhoop.hoop import Hoop
 import time
 import cv2
 

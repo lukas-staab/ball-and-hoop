@@ -3,13 +3,13 @@ import imutils
 import numpy as np
 import cv2
 import circle_fit as cf
-import src.imageComposer
+import src.ballandhoop.imageComposer
 
 
 class Hoop:
 
     def __init__(self,
-                 image_composer: src.imageComposer.ImageComposer,
+                 image_composer: src.ballandhoop.imageComposer.ImageComposer,
                  lower_hsv=np.array([150, 20, 20]),
                  upper_hsv=np.array([190, 255, 255]),
                  ):
