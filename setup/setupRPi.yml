@@ -70,3 +70,4 @@
     notify:
       - wait-for-reboot
     when: ansible_facts.need_reboot is defined and ansible_facts.need_reboot == True
+

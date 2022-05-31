@@ -1,0 +1,9 @@
+- hosts: rpi
+  gather_facts: false
+  tasks:
+    - name: Copy results from storage
+      synchronize:
+        src: ~/ball-and-hoop/storage/
+        dest: "{{ playbook_dir }}/../fetch/{{ inventory_hostname }}/"
+        mode: pull
+        delay_updates: false

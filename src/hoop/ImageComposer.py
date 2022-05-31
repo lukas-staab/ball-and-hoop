@@ -8,7 +8,7 @@ class ImageComposer:
     camera_matrix, dist_matrix = utils.load_coefficients(
         'storage/chessboard-calibration/calibration_chessboard.yml')
 
-    def __init__(self, image_raw, do_undistortion=True, do_blurring=True, dirPath=None):
+    def __init__(self, image_raw, do_undistortion=True, do_blurring=True, debug_path: str=None):
         if image_raw is None:
             raise Exception('Cannot work with empty/none image')
         self.idx = 0
@@ -19,10 +19,15 @@ class ImageComposer:
         if do_blurring:
             self.apply_blurring()
         # append copy of last instance to paint on
+        self.newImage()
+        if debug_path is not None and not debug_path.endswith('/'):
+            debug_path += "/"
+        self.debug_path = debug_path
+        if self.debug_path is not None:
+            os.makedirs(debug_path, exist_ok=True)
+
+    def newImage(self):
         self.image_history.append(self.image_history[-1].copy())
-        self.dirPath = dirPath
-        if self.dirPath is not None:
-            os.makedirs(dirPath, exist_ok=True)
 
     def image(self):
         return self.image_history[-1]
@@ -54,9 +59,12 @@ class ImageComposer:
             thickness = int(np.sqrt(pts.maxlen / float(i + 1)) * 2.5)
             cv2.line(self.image(), pts[i - 1], pts[i], color, thickness)
 
+    def get_debug_path(self):
+        return self.debug_path + str(self.idx) + "/"
+
     def save(self):
-        if self.dirPath is None:
+        if self.debug_path is None:
             return
         for num, img in enumerate(self.image_history, start=0):
-            cv2.imwrite(self.dirPath + "/" + str(self.idx) + "/" + str(num) + ".png", img)
+            cv2.imwrite(self.debug_path + str(self.idx) + "/" + str(num) + ".png", img)
         self.idx = self.idx + 1

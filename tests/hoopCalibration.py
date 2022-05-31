@@ -9,6 +9,7 @@ import time
 import cv2
 import os
 from src.hoop.hoop import Hoop
+from src.hoop.ImageComposer import ImageComposer
 
 
 dirName = input("Base dir name [00]:") or "00"
@@ -25,7 +26,6 @@ if not os.path.exists(dirPath):
     camera.resolution = (640, 480)
     camera.framerate = 90
     rawCapture = PiRGBArray(camera, size=(640, 480))
-    [camera_matrix, dist_matrix] = load_coefficients('storage/chessboard-calibration/calibration_chessboard.yml')
 
     # allow the camera to warmup
     time.sleep(0.1)
@@ -35,22 +35,20 @@ if not os.path.exists(dirPath):
     # grab the raw NumPy array representing the image, then initialize the timestamp
     # and occupied/unoccupied text
     image_raw = rawCapture.array
-    image_undis = cv2.undistort(image_raw, camera_matrix, dist_matrix)
     cv2.imwrite(dirPath + "raw.png", image_raw)
-    cv2.imwrite(dirPath + "undistorted.png", image_undis)
 else:
     print('Take picture from ' + dirPath)
     image_raw = cv2.imread(dirPath + "raw.png")
-    image_undis = cv2.imread(dirPath + "undistorted.png")
 
+imc = ImageComposer(image_raw, do_blurring=False, do_undistortion=True, debug_path=dirPath)
+imc.save()
 # convert to hsv colorspace
-hsv = cv2.cvtColor(image_undis, cv2.COLOR_BGR2HSV)
 # search hoop
-hoop = Hoop(hsv)
+hoop = Hoop(imc.get_hsv())
+hoop.find_hoop()
+imc.plot_hoop(hoop)
+imc.save()
 # prepare output picture
-image_result = image_undis.copy()
-cv2.circle(image_result, hoop.center, int(hoop.radius), (0, 255, 0), 2)
-cv2.line(image_result, hoop.center, np.array(hoop.center - np.array((0, hoop.radius)), int), (255, 53, 184), 2)
 
 # search balls in colors
 ball_colors = (
@@ -66,16 +64,13 @@ for (col_low, col_up) in ball_colors:
     if ball_radius > 10:
         # draw the circle and centroid on the frame,
         # then update the list of tracked points
-        cv2.circle(image_result, ball_center, int(ball_radius), (0, 255, 255), 2)
-        cv2.circle(image_result, ball_center, 5, (0, 0, 255), -1)
+        imc.plot_ball(ball_center, ball_radius)
         print(np.array(ball_center) - hoop.center)
-        cv2.line(image_result, hoop.center, ball_center, (255, 0, 0), 2)
+        imc.plot_line((hoop.center, ball_center))
         deg = hoop.angle_in_hoop(ball_center)
-        cv2.putText(image_result, str(round(deg, 2)), (ball_center[0], ball_center[1] - int(1.5 * ball_radius)),
-                    fontFace=FONT_HERSHEY_PLAIN, color=(255, 0, 0),
-                    fontScale=1)
 
-cv2.imwrite(dirPath + "result.png", image_result)
+
+imc.save()
 print("dumped pic saves to dir")
 
 # cv2.imshow('image', image_result)
