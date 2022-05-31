@@ -11,10 +11,10 @@ import os
 from src.hoop.hoop import Hoop
 
 
-dirName = input("Base dir name: ")
+dirName = input("Base dir name [00]:") or "00"
 dirPath = "storage/hoop-calibration/" + dirName + "/"
 if not os.path.exists(dirPath):
-    os.mkdir("storage/hoop-calibration/" + dirName + "/")
+    os.makedirs("storage/hoop-calibration/" + dirName + "/", exist_ok=True)
     print('Take picture from raspi cam')
     # imports only work on raspi
     from picamera.array import PiRGBArray
