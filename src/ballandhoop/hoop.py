@@ -82,7 +82,7 @@ class Hoop:
         if len(cnts) == 0:
             # cv2.imshow('debug', hsv)
             # time.sleep(5)
-            raise RuntimeError('No ball found')
+            return None
         # find the largest contour in the mask, then use
         # it to compute the minimum enclosing circle and
         # centroid
