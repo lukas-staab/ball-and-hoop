@@ -1,5 +1,5 @@
 pyserial
-numpy
+numpy>=1.22
 imutils
 tabulate
 repackage
