@@ -12,6 +12,6 @@ camera = PiCamera()
 camera.resolution = (320, 240)
 camera.framerate = 60
 
-camera.start_recording(dir + fileName + 'vid.h264')
+camera.start_recording(dir + fileName + '.bgr', format='bgr')
 sleep(10)
 camera.stop_recording()

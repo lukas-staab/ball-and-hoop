@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Ansible setup PIs" type="ShConfigurationType">
+  <configuration default="false" name="setup PIs" type="ShConfigurationType">
     <option name="SCRIPT_TEXT" value="ansible-playbook setupRPi.yml" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="ansible-playbook setupRPi.yml" />
