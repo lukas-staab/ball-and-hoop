@@ -11,11 +11,11 @@ from src.chessboard import utils
 class ImageComposer:
     camera_matrix, dist_matrix = utils.load_coefficients(
         'storage/chessboard-calibration/calibration_chessboard.yml')
+    idx = 0
 
     def __init__(self, image_raw, do_undistortion=True, do_blurring=True, debug_path: str = None):
         if image_raw is None:
             raise Exception('Cannot work with empty/none image')
-        self.idx = 0
         self.image_raw = image_raw
         self.image_history = [image_raw]
         if do_undistortion:
@@ -83,4 +83,4 @@ class ImageComposer:
         os.makedirs(self.debug_path + str(self.idx) + "/", exist_ok=True)
         for num, img in enumerate(self.image_history, start=0):
             cv2.imwrite(self.debug_path + str(self.idx) + "/" + str(num) + ".png", img)
-        self.idx = self.idx + 1
+        ImageComposer.idx = ImageComposer.idx + 1
