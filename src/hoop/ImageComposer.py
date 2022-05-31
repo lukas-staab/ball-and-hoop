@@ -2,6 +2,7 @@ import os
 import numpy as np
 import cv2
 from src.chessboard import utils
+from src.hoop.hoop import Hoop
 
 
 class ImageComposer:
@@ -32,11 +33,11 @@ class ImageComposer:
     def image(self):
         return self.image_history[-1]
 
-    def plot_hoop(self, hoop, color=(255, 0, 0), thickness=2):
+    def plot_hoop(self, hoop: Hoop, color=(255, 0, 0), thickness=2):
         cv2.circle(self.image(), hoop.center, int(hoop.radius), color, thickness)
 
-    def plot_ball(self, ball_center, ball_radius, color_outline=(0, 255, 0), color_center=(0, 255, 0)):
-        cv2.circle(self.image(), ball_center, int(ball_radius), color_outline, 2)
+    def plot_ball(self, ball_center: tuple, ball_radius: int, color_outline: tuple = (0, 255, 0), color_center: tuple = (0, 255, 0)):
+        cv2.circle(self.image(), ball_center, ball_radius, color_outline, 2)
         cv2.circle(self.image(), ball_center, 3, color_center, -1)
 
     def apply_undistort(self):

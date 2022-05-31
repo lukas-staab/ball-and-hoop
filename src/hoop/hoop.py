@@ -52,7 +52,7 @@ class Hoop:
             raise RuntimeError('Not enough calibration points in the picture')
         xc, yc, radius_hoop, _ = cf.least_squares_circle(dots_center)
         center_hoop = (int(xc), int(yc))
-        ret = (numpy.array(center_hoop), radius_hoop, dots_center, dots_radius, mask_hoop)
+        ret = (center_hoop, int(radius_hoop), dots_center, dots_radius, mask_hoop)
         self.center, self.radius, self.center_dots, self.radius_dots, self.mask_hoop = ret
         return ret
 
