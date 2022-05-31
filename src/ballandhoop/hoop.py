@@ -4,29 +4,37 @@ import imutils
 import numpy as np
 import cv2
 import circle_fit as cf
+from .ball import Ball
 
 
 class Hoop:
 
     def __init__(self,
                  image_composer: ImageComposer,
-                 lower_hsv=np.array([150, 20, 20]),
-                 upper_hsv=np.array([190, 255, 255]),
+                 center: tuple,
+                 radius: int,
+                 center_dots,
+                 radius_dots,
                  ):
         self.image_composer = image_composer
-        self.lower_hsv = lower_hsv
-        self.upper_hsv = upper_hsv
-        self.debug_path = image_composer.get_debug_path()
-        self.center, self.radius, self.center_dots, self.radius_dots, self.mask_hoop = (None, None, None, None, None)
+        self.center = center,
+        # i dont know why i need this. center is fine shaped, self.center is not...
+        self.center = self.center[0]
+        # end of confusion
+        self.radius = int(radius)
+        self.center_dots = center_dots
+        self.radius_dots = radius_dots
 
-    def find_hoop(self):
-        mask_hoop = cv2.inRange(self.image_composer.get_hsv(), self.lower_hsv, self.upper_hsv)
-        self.save_debug_pic(mask_hoop, 'hoop-mask')
+    @staticmethod
+    def create_from_image(imc: ImageComposer, lower_hsv=np.array([150, 20, 20]),
+                          upper_hsv=np.array([190, 255, 255]), ):
+        mask_hoop = cv2.inRange(imc.get_hsv(), lower_hsv, upper_hsv)
+        Hoop.save_debug_pic(imc.debug_path, mask_hoop, 'hoop-mask')
         mask_hoop = cv2.erode(mask_hoop, None, iterations=2)
-        self.save_debug_pic(mask_hoop, 'hoop-mask-erode')
+        Hoop.save_debug_pic(imc.debug_path, mask_hoop, 'hoop-mask-erode')
         mask_hoop = cv2.dilate(mask_hoop, None, iterations=2)
-        self.save_debug_pic(mask_hoop, 'hoop-mask-dil')
-        self.mask_hoop = mask_hoop
+        Hoop.save_debug_pic(imc.debug_path, mask_hoop, 'hoop-mask-dil')
+        mask_hoop = mask_hoop
         cnts = cv2.findContours(mask_hoop.copy(), cv2.RETR_EXTERNAL,
                                 cv2.CHAIN_APPROX_SIMPLE)
         cnts = imutils.grab_contours(cnts)
@@ -45,16 +53,14 @@ class Hoop:
                 dots_center.append(center_dot)
                 dots_radius.append(radius)
         if len(dots_radius) < 3:
-            raise RuntimeError('Not enough calibration points in the picture')
+            return None
         xc, yc, radius_hoop, _ = cf.least_squares_circle(dots_center)
         center_hoop = (int(xc), int(yc))
-        ret = (center_hoop, int(radius_hoop), dots_center, dots_radius, mask_hoop)
-        self.center, self.radius, self.center_dots, self.radius_dots, self.mask_hoop = ret
-        return ret
+        return Hoop(imc, center_hoop, radius_hoop, dots_center, dots_radius)
 
-    def angle_in_hoop(self, center_ball):
+    def angle_in_hoop(self, p: tuple):
         v1 = np.array((0, -self.radius))
-        v2 = center_ball - self.center
+        v2 = np.array(p) - np.array(self.center)
         return self.angle_of_vectors(v1, v2)
 
     @staticmethod
@@ -65,11 +71,11 @@ class Hoop:
 
     def find_ball(self, col_low, col_up):
         mask_ball = cv2.inRange(self.image_composer.get_hsv(), (col_low, 20, 20), (col_up, 255, 255))
-        self.save_debug_pic(mask_ball, 'ball-mask')
+        self.save_debug_pic(self, mask_ball, 'ball-mask')
         mask_ball = cv2.erode(mask_ball, None, iterations=2)
-        self.save_debug_pic(mask_ball, 'ball-mask-erode')
+        self.save_debug_pic(self, mask_ball, 'ball-mask-erode')
         mask_ball = cv2.dilate(mask_ball, None, iterations=2)
-        self.save_debug_pic(mask_ball, 'ball-mask-erode-dil')
+        self.save_debug_pic(self, mask_ball, 'ball-mask-erode-dil')
         cnts = cv2.findContours(mask_ball.copy(), cv2.RETR_EXTERNAL,
                                 cv2.CHAIN_APPROX_SIMPLE)
         cnts = imutils.grab_contours(cnts)
@@ -83,13 +89,15 @@ class Hoop:
         c = max(cnts, key=cv2.contourArea)
         ((x, y), radius) = cv2.minEnclosingCircle(c)
         m = cv2.moments(c)
-        center_ball = np.array((int(m["m10"] / m["m00"]), int(m["m01"] / m["m00"])))
+        center_ball = (int(m["m10"] / m["m00"]), int(m["m01"] / m["m00"]))
         # only proceed if the radius meets a minimum size
-        hoop_deg = self.angle_in_hoop(center_ball)
-        return center_ball, radius, hoop_deg
+        return Ball(self, center_ball, int(radius))
 
-    def save_debug_pic(self, img, name):
+    @staticmethod
+    def save_debug_pic(path, img, name):
+        if isinstance(path, Hoop):
+            path = path.image_composer.debug_path
         if not name.endswith(".png"):
             name = name + ".png"
-        if self.debug_path != "":
-            cv2.imwrite(self.debug_path + name, img)
+        if path is not None:
+            cv2.imwrite(path + name, img)

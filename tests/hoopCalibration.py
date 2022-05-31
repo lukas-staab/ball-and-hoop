@@ -1,5 +1,6 @@
 # make parent folder / package accessible
 import repackage
+
 repackage.up()
 # import the necessary packages
 import numpy as np
@@ -9,9 +10,9 @@ import os
 from src.ballandhoop.hoop import Hoop
 from src.ballandhoop.imageComposer import ImageComposer
 
-
 dirName = input("Base dir name [00]:") or "00"
 dirPath = "storage/hoop-calibration/" + dirName + "/"
+print("Search if path exists: " + dirPath)
 if not os.path.exists(dirPath):
     os.makedirs("storage/hoop-calibration/" + dirName + "/", exist_ok=True)
     print('Take picture from raspi cam')
@@ -39,34 +40,32 @@ else:
     image_raw = cv2.imread(dirPath + "raw.png")
 
 imc = ImageComposer(image_raw, do_blurring=False, do_undistortion=True, debug_path=dirPath)
-imc.save()
 # convert to hsv colorspace
 # search hoop
-hoop = Hoop(imc)
-hoop.find_hoop()
+hoop = Hoop.create_from_image(imc, (150, 20, 20), (190, 255, 255))
+if hoop is None:
+    imc.save()
+    print("No hoop found")
+    exit(1)
 imc.plot_hoop(hoop)
-imc.save()
 # prepare output picture
 
 # search balls in colors
 ball_colors = (
-    #(0, 20),  # red
-    #(15, 35),  # yellow
-    #(90, 100),  # light blue
+    # (0, 20),  # red
+    # (15, 35),  # yellow
+    # (90, 100),  # light blue
     (100, 120),  # dark blue
 )
 
 for (col_low, col_up) in ball_colors:
-    ball_center, ball_radius, ball_deg = hoop.find_ball(col_low, col_up)
+    ball = hoop.find_ball(col_low, col_up)
     # only proceed if the radius meets a minimum size
-    if ball_radius > 10:
+    if ball is not None and ball.radius > 10:
         # draw the circle and centroid on the frame,
         # then update the list of tracked points
-        imc.plot_ball(ball_center, ball_radius)
-        print(np.array(ball_center) - hoop.center)
-        imc.plot_line((hoop.center, ball_center))
-        deg = hoop.angle_in_hoop(ball_center)
-
+        imc.plot_ball(ball)
+        imc.plot_angle(hoop, ball)
 
 imc.save()
 print("dumped pic saves to dir")
