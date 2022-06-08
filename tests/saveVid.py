@@ -23,7 +23,7 @@ dirName = "storage/video/"
 if not os.path.exists(dirName):
     os.mkdir(dirName)
 
-with PiCamera as camera:
+with PiCamera() as camera:
     camera.resolution = (320, 240)
     camera.framerate = args['fps']
     camera.start_recording(dirName + fileName + '.raw', format=args['encode'])
