@@ -34,9 +34,11 @@ with picamera.PiCamera() as camera:
                     rg += 0.01 * abs(r - g)
             if abs(b - g) > 1:
                 if b > g:
-                    bg -= 0.1 * abs(b - g)
+                    bg -= 0.01 * abs(b - g)
                 else:
-                    bg += 0.1 * abs(b - g)
+                    bg += 0.01 * abs(b - g)
+            (rg, bg) = max((0, 0), (rg, bg))
+            (rg, bg) = min((8, 8), (rg, bg))
             camera.awb_gains = (rg, bg)
             output.seek(0)
             output.truncate()
