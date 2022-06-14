@@ -2,6 +2,7 @@ import os
 
 import picamera.array
 import numpy as np
+import cv2
 
 dirPath = './storage/awb/'
 os.makedirs(dirPath, exist_ok=True)
