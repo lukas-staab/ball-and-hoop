@@ -1,3 +1,5 @@
+
+
 import os
 
 import picamera.array
@@ -6,7 +8,7 @@ import cv2
 
 dirPath = './storage/awb/'
 os.makedirs(dirPath, exist_ok=True)
-
+# https://raspberrypi.stackexchange.com/questions/22975/custom-white-balancing-with-picamera
 with picamera.PiCamera() as camera:
     camera.resolution = (1280, 720)
     camera.awb_mode = 'off'
@@ -19,7 +21,7 @@ with picamera.PiCamera() as camera:
             # Capture a tiny resized image in RGB format, and extract the
             # average R, G, and B values
             camera.capture(output, format='rgb', resize=(128, 72), use_video_port=True)
-            cv2.imwrite(dirPath + '{0:2d}.png'.format(i), output)
+            cv2.imwrite(dirPath + '{0:2d}.png'.format(i), output.array)
             r, g, b = (np.mean(output.array[..., i]) for i in range(3))
             print('R:%5.2f, B:%5.2f = (%5.2f, %5.2f, %5.2f)' % (
                 rg, bg, r, g, b))
@@ -27,14 +29,14 @@ with picamera.PiCamera() as camera:
             # different (delta +/- 2)
             if abs(r - g) > 2:
                 if r > g:
-                    rg -= 0.1
+                    rg -= 0.01 * abs(r - g)
                 else:
-                    rg += 0.1
+                    rg += 0.01 * abs(r - g)
             if abs(b - g) > 1:
                 if b > g:
-                    bg -= 0.1
+                    bg -= 0.1 * abs(b - g)
                 else:
-                    bg += 0.1
+                    bg += 0.1 * abs(b - g)
             camera.awb_gains = (rg, bg)
             output.seek(0)
             output.truncate()
