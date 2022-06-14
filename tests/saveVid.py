@@ -1,3 +1,5 @@
+import repackage
+repackage.up()
 import argparse
 import os
 import time
