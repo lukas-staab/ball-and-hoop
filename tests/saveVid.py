@@ -3,6 +3,7 @@ repackage.up()
 import argparse
 import os
 import time
+import cv2
 
 from src.PiVideoStream import PiVideoStream
 
