@@ -14,13 +14,13 @@ with picamera.PiCamera() as camera:
     camera.awb_mode = 'off'
     # Start off with ridiculously low gains
     rg, bg = (0.5, 0.5)
-    camera.awb_gains = (rg, bg)
-    with picamera.array.PiRGBArray(camera, size=(128, 72)) as output:
+    with picamera.array.PiRGBArray(camera) as output:
         # Allow 30 attempts to fix AWB
         for i in range(30):
             # Capture a tiny resized image in RGB format, and extract the
             # average R, G, and B values
-            camera.capture(output, format='rgb', resize=(128, 72), use_video_port=True)
+            camera.awb_gains = (rg, bg)
+            camera.capture(output, format='rgb', use_video_port=True)
             cv2.imwrite(dirPath + '{0:2d}.png'.format(i), output.array)
             r, g, b = (np.mean(output.array[..., i]) for i in range(3))
             print('R:%5.2f, B:%5.2f = (%5.2f, %5.2f, %5.2f)' % (
@@ -39,6 +39,5 @@ with picamera.PiCamera() as camera:
                     bg += 0.01 * abs(b - g)
             (rg, bg) = max((0, 0), (rg, bg))
             (rg, bg) = min((8, 8), (rg, bg))
-            camera.awb_gains = (rg, bg)
             output.seek(0)
             output.truncate()
