@@ -1,9 +1,8 @@
 import argparse
 import os
-from time import sleep
+import time
 
-from picamera import PiCamera
-
+from src.PiVideoStream import PiVideoStream
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-f", "--fps", type=int, default=60,
@@ -20,12 +19,17 @@ args = vars(ap.parse_args())
 
 fileName = args['name']
 dirName = "storage/video/"
+size = (320, 240)
+
 if not os.path.exists(dirName):
     os.mkdir(dirName)
 
-with PiCamera() as camera:
-    camera.resolution = (320, 240)
-    camera.framerate = args['fps']
-    camera.start_recording(dirName + fileName + '.raw', format=args['encode'])
-    camera.wait_recording(args['time'])
-    camera.stop_recording()
+videoWriter = cv2.VideoWriter(dirName + 'outputvid.avi', cv2.VideoWriter_fourcc('I', '4', '2', '0'), args['fps'], size)
+
+with PiVideoStream(resolution_no=1, framerate=args['fps']) as vid:
+    vid.start()
+    sec = time.time()
+    while videoWriter.isOpened() and time.time() - sec > int(args['time']) :
+        frame = vid.read()
+        videoWriter.write(frame)
+    videoWriter.release()
