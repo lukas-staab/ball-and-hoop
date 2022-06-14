@@ -9,7 +9,7 @@ import cv2
 dirPath = './storage/awb/'
 os.makedirs(dirPath, exist_ok=True)
 # https://raspberrypi.stackexchange.com/questions/22975/custom-white-balancing-with-picamera
-with picamera.PiCamera() as camera:
+with picamera.PiCamera(sensor_mode=7) as camera:
     camera.resolution = (640, 480)
     camera.awb_mode = 'off'
     # Start off with ridiculously low gains
@@ -20,7 +20,7 @@ with picamera.PiCamera() as camera:
             # Capture a tiny resized image in RGB format, and extract the
             # average R, G, and B values
             camera.awb_gains = (rg, bg)
-            camera.capture(output, format='rgb', use_video_port=True, sensor_mode=7)
+            camera.capture(output, format='rgb', use_video_port=True)
             cv2.imwrite(dirPath + '{0:2d}.png'.format(i), output.array)
             r, g, b = (np.mean(output.array[..., i]) for i in range(3))
             print('R:%5.2f, B:%5.2f = (%5.2f, %5.2f, %5.2f)' % (
