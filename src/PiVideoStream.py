@@ -69,6 +69,7 @@ class PiVideoStream:
 
     def __enter__(self):
         self.start()
+        return self
 
     def update(self):
         # keep looping infinitely until the thread is stopped
