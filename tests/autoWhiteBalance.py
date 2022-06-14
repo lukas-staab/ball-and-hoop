@@ -10,17 +10,17 @@ dirPath = './storage/awb/'
 os.makedirs(dirPath, exist_ok=True)
 # https://raspberrypi.stackexchange.com/questions/22975/custom-white-balancing-with-picamera
 with picamera.PiCamera() as camera:
-    camera.resolution = (1280, 720)
+    camera.resolution = (640, 480)
     camera.awb_mode = 'off'
     # Start off with ridiculously low gains
     rg, bg = (0.5, 0.5)
     with picamera.array.PiRGBArray(camera) as output:
         # Allow 30 attempts to fix AWB
-        for i in range(30):
+        for i in range(10):
             # Capture a tiny resized image in RGB format, and extract the
             # average R, G, and B values
             camera.awb_gains = (rg, bg)
-            camera.capture(output, format='rgb', use_video_port=True)
+            camera.capture(output, format='rgb', use_video_port=True, sensor_mode=7)
             cv2.imwrite(dirPath + '{0:2d}.png'.format(i), output.array)
             r, g, b = (np.mean(output.array[..., i]) for i in range(3))
             print('R:%5.2f, B:%5.2f = (%5.2f, %5.2f, %5.2f)' % (
