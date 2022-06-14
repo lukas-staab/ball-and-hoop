@@ -13,6 +13,7 @@ ap.add_argument("-f", "--fps", type=int, default=60,
 ap.add_argument("-e", "--encode", type=str, default='bgr',
                 help="Encoding (yuv, bgr, ...)")
 ap.add_argument('-n', "--name", type=str, required=True)
+ap.add_argument('-w', "--awb", type=str, default='auto')
 # ---------------------------------------------------
 ap.add_argument("-t", "--time", type=int, default=5,
                 help="Time in seconds")
@@ -28,7 +29,7 @@ if not os.path.exists(dirName):
     os.mkdir(dirName)
 
 videoWriter = cv2.VideoWriter(fileName + '.avi', cv2.VideoWriter_fourcc('I', '4', '2', '0'), args['fps'], size)
-with PiVideoStream(resolution_no=1, framerate=args['fps']) as vid:
+with PiVideoStream(resolution_no=1, framerate=args['fps'], awb_mode=args['awb']) as vid:
     sec = time.time()
     while videoWriter.isOpened() and time.time() - sec <= int(args['time']):
         frame = vid.read()
