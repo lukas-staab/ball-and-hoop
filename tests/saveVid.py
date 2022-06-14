@@ -29,7 +29,7 @@ if not os.path.exists(dirName):
     os.mkdir(dirName)
 
 videoWriter = cv2.VideoWriter(fileName + '.avi', cv2.VideoWriter_fourcc('I', '4', '2', '0'), args['fps'], size)
-with PiVideoStream(resolution_no=1, framerate=args['fps'], awb_mode=args['awb']) as vid:
+with PiVideoStream(resolution_no=1, framerate=args['fps'], awb=(1.5, 1.5)) as vid:
     sec = time.time()
     while videoWriter.isOpened() and time.time() - sec <= int(args['time']):
         frame = vid.read()

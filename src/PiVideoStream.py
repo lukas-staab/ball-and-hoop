@@ -31,7 +31,7 @@ class PiVideoStream:
         1: 'bgr'
     }
 
-    def __init__(self, resolution_no=1, framerate=30, rotation=0, encode=1, debug_path=None, awb_mode='auto'):
+    def __init__(self, resolution_no=1, framerate=30, rotation=0, encode=1, debug_path=None, awb='auto'):
         self.debug_path = debug_path
         resolution = self.resolutions[resolution_no]
         # initialize the camera and stream
@@ -41,7 +41,11 @@ class PiVideoStream:
             self.camera = PiCamera()
             self.camera.resolution = resolution
             self.camera.framerate = framerate
-            self.camera.awb_mode = awb_mode
+            if type(awb) is tuple:
+                self.camera.awb_mode = 'off'
+                self.camera.awb_gains = awb
+            else:
+                self.camera.awb_mode = awb
             if self.encodings[encode] == 'bgr':
                 self.rawCapture = PiRGBArray(self.camera, size=resolution)
             else:
@@ -138,7 +142,7 @@ class PiVideoStream:
         print("[OUT] approx. FPS: {:.2f}".format(self.fpsOut.fps()))
 
     def faker_stream_generator(self):
-        cap = cv2.VideoCapture('fetch/rpi3.lan/video/test-motion.avi')
+        cap = cv2.VideoCapture('fetch/rpi3.lan/video/test-off.avi')
         while cap.isOpened():
             success, frame = cap.read()
             if success:
