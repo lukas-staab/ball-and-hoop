@@ -31,7 +31,8 @@ class PiVideoStream:
         1: 'bgr'
     }
 
-    def __init__(self, resolution_no=1, framerate=30, rotation=0, encode=1):
+    def __init__(self, resolution_no=1, framerate=30, rotation=0, encode=1, debug_path=None):
+        self.debug_path = debug_path
         resolution = self.resolutions[resolution_no]
         # initialize the camera and stream
         self.isPi = find_spec('picamera') is not None
@@ -65,6 +66,9 @@ class PiVideoStream:
         print('Try to start cam...')
         threading.Thread(target=self.update, args=()).start()
         return self
+
+    def __enter__(self):
+        self.start()
 
     def update(self):
         # keep looping infinitely until the thread is stopped
@@ -117,6 +121,9 @@ class PiVideoStream:
             time.sleep(0.1)
         print('Cam is stopped')
 
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.stop()
+
     def print_stats(self):
         if not self.stopped:
             print("[ERROR] thread not closed (yet)")
@@ -127,7 +134,7 @@ class PiVideoStream:
         print("[OUT] approx. FPS: {:.2f}".format(self.fpsOut.fps()))
 
     def faker_stream_generator(self):
-        cap = cv2.VideoCapture('storage/hoop-calibration/vid2/vid.h264_cutted.mp4')
+        cap = cv2.VideoCapture('fetch/rpi2.lan/video/vid1vid.h264')
         while cap.isOpened():
             success, frame = cap.read()
             if success:
