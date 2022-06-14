@@ -28,15 +28,9 @@ with picamera.PiCamera() as camera:
             # Adjust R and B relative to G, but only if they're significantly
             # different (delta +/- 2)
             if abs(r - g) > 2:
-                if r > g:
-                    rg -= 0.01 * abs(r - g)
-                else:
-                    rg += 0.01 * abs(r - g)
+                rg -= 0.01 * (r - g)
             if abs(b - g) > 1:
-                if b > g:
-                    bg -= 0.01 * abs(b - g)
-                else:
-                    bg += 0.01 * abs(b - g)
+                bg -= 0.01 * (b - g)
             (rg, bg) = max((0, 0), (rg, bg))
             (rg, bg) = min((8, 8), (rg, bg))
             output.seek(0)
