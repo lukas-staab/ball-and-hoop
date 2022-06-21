@@ -4,6 +4,7 @@ import threading
 import time
 import cv2
 from imutils.video import FPS
+from src.ballandhoop.whiteBalancing import WhiteBalancing
 
 if find_spec('picamera') is not None:
     from picamera.array import PiRGBArray
@@ -29,7 +30,7 @@ class PiVideoStream:
         1: 'bgr'
     }
 
-    def __init__(self, resolution_no=2, framerate=30, rotation=0, encode=1, debug_path=None, awb='auto'):
+    def __init__(self, resolution_no=2, framerate=30, rotation=0, encode=1, debug_path=None, awb='manuell'):
         self.debug_path = debug_path
         resolution = self.resolutions[resolution_no]
         # initialize the camera and stream
@@ -39,7 +40,12 @@ class PiVideoStream:
             self.camera = PiCamera(sensor_mode=7)
             self.camera.resolution = resolution
             self.camera.framerate = framerate
-            if type(awb) is tuple:
+            if awb == 'manuell':
+                wb = WhiteBalancing()
+                gains = wb.calculate()
+                self.camera.awb_mode = 'off'
+                self.camera.awb_gains = gains
+            elif type(awb) is tuple:
                 self.camera.awb_mode = 'off'
                 self.camera.awb_gains = awb
             else:

@@ -40,13 +40,8 @@ buffer = 10
 pts = deque(maxlen=buffer)
 idx = 0
 
-wb = WhiteBalancing(delta=1, dirPath='./storage/awb')
-gains = wb.calculate()
-print("White Gains:")
-print(gains)
-
 with PiVideoStream(resolution_no=args['resolution'], framerate=args['fps'], rotation=args['rotation'],
-                   encode=args['encode'], awb=gains) as cam:
+                   encode=args['encode']) as cam:
     # allow the camera to warmup and start the FPS counter
     time.sleep(0.25)
     # capture frames from the camera
