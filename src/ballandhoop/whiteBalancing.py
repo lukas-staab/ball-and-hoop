@@ -47,6 +47,8 @@ class WhiteBalancing:
                     output.seek(0)
                     output.truncate()
                     if changed is False:
+                        output.close()
+                        camera.close()
                         return rg, bg
 
 
