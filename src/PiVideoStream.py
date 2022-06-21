@@ -43,6 +43,7 @@ class PiVideoStream:
             if awb == 'manuell':
                 wb = WhiteBalancing()
                 gains = wb.calculate()
+                time.sleep(1)
                 self.camera.awb_mode = 'off'
                 self.camera.awb_gains = gains
             elif type(awb) is tuple:
