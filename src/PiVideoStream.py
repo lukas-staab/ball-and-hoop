@@ -30,7 +30,7 @@ class PiVideoStream:
         1: 'bgr'
     }
 
-    def __init__(self, resolution_no=2, framerate=30, rotation=0, encode=1, debug_path=None, awb='manuell'):
+    def __init__(self, resolution_no=2, framerate=30, rotation=0, encode=1, debug_path=None, awb='auto'):
         self.debug_path = debug_path
         resolution = self.resolutions[resolution_no]
         # initialize the camera and stream
@@ -40,14 +40,7 @@ class PiVideoStream:
             self.camera = PiCamera(sensor_mode=7)
             self.camera.resolution = resolution
             self.camera.framerate = framerate
-            if awb == 'manuell':
-                wb = WhiteBalancing()
-                gains = wb.calculate()
-                del wb
-                time.sleep(1)
-                self.camera.awb_mode = 'off'
-                self.camera.awb_gains = gains
-            elif type(awb) is tuple:
+            if type(awb) is tuple:
                 self.camera.awb_mode = 'off'
                 self.camera.awb_gains = awb
             else:

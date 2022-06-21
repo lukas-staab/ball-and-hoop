@@ -39,8 +39,10 @@ buffer = 10
 pts = deque(maxlen=buffer)
 idx = 0
 
+gains = WhiteBalancing(verboseOutput=True).calculate()
+
 with PiVideoStream(resolution_no=args['resolution'], framerate=args['fps'], rotation=args['rotation'],
-                   encode=args['encode']) as cam:
+                   encode=args['encode'], awb=gains) as cam:
     # allow the camera to warmup and start the FPS counter
     time.sleep(0.25)
     # capture frames from the camera
