@@ -7,8 +7,10 @@ import cv2
 
 class WhiteBalancing:
 
-    def __init__(self, dirPath='./storage/awb/', deleteOldPics=True):
+    def __init__(self, dirPath='./storage/awb/', deleteOldPics=True, delta=1, verboseOutput=False):
+        self.verboseOutput = verboseOutput
         self.dirPath = dirPath
+        self.delta = delta
         os.makedirs(self.dirPath, exist_ok=True)
         filelist = [f for f in os.listdir(self.dirPath) if f.endswith(".png") and deleteOldPics]
         for f in filelist:
@@ -31,13 +33,13 @@ class WhiteBalancing:
                     camera.capture(output, format='rgb', use_video_port=True)
                     cv2.imwrite(self.dirPath + '{0:2d}.png'.format(i), output.array)
                     r, g, b = (numpy.mean(output.array[..., i]) for i in range(3))
-                    print('R:%5.2f, B:%5.2f = (%5.2f, %5.2f, %5.2f)' % (rg, bg, r, g, b))
+                    if self.verboseOutput:
+                        print('R:%5.2f, B:%5.2f = (%5.2f, %5.2f, %5.2f)' % (rg, bg, r, g, b))
                     # Adjust R and B relative to G, but only if they're significantly
-                    # different (delta +/- 2)
-                    if abs(r - g) > 2:
+                    if abs(r - g) > self.delta:
                         rg -= 0.01 * (r - g)
                         changed = True
-                    if abs(b - g) > 2:
+                    if abs(b - g) > self.delta:
                         bg -= 0.01 * (b - g)
                         changed = True
                     (rg, bg) = numpy.maximum((0, 0), (rg, bg))

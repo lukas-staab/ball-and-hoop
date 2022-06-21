@@ -5,9 +5,9 @@ from collections import deque
 from src.PiVideoStream import PiVideoStream
 import argparse
 import time
-import cv2
 from src.ballandhoop.imageComposer import ImageComposer
 from src.ballandhoop.hoop import Hoop
+from src.ballandhoop.whiteBalancing import WhiteBalancing
 
 
 # construct the argument parse and parse the arguments
@@ -29,7 +29,7 @@ ap.add_argument("-t", "--time", type=int, default=-1,
                 help="Time in seconds")
 
 args = vars(ap.parse_args())
-
+print(args['white'])
 # -----------------
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space, then initialize the
@@ -39,8 +39,14 @@ col_upper = (120, 255, 255)
 buffer = 10
 pts = deque(maxlen=buffer)
 idx = 0
+
+wb = WhiteBalancing(delta=1, dirPath='./storage/awb')
+gains = wb.calculate()
+print("White Gains:")
+print(gains)
+
 with PiVideoStream(resolution_no=args['resolution'], framerate=args['fps'], rotation=args['rotation'],
-                   encode=args['encode'], awb=(1.80, 1.18)) as cam:
+                   encode=args['encode'], awb=gains) as cam:
     # allow the camera to warmup and start the FPS counter
     time.sleep(0.25)
     # capture frames from the camera
