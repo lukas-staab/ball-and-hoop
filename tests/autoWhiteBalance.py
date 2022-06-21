@@ -20,7 +20,7 @@ with picamera.PiCamera(sensor_mode=7) as camera:
             # Capture a tiny resized image in RGB format, and extract the
             # average R, G, and B values
             camera.awb_gains = (rg, bg)
-            camera.capture_continuous(output, format='rgb', use_video_port=True)
+            camera.capture(output, format='rgb', use_video_port=True)
             cv2.imwrite(dirPath + '{0:2d}.png'.format(i), output.array)
             r, g, b = (np.mean(output.array[..., i]) for i in range(3))
             print('R:%5.2f, B:%5.2f = (%5.2f, %5.2f, %5.2f)' % (
@@ -29,9 +29,9 @@ with picamera.PiCamera(sensor_mode=7) as camera:
             # different (delta +/- 2)
             if abs(r - g) > 2:
                 rg -= 0.01 * (r - g)
-            if abs(b - g) > 1:
+            if abs(b - g) > 2:
                 bg -= 0.01 * (b - g)
-            (rg, bg) = max((0, 0), (rg, bg))
-            (rg, bg) = min((8, 8), (rg, bg))
+            (rg, bg) = np.maximum((0, 0), (rg, bg))
+            (rg, bg) = np.minimum((8, 8), (rg, bg))
             output.seek(0)
             output.truncate()

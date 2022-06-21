@@ -16,8 +16,6 @@ class PiVideoStream:
         0: (160, 128),
         1: (320, 240),
         2: (640, 480),
-        3: (1280, 920),
-        4: (1600, 1200),
     }
 
     rotations = {
@@ -31,14 +29,14 @@ class PiVideoStream:
         1: 'bgr'
     }
 
-    def __init__(self, resolution_no=1, framerate=30, rotation=0, encode=1, debug_path=None, awb='auto'):
+    def __init__(self, resolution_no=2, framerate=30, rotation=0, encode=1, debug_path=None, awb='auto'):
         self.debug_path = debug_path
         resolution = self.resolutions[resolution_no]
         # initialize the camera and stream
         self.isPi = find_spec('picamera') is not None
         self.framerate = framerate
         if self.isPi:
-            self.camera = PiCamera()
+            self.camera = PiCamera(sensor_mode=7)
             self.camera.resolution = resolution
             self.camera.framerate = framerate
             if type(awb) is tuple:
@@ -46,13 +44,14 @@ class PiVideoStream:
                 self.camera.awb_gains = awb
             else:
                 self.camera.awb_mode = awb
+                self.camera.awb_gains = (0, 0)
             if self.encodings[encode] == 'bgr':
                 self.rawCapture = PiRGBArray(self.camera, size=resolution)
             else:
                 self.rawCapture = PiYUVArray(self.camera, size=resolution)
             self.stream = self.camera.capture_continuous(self.rawCapture,
                                                          format=self.encodings[encode],
-                                                         use_video_port=True)
+                                                         use_video_port=True,)
         else:
             self.stream = self.faker_stream_generator()
         # initialize the frame and the variable used to indicate
@@ -142,7 +141,7 @@ class PiVideoStream:
         print("[OUT] approx. FPS: {:.2f}".format(self.fpsOut.fps()))
 
     def faker_stream_generator(self):
-        cap = cv2.VideoCapture('fetch/rpi3.lan/video/test-off.avi')
+        cap = cv2.VideoCapture('fetch/rpi3.lan/video/test-off-1.79-1.14.avi')
         while cap.isOpened():
             success, frame = cap.read()
             if success:

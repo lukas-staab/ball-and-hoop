@@ -10,7 +10,7 @@ import os
 from src.ballandhoop.hoop import Hoop
 from src.ballandhoop.imageComposer import ImageComposer
 
-dirName = input("Base dir name [00]:") or "00"
+dirName = input("Base dirName name [00]:") or "00"
 dirPath = "storage/hoop-calibration/" + dirName + "/"
 print("Search if path exists: " + dirPath)
 if not os.path.exists(dirPath):
@@ -68,7 +68,7 @@ for (col_low, col_up) in ball_colors:
         imc.plot_angle(hoop, ball)
 
 imc.save()
-print("dumped pic saves to dir")
+print("dumped pic saves to dirName")
 
 # cv2.imshow('image', image_result)
 # waits for user to press any key
