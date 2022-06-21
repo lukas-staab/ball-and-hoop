@@ -7,7 +7,7 @@ import cv2
 
 class WhiteBalancing:
 
-    def __init__(self, dirPath='./storage/awb/', deleteOldPics=True, delta=1, verboseOutput=False):
+    def __init__(self, dirPath='./storage/awb/', deleteOldPics=True, delta=2, verboseOutput=False):
         self.verboseOutput = verboseOutput
         self.dirPath = dirPath
         self.delta = delta
