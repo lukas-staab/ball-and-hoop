@@ -16,9 +16,9 @@ from src.ballandhoop.hoop import Hoop
 ap = argparse.ArgumentParser()
 ap.add_argument("-f", "--fps", type=int, default=60,
                 help="# of frames to loop over for FPS test")
-ap.add_argument("-res", "--resolution", type=int, default=1,
+ap.add_argument("-res", "--resolution", type=int, default=2,
                 help="Sizes from 0 to 4, default 2 (640x480)")
-ap.add_argument("-e", "--encode", type=int, default=2,
+ap.add_argument("-e", "--encode", type=int, default=1,
                 help="Encoding (yuv, bgr)")
 ap.add_argument("-rot", "--rotation", type=int, default=0,
                 help="Rotate multiple of 90 degree")
