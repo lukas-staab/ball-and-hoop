@@ -29,7 +29,6 @@ ap.add_argument("-t", "--time", type=int, default=-1,
                 help="Time in seconds")
 
 args = vars(ap.parse_args())
-print(args['white'])
 # -----------------
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space, then initialize the
