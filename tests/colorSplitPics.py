@@ -4,12 +4,14 @@ repackage.up()
 # import the necessary packages
 from src.ballandhoop import ImageComposer
 from src.PiVideoStream import PiVideoStream
+from src.ballandhoop.whiteBalancing import WhiteBalancing
 import cv2
 import os
 import numpy as np
 
+gains = WhiteBalancing().calculate()
 
-with PiVideoStream(framerate=60) as vid:
+with PiVideoStream(framerate=60, awb=gains) as vid:
     dirName = input("Base dirName name: ")
     os.makedirs("storage/hoop-calibration/" + dirName + "/", exist_ok=True)
     # due to the user input lag, this is kind of random which picture is picked
