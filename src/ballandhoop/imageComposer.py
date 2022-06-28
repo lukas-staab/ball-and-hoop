@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import os
+import shutil
+
 import numpy as np
 import cv2
 from cv2 import FONT_HERSHEY_PLAIN
@@ -28,6 +30,8 @@ class ImageComposer:
             debug_path += "/"
         self.debug_path = debug_path
         if self.debug_path is not None:
+            if os.path.exists(self.debug_path):
+                shutil.rmtree(self.debug_path)
             os.makedirs(debug_path, exist_ok=True)
 
     def newImage(self):
