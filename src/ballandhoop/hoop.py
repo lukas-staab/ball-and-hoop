@@ -69,8 +69,8 @@ class Hoop:
         y = np.dot(v1, v2)
         return math.atan2(x, y) / math.pi * 180
 
-    def find_ball(self, col_low, col_up):
-        mask_ball = cv2.inRange(self.image_composer.get_hsv(), (col_low, 20, 20), (col_up, 255, 255))
+    def find_ball(self, hue_low, hue_upper, saturation_low=50, saturation_upper=255):
+        mask_ball = cv2.inRange(self.image_composer.get_hsv(), (hue_low, saturation_low, 50), (hue_upper, saturation_upper, 255))
         self.save_debug_pic(self, mask_ball, 'ball-mask')
         mask_ball = cv2.erode(mask_ball, None, iterations=2)
         self.save_debug_pic(self, mask_ball, 'ball-mask-erode')

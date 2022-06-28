@@ -30,11 +30,9 @@ ap.add_argument("-t", "--time", type=int, default=-1,
 
 args = vars(ap.parse_args())
 # -----------------
-# define the lower and upper boundaries of the "green"
+# define the lower and upper boundaries of the
 # ball in the HSV color space, then initialize the
 # list of tracked points
-col_lower = (100, 86, 6)
-col_upper = (120, 255, 255)
 buffer = 10
 pts = deque(maxlen=buffer)
 idx = 0

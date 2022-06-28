@@ -5,8 +5,7 @@ import repackage
 repackage.up()
 # import the necessary packages
 from src.ballandhoop import ImageComposer
-from src.PiVideoStream import PiVideoStream
-from src.ballandhoop.whiteBalancing import WhiteBalancing
+
 import cv2
 import os
 import numpy as np
@@ -22,9 +21,13 @@ image = None
 storagePath = "storage/col-split/"
 
 if 'filepath' in args:
+    print('Take pic from file')
     image = cv2.imread(args['filepath'])
 else:
     # has to be on rpi
+    print('Take pic from cam')
+    from src.PiVideoStream import PiVideoStream
+    from src.ballandhoop.whiteBalancing import WhiteBalancing
     gains = WhiteBalancing(verboseOutput=True).calculate()
     with PiVideoStream(framerate=60, awb=gains) as vid:
         image = vid.read()
@@ -48,7 +51,7 @@ for x in range(0, 255, 5):
     mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
     segmented_img = cv2.bitwise_and(im.image(), im.image(), mask=mask)
 
-    path = "storage/hoop-calibration/" + dirName + "/" + str(x) + "-" + str((x+20) % 255) + ".png"
+    path = storagePath + dirName + "/" + str(x) + "-" + str((x+20) % 255) + ".png"
     cv2.imwrite(path, segmented_img)
 im.save()
 print("Saved")
