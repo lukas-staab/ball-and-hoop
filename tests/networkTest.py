@@ -1,13 +1,18 @@
 # construct the argument parse and parse the arguments
 import argparse
 import socket
+import time
+
 import numpy
 from datetime import datetime
 from tabulate import tabulate
+import repackage
+repackage.up()
+from src.ballandhoop.network import Server, Client
 
 ap = argparse.ArgumentParser()
 # ---------------------------------------------------
-ap.add_argument("-i", "--server-ip", type=str, default="",
+ap.add_argument("-i", "--server-ip", type=str, default="127.0.0.1",
                 help="The Server IP address to connect to, do not use together with -s")
 ap.add_argument("-s", "--server", action='store_true', help="Use to start in server mode")  # server flag
 ap.add_argument("-p", "--port", type=int, default=9999, help="The port to listen at / to send to")
@@ -15,36 +20,22 @@ ap.add_argument("-p", "--port", type=int, default=9999, help="The port to listen
 args = vars(ap.parse_args())
 
 if args['server']:
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.bind((args['server_ip'], args['port']))
-        print('Startup server. Press CRTL+C to stop.')
-        s.listen(1)
+    with Server(args['server_ip'], args['port']) as server:
         try:
             while True:
-                conn, addr = s.accept()
-                with conn:
-                    print('Connected by', addr)
-                    while True:
-                        data = conn.recv(1024)
-                        if not data:
-                            break
-                        # send answer
-                        now = str(datetime.utcnow()).encode()
-                        conn.sendall(now)
+                pass
         except KeyboardInterrupt:
-            print('Stopping Server')
             pass
 else:
     diffs = []
     print(args['server_ip'])
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect((args['server_ip'], args['port']))
+    with Client(args['server_ip'], args['port']) as c:
         for i in range(1, 10):
             sendTime = datetime.utcnow()
-            s.sendall(str(sendTime).encode())
-            data = s.recv(1024)
+            answer = c.send(str(sendTime).encode())
             receivedTime = datetime.utcnow()
             diffs.append((receivedTime - sendTime).total_seconds() * 1000)
+            time.sleep(.01)
     print('Round-Trip-Time (RTT) was measured')
     # print(tabulate({'RTT [ms]:': diffs}, headers='keys'))
     print('--------------')

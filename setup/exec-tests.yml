@@ -1,0 +1,13 @@
+#- name: setup and update the pis
+#  import_playbook: setupRPi.yml
+- hosts: rpi
+  vars:
+    cmd: tracking.py
+  tasks:
+  - name: Execute command
+    command:
+      cmd: "python3 tests/{{ cmd }}"
+      chdir: "~/ball-and-hoop/"
+
+- name: sync video back
+  import_playbook: pull-storage.yml

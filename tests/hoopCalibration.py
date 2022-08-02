@@ -1,20 +1,29 @@
 # make parent folder / package accessible
+from importlib.util import find_spec
+
 import repackage
 
 repackage.up()
 # import the necessary packages
-import numpy as np
 import time
+import argparse
 import cv2
 import os
 from src.ballandhoop.hoop import Hoop
 from src.ballandhoop.imageComposer import ImageComposer
 
-dirName = input("Base dirName name [00]:") or "00"
-dirPath = "storage/hoop-calibration/" + dirName + "/"
-print("Search if path exists: " + dirPath)
-if not os.path.exists(dirPath):
-    os.makedirs("storage/hoop-calibration/" + dirName + "/", exist_ok=True)
+ap = argparse.ArgumentParser()
+ap.add_argument("-r", "--rotation", type=int, default=0,
+                help="Rotate multiple of 90 degree")
+ap.add_argument('-l', "--lowercol", type=int, nargs=3, default=(150, 20, 20))
+ap.add_argument('-u', "--uppercol", type=int, nargs=3, default=(190, 255, 255))
+# ---------------------------------------------------
+args = vars(ap.parse_args())
+
+dirPath = "storage/hoop-calibration/"
+os.makedirs(dirPath, exist_ok=True)
+
+if not find_spec('picamera') is not None:
     print('Take picture from raspi cam')
     # imports only work on raspi
     from picamera.array import PiRGBArray
@@ -42,7 +51,7 @@ else:
 imc = ImageComposer(image_raw, do_blurring=False, do_undistortion=True, debug_path=dirPath)
 # convert to hsv colorspace
 # search hoop
-hoop = Hoop.create_from_image(imc, (150, 20, 20), (190, 255, 255))
+hoop = Hoop.create_from_image(imc, args['lowercol'], args['uppercol'])
 if hoop is None:
     imc.save()
     print("No hoop found")

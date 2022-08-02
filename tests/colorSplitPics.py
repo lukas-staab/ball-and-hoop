@@ -20,7 +20,7 @@ args = vars(ap.parse_args())
 image = None
 storagePath = "storage/col-split/"
 
-if 'filepath' in args:
+if 'filepath' in args and len(args['filepath']) > 0:
     print('Take pic from file')
     image = cv2.imread(args['filepath'])
 else:

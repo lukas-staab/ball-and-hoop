@@ -44,20 +44,26 @@ with PiVideoStream(resolution_no=args['resolution'], framerate=args['fps'], rota
     # allow the camera to warmup and start the FPS counter
     time.sleep(0.25)
     # capture frames from the camera
+
+    hoop = None
     while idx < 5:
         # grab the raw NumPy array representing the image, then initialize the timestamp
         # and occupied/unoccupied text
         raw = cam.read()
         img = ImageComposer(raw, do_undistortion=False, do_blurring=False, debug_path='storage/tracking/')
-        hoop = Hoop.create_from_image(img)
-        if hoop is not None:
-            ball = hoop.find_ball(100, 120)
-            img.plot_hoop(hoop)
-            if ball is not None:
-                img.plot_ball(ball)
-                pts.appendleft(ball.center)
-                img.plot_ball_history(pts)
-            img.save()
+        if hoop is None:
+            hoop = Hoop.create_from_image(img)
+            if hoop is None:
+                img.save()
+                raise Exception('Ring kann nicht erzeugt werden - kann im Bild nicht gefunden werden')
+        ball = hoop.find_ball(100, 120)
+        # plot after ball search
+        img.plot_hoop(hoop)
+        if ball is not None:
+            img.plot_ball(ball)
+            pts.appendleft(ball.center)
+            img.plot_ball_history(pts)
+        img.save()
         idx += 1
 
 
