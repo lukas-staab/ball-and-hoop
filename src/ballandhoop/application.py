@@ -1,12 +1,9 @@
 import os
 from os.path import abspath, join, dirname
-from src.ballandhoop.whiteBalancing import WhiteBalancing
+from src.ballandhoop import WhiteBalancing, Hoop
 import socket
 import yaml
 import scipy.io
-
-
-from src.ballandhoop import Hoop
 
 
 class Application:
