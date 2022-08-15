@@ -23,8 +23,7 @@ class Hoop:
         self.radius_dots = radius_dots
 
     @staticmethod
-    def create_from_image(hsv=None, lower_hsv=np.array([150, 20, 20]),
-                          upper_hsv=np.array([190, 255, 255]), ):
+    def create_from_image(lower_hsv, upper_hsv, hsv=None):
         if hsv is None:
             import picamera.array
             from . import ImageComposer

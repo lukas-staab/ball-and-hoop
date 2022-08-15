@@ -2,6 +2,10 @@ all:
   run_calibration:
     every_run: false
     next_run: true
+  hsv:
+    hoop:
+      lower: [150, 20, 20]
+      upper: [190, 255, 255]
 rpi1:
   server_ip: localhost
 rpi2:
