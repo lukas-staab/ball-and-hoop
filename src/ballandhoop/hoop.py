@@ -26,12 +26,11 @@ class Hoop:
     def create_from_image(hsv=None, lower_hsv=np.array([150, 20, 20]),
                           upper_hsv=np.array([190, 255, 255]), ):
         if hsv is None:
-            from picamera.array import PiRGBArray
-            from picamera import PiCamera
+            import picamera.array
             from . import ImageComposer
-            camera = PiCamera(sensor_mode=7)
+            camera = picamera.PiCamera(sensor_mode=7)
             camera.resolution = (640, 480)
-            output = PiRGBArray(camera)
+            output = picamera.array.PiRGBArray(camera)
             img = camera.capture(output, format='rgb', use_video_port=True)
             hsv = ImageComposer(img, do_undistortion=False, do_blurring=False).get_hsv()
         mask_hoop = cv2.inRange(hsv, lower_hsv, upper_hsv)
