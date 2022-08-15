@@ -68,7 +68,7 @@ class Hoop:
                 m = cv2.moments(c)
                 center_dot = [int(m["m10"] / m["m00"]), int(m["m01"] / m["m00"])]
                 dots_center.append(center_dot)
-                dots_radius.append(radius)
+                dots_radius.append(int(radius))
         if len(dots_radius) < 3:
             return None # Exception('Less then 3 edge dots found for hoop. See in storage/hoop/ for debugging pictures')
         xc, yc, radius_hoop, _ = cf.least_squares_circle(dots_center)
