@@ -67,7 +67,7 @@ class Hoop:
                 dots_center.append(center_dot)
                 dots_radius.append(radius)
         if len(dots_radius) < 3:
-            raise Exception('Less then 3 edge dots found for hoop. See in storage/hoop/ for debugging pictures')
+            return None # Exception('Less then 3 edge dots found for hoop. See in storage/hoop/ for debugging pictures')
         xc, yc, radius_hoop, _ = cf.least_squares_circle(dots_center)
         center_hoop = [int(xc), int(yc)]
         return Hoop(center_hoop, radius_hoop, dots_center, dots_radius)

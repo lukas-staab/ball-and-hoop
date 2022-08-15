@@ -1,7 +1,10 @@
 all:
   run_calibration:
+    next_run:
+      color: false
+      hoop: true
     every_run: false
-    next_run: true
+
   hsv:
     hoop:
       lower: [150, 20, 20]

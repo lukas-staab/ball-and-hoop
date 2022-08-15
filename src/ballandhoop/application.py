@@ -16,7 +16,7 @@ class Application:
         self.hostname = socket.gethostname()
         if self.get_cfg('all', 'run_calibration', 'next_run') or self.get_cfg('all', 'run_calibration', 'every_run'):
             self.run_calibration()
-        self.hoop = Hoop(** self.get_cfg('hoop'))
+        # self.hoop = Hoop(** self.get_cfg('hoop'))
         self.save_config_to_disk()
 
     def load_config_from_disk(self, file_type='yml'):
@@ -61,22 +61,27 @@ class Application:
 
     def run_calibration(self):
         print('Start Calibration')
-        self.cfg['all']['run_calibration']['next_run'] = False
-        print('|-> Start White Balancing Calibration')
-        self.local_config()['wb_gains'] = WhiteBalancing(verboseOutput=False).calculate()
-        print('|-> Gains found: ' + str(self.get_cfg('wb_gains')))
-        print('|-> Searching Hoop in new picture')
-        lower_hsv = self.get_cfg('all', 'hsv', 'hoop', 'lower')
-        upper_hsv = self.get_cfg('all', 'hsv', 'hoop', 'upper')
-        hoop = Hoop.create_from_image(lower_hsv=lower_hsv, upper_hsv=upper_hsv)
-        hoop_cfg = {
-            'radius': hoop.radius,
-            'center': hoop.center,
-            'center_dots': hoop.center_dots,
-            'radius_dots': hoop.radius_dots,
-        }
-        self.local_config()['hoop'] = hoop_cfg
-        print('|-> Hoop found: ' + str(self.get_cfg('hoop')))
+        if self.get_cfg('all', 'every_run', 'color') or self.get_cfg('all', 'next_run', 'color'):
+            print('|-> Start White Balancing Calibration')
+            self.local_config()['wb_gains'] = WhiteBalancing(verboseOutput=False).calculate()
+        print('|-> Using Gains: ' + str(self.get_cfg('wb_gains')))
+        if self.get_cfg('all', 'every_run', 'hoop') or self.get_cfg('all', 'next_run', 'hoop'):
+            print('|-> Searching Hoop in new picture')
+            lower_hsv = self.get_cfg('all', 'hsv', 'hoop', 'lower')
+            upper_hsv = self.get_cfg('all', 'hsv', 'hoop', 'upper')
+            hoop = Hoop.create_from_image(lower_hsv=lower_hsv, upper_hsv=upper_hsv)
+            if hoop is not None:
+                hoop_cfg = {
+                    'radius': hoop.radius,
+                    'center': hoop.center,
+                    'center_dots': hoop.center_dots,
+                    'radius_dots': hoop.radius_dots,
+                }
+                self.local_config()['hoop'] = hoop_cfg
+                print('|-> Hoop found: ' + str(self.get_cfg('hoop')))
+            else:
+                print('|-> NO HOOP FOUND! - see in storage/hoop/ for debug pictures')
+
 
 
 if __name__ == '__main__':
