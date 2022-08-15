@@ -14,8 +14,7 @@ class Application:
     def __init__(self):
         self.cfg = self.load_config_from_disk('yml')
         self.hostname = socket.gethostname()
-        if self.get_cfg('all', 'run_calibration', 'next_run') or self.get_cfg('all', 'run_calibration', 'every_run'):
-            self.run_calibration()
+        self.run_calibration()
         # self.hoop = Hoop(** self.get_cfg('hoop'))
         self.save_config_to_disk()
 
@@ -65,6 +64,8 @@ class Application:
         if calibration['white_balance']:
             print('|-> Start White Balancing Calibration')
             self.local_config()['wb_gains'] = WhiteBalancing(verboseOutput=False).calculate()
+        else:
+            print('|-> [SKIPPING] White Balancing Calibration')
         print('|-> Using Gains: ' + str(self.get_cfg('wb_gains')))
         if calibration['find_hoop']:
             print('|-> Searching Hoop in new picture')
@@ -82,7 +83,8 @@ class Application:
                 print('|-> Hoop found: ' + str(self.get_cfg('hoop')))
             else:
                 print('|-> NO HOOP FOUND! - see in storage/hoop/ for debug pictures')
-
+        else:
+            print('|-> [SKIPPING] Searching Hoop in new picture')
 
 
 if __name__ == '__main__':
