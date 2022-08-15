@@ -112,4 +112,4 @@ class ImageComposer:
             segmented_img = cv2.bitwise_and(self.image(), self.image(), mask=mask)
 
             file_name = path + str(x) + "-" + str((x + 20) % 255) + ".png"
-            cv2.imwrite(path, segmented_img)
+            cv2.imwrite(file_name, segmented_img)
