@@ -24,8 +24,6 @@ class Hoop:
         self.radius = int(radius)
         self.center_dots = center_dots
         self.radius_dots = radius_dots
-        shutil.rmtree('storage/hoop/')
-        os.makedirs('storage/hoop/')
 
     @staticmethod
     def create_from_image(lower_hsv, upper_hsv, pic=None):
@@ -70,8 +68,7 @@ class Hoop:
         if len(dots_radius) < 3:
             return None # Exception('Less then 3 edge dots found for hoop. See in storage/hoop/ for debugging pictures')
         xc, yc, radius_hoop, _ = cf.least_squares_circle(dots_center)
-        center_hoop = [int(xc), int(yc)]
-        return Hoop(center_hoop, radius_hoop, dots_center, dots_radius)
+        return Hoop([int(xc), int(yc)], int(radius_hoop), dots_center, dots_radius)
 
     def angle_in_hoop(self, p: tuple):
         v1 = np.array((0, -self.radius))
