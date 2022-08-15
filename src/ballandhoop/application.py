@@ -76,7 +76,7 @@ class Application:
             'radius_dots': hoop.radius_dots,
         }
         self.local_config()['hoop'] = hoop_cfg
-        print('|-> Hoop found' + str(self.get_cfg('hoop')))
+        print('|-> Hoop found: ' + str(self.get_cfg('hoop')))
 
 
 if __name__ == '__main__':

@@ -38,7 +38,6 @@ class Hoop:
         Hoop._save_debug_pic(mask_hoop, 'hoop-mask-erode')
         mask_hoop = cv2.dilate(mask_hoop, None, iterations=2)
         Hoop._save_debug_pic(mask_hoop, 'hoop-mask-dil')
-        mask_hoop = mask_hoop
         cnts = cv2.findContours(mask_hoop.copy(), cv2.RETR_EXTERNAL,
                                 cv2.CHAIN_APPROX_SIMPLE)
         cnts = imutils.grab_contours(cnts)
@@ -57,7 +56,7 @@ class Hoop:
                 dots_center.append(center_dot)
                 dots_radius.append(radius)
         if len(dots_radius) < 3:
-            return None
+            raise Exception('Less then 3 edge dots found for hoop. See in storage/hoop/ for debugging pictures')
         xc, yc, radius_hoop, _ = cf.least_squares_circle(dots_center)
         center_hoop = [int(xc), int(yc)]
         return Hoop(center_hoop, radius_hoop, dots_center, dots_radius)
