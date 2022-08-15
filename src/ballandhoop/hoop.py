@@ -1,5 +1,7 @@
 from __future__ import annotations
 import math
+import os
+
 import imutils
 import numpy as np
 import cv2
@@ -103,4 +105,5 @@ class Hoop:
     def _save_debug_pic(img, name):
         if not name.endswith(".png"):
             name = name + ".png"
+        os.makedirs('storage/hoop/', exist_ok=True)
         cv2.imwrite('storage/hoop/' + name, img)
