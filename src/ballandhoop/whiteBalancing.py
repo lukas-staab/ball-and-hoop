@@ -1,6 +1,7 @@
 import os
 import numpy
 import cv2
+import numpy as np
 
 
 class WhiteBalancing:
@@ -48,6 +49,6 @@ class WhiteBalancing:
                     if changed is False:
                         output.close()
                         camera.close()
-                        return rg, bg
+                        return [np.round(rg, 2, float), np.round(bg, 2, float)]
 
 
