@@ -1,9 +1,8 @@
 all:
   run_calibration:
-    next_run:
-      color: false
-      hoop: true
-    every_run: false
+    interactive: false
+    white_balance: true
+    find_hoop: true
 
   hsv:
     hoop:

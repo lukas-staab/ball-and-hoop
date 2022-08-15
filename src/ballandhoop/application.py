@@ -60,12 +60,13 @@ class Application:
         print('Updated config file(s)')
 
     def run_calibration(self):
+        calibration = self.get_cfg('all', 'run_calibration')
         print('Start Calibration')
-        if self.get_cfg('all', 'every_run', 'color') or self.get_cfg('all', 'next_run', 'color'):
+        if calibration['white_balance']:
             print('|-> Start White Balancing Calibration')
             self.local_config()['wb_gains'] = WhiteBalancing(verboseOutput=False).calculate()
         print('|-> Using Gains: ' + str(self.get_cfg('wb_gains')))
-        if self.get_cfg('all', 'every_run', 'hoop') or self.get_cfg('all', 'next_run', 'hoop'):
+        if calibration['find_hoop']:
             print('|-> Searching Hoop in new picture')
             lower_hsv = self.get_cfg('all', 'hsv', 'hoop', 'lower')
             upper_hsv = self.get_cfg('all', 'hsv', 'hoop', 'upper')
