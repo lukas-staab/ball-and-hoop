@@ -27,7 +27,7 @@ class ImageComposer:
         if do_blurring:
             self.apply_blurring()
         # append copy of last instance to paint on
-        self.newImage()
+        self.start_new_image()
         if debug_path is not None and not debug_path.endswith('/'):
             debug_path += "/"
         self.debug_path = debug_path
