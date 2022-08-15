@@ -102,7 +102,7 @@ class ImageComposer:
         for x in range(0, 255, 5):
             # lower bound and upper bound for Orange color
             lower_bound = np.array([x, hsv_lower_bound[1], hsv_lower_bound[2]])
-            upper_bound = np.array([(x + 20) % 255, hsv_upper_bound[1], hsv_lower_bound[2] ])
+            upper_bound = np.array([(x + 20) % 255, hsv_upper_bound[1], hsv_upper_bound[2] ])
             # find the colors within the boundaries
             mask = cv2.inRange(self.get_hsv(), lower_bound, upper_bound)
 
