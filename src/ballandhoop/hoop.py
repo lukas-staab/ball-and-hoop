@@ -63,7 +63,7 @@ class Hoop:
             ((x, y), radius) = cv2.minEnclosingCircle(c)
             if radius > 5:
                 m = cv2.moments(c)
-                center_dot = (int(m["m10"] / m["m00"]), int(m["m01"] / m["m00"]))
+                center_dot = [int(m["m10"] / m["m00"]), int(m["m01"] / m["m00"])]
                 dots_center.append(center_dot)
                 dots_radius.append(radius)
         if len(dots_radius) < 3:
