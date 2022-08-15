@@ -1,6 +1,4 @@
 import os
-
-import picamera.array
 import numpy
 import cv2
 
@@ -17,6 +15,7 @@ class WhiteBalancing:
             os.remove(os.path.join(self.dirPath, f))
 
     def calculate(self):
+        import picamera.array
         # https://raspberrypi.stackexchange.com/questions/22975/custom-white-balancing-with-picamera
         with picamera.PiCamera(sensor_mode=7) as camera:
             camera.resolution = (640, 480)

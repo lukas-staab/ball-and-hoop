@@ -1,0 +1,10 @@
+all:
+  run_calibration:
+    every_run: false
+    next_run: false
+rpi1:
+  server_ip: localhost
+rpi2:
+  server_ip: 192.168.??
+rpi3:
+  server_ip: 192.168.??

@@ -1,7 +1,9 @@
 pyserial
-numpy>=1.22
+numpy
 imutils
 tabulate
 repackage
 circle_fit
 PyYAML
+opencv-python
+scipy

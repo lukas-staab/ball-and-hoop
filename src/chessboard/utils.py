@@ -16,7 +16,7 @@ def load_coefficients(path):
     """Loads camera matrix and distortion coefficients."""
     # FILE_STORAGE_READ
     if not os.path.exists(path):
-        raise RuntimeError('Path: ' + path + ' does not exist')
+        raise RuntimeError('Path: "' + os.getcwd() + path + '" does not exist')
     cv_file = cv2.FileStorage(path, cv2.FILE_STORAGE_READ)
 
     # note we also have to specify the type to retrieve other wise we only get a
