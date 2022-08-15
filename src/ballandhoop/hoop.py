@@ -28,13 +28,12 @@ class Hoop:
         if hsv is None:
             from picamera.array import PiRGBArray
             from picamera import PiCamera
-            from .imageComposer import ImageComposer
-
-            with PiCamera(sensor_mode=7) as camera:
-                camera.resolution = (640, 480)
-                with PiRGBArray(camera) as output:
-                    img = camera.capture(output, format='rgb', use_video_port=True)
-            hsv = ImageComposer(img).get_hsv()
+            from . import ImageComposer
+            camera = PiCamera(sensor_mode=7)
+            camera.resolution = (640, 480)
+            output = PiRGBArray(camera)
+            img = camera.capture(output, format='rgb', use_video_port=True)
+            hsv = ImageComposer(img, do_undistortion=False, do_blurring=False).get_hsv()
         mask_hoop = cv2.inRange(hsv, lower_hsv, upper_hsv)
         Hoop._save_debug_pic(mask_hoop, 'hoop-mask')
         mask_hoop = cv2.erode(mask_hoop, None, iterations=2)

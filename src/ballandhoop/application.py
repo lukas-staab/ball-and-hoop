@@ -64,6 +64,7 @@ class Application:
         self.cfg['all']['run_calibration']['next_run'] = False
         print('|-> Start White Balancing Calibration')
         self.local_config()['wb_gains'] = WhiteBalancing(verboseOutput=False).calculate()
+        print('|-> Gains found: ' + str(self.get_cfg('wb_gains')))
         print('|-> Searching Hoop in new picture')
         lower_hsv = self.get_cfg('all', 'hsv', 'hoop', 'lower')
         upper_hsv = self.get_cfg('all', 'hsv', 'hoop', 'upper')
@@ -74,7 +75,8 @@ class Application:
             'center_dots': hoop.center_dots,
             'radius_dots': hoop.radius_dots,
         }
-        self.get_cfg()['hoop'] = hoop_cfg
+        self.local_config()['hoop'] = hoop_cfg
+        print('|-> Hoop found' + str(self.get_cfg('hoop')))
 
 
 if __name__ == '__main__':
