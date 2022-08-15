@@ -38,7 +38,7 @@ class Application:
         return self.cfg[self.hostname]
 
     def get_cfg(self, *arg):
-        if arg[0] != 'all':
+        if arg[0] == 'all':
             cfg = self.cfg
         else:
             cfg = self.local_config()

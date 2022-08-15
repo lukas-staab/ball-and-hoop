@@ -23,7 +23,7 @@ class Hoop:
         self.radius_dots = radius_dots
 
     @staticmethod
-    def create_from_image(hsv, lower_hsv=np.array([150, 20, 20]),
+    def create_from_image(hsv=None, lower_hsv=np.array([150, 20, 20]),
                           upper_hsv=np.array([190, 255, 255]), ):
         if hsv is None:
             from picamera.array import PiRGBArray
