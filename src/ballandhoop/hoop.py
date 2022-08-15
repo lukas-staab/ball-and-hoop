@@ -1,6 +1,7 @@
 from __future__ import annotations
 import math
 import os
+import shutil
 
 import imutils
 import numpy as np
@@ -23,20 +24,26 @@ class Hoop:
         self.radius = int(radius)
         self.center_dots = center_dots
         self.radius_dots = radius_dots
+        shutil.rmtree('storage/hoop')
 
     @staticmethod
-    def create_from_image(lower_hsv, upper_hsv, hsv=None):
-        if hsv is None:
+    def create_from_image(lower_hsv, upper_hsv, pic=None):
+        lower_hsv = np.array(lower_hsv)
+        upper_hsv = np.array(upper_hsv)
+        if pic is None:
             import picamera.array
-            from . import ImageComposer
             camera = picamera.PiCamera(sensor_mode=7)
             camera.resolution = (640, 480)
             output = picamera.array.PiRGBArray(camera)
             camera.capture(output, format='rgb', use_video_port=True)
-            hsv = ImageComposer(output.array, do_undistortion=False, do_blurring=False).get_hsv()
-        Hoop._save_debug_pic(output.array, 'raw')
+            pic = output.array
+        from . import ImageComposer
+        imc = ImageComposer(pic, do_undistortion=False, do_blurring=False)
+        imc.color_split('storage/hoop/details/', lower_hsv, upper_hsv)
+        hsv = imc.get_hsv()
+        Hoop._save_debug_pic(pic, 'raw')
         Hoop._save_debug_pic(hsv, 'hsv')
-        mask_hoop = cv2.inRange(hsv, np.array(lower_hsv), np.array(upper_hsv))
+        mask_hoop = cv2.inRange(hsv, lower_hsv, upper_hsv)
         Hoop._save_debug_pic(mask_hoop, 'hoop-mask')
         mask_hoop = cv2.erode(mask_hoop, None, iterations=2)
         Hoop._save_debug_pic(mask_hoop, 'hoop-mask-erode')

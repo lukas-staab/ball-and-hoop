@@ -96,3 +96,20 @@ class ImageComposer:
             ImageComposer.camera_matrix, ImageComposer.dist_matrix = utils.load_coefficients(
             'storage/chessboard-calibration/calibration_chessboard.yml')
         ImageComposer.instance_number = ImageComposer.instance_number + 1
+
+    def color_split(self, path, hsv_lower_bound, hsv_upper_bound):
+        os.makedirs(path, exist_ok=True)
+        for x in range(0, 255, 5):
+            # lower bound and upper bound for Orange color
+            lower_bound = np.array([x, hsv_lower_bound[1:2]])
+            upper_bound = np.array([(x + 20) % 255, hsv_upper_bound[1:2] ])
+            # find the colors within the boundaries
+            mask = cv2.inRange(self.get_hsv(), lower_bound, upper_bound)
+
+            kernel = np.ones((7, 7), np.uint8)
+            mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+            mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+            segmented_img = cv2.bitwise_and(self.image(), self.image(), mask=mask)
+
+            file_name = path + str(x) + "-" + str((x + 20) % 255) + ".png"
+            cv2.imwrite(path, segmented_img)
