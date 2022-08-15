@@ -36,7 +36,7 @@ class ImageComposer:
                 shutil.rmtree(self.debug_path)
             os.makedirs(debug_path, exist_ok=True)
 
-    def newImage(self):
+    def start_new_image(self):
         self.image_history.append(self.image_history[-1].copy())
 
     def image(self):

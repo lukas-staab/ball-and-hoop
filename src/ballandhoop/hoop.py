@@ -20,6 +20,8 @@ class Hoop:
                  radius_dots:list,
                  ):
         self.center = center,
+        # i do not know why i need this line, input is ok, self. ist not
+        self.center = self.center[0]
         # end of confusion
         self.radius = int(radius)
         self.center_dots = center_dots
@@ -70,7 +72,11 @@ class Hoop:
         if len(dots_radius) < 3:
             return None # Exception('Less then 3 edge dots found for hoop. See in storage/hoop/ for debugging pictures')
         xc, yc, radius_hoop, _ = cf.least_squares_circle(dots_center)
-        return Hoop([int(xc), int(yc)], int(radius_hoop), dots_center, dots_radius)
+        hoop = Hoop([int(xc), int(yc)], int(radius_hoop), dots_center, dots_radius)
+        imc.start_new_image()
+        imc.plot_hoop(hoop)
+        Hoop._save_debug_pic(imc.image(), 'hoop')
+        return hoop
 
     def angle_in_hoop(self, p: tuple):
         v1 = np.array((0, -self.radius))
