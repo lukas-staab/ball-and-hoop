@@ -24,7 +24,8 @@ class Hoop:
         self.radius = int(radius)
         self.center_dots = center_dots
         self.radius_dots = radius_dots
-        shutil.rmtree('storage/hoop')
+        shutil.rmtree('storage/hoop/')
+        os.makedirs('storage/hoop/')
 
     @staticmethod
     def create_from_image(lower_hsv, upper_hsv, pic=None):
