@@ -63,7 +63,7 @@ class Application:
         print('Start Calibration')
         if calibration['white_balance']:
             print('|-> Start White Balancing Calibration')
-            self.local_config()['wb_gains'] = WhiteBalancing(verboseOutput=False).calculate()
+            self.local_config()['wb_gains'] = WhiteBalancing(verboseOutput=False).calculate(cropping=True)
         else:
             print('|-> [SKIPPING] White Balancing Calibration')
         print('|-> Using Gains: ' + str(self.get_cfg('wb_gains')))

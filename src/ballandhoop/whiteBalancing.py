@@ -15,7 +15,7 @@ class WhiteBalancing:
         for f in filelist:
             os.remove(os.path.join(self.dirPath, f))
 
-    def calculate(self):
+    def calculate(self, cropping=False):
         import picamera.array
         # https://raspberrypi.stackexchange.com/questions/22975/custom-white-balancing-with-picamera
         with picamera.PiCamera(sensor_mode=7) as camera:
@@ -31,8 +31,11 @@ class WhiteBalancing:
                     changed = False
                     camera.awb_gains = (rg, bg)
                     camera.capture(output, format='rgb', use_video_port=True)
-                    cv2.imwrite(self.dirPath + '{0:2d}.png'.format(i), output.array)
-                    r, g, b = (numpy.mean(output.array[..., i]) for i in range(3))
+                    pic = output.array
+                    if cropping:
+                        pic = pic[210:430, 150:320]
+                    cv2.imwrite(self.dirPath + '{0:2d}.png'.format(i), pic)
+                    r, g, b = (numpy.mean(pic[..., i]) for i in range(3))
                     if self.verboseOutput:
                         print('R:%5.2f, B:%5.2f = (%5.2f, %5.2f, %5.2f)' % (rg, bg, r, g, b))
                     # Adjust R and B relative to G, but only if they're significantly
@@ -49,6 +52,6 @@ class WhiteBalancing:
                     if changed is False:
                         output.close()
                         camera.close()
-                        return [np.round(rg, 2, float), np.round(bg, 2, float)]
+                        return [float(rg), float(bg)]
 
 
