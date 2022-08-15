@@ -32,7 +32,7 @@ class Hoop:
             output = picamera.array.PiRGBArray(camera)
             camera.capture(output, format='rgb', use_video_port=True)
             hsv = ImageComposer(output.array, do_undistortion=False, do_blurring=False).get_hsv()
-        mask_hoop = cv2.inRange(hsv, lower_hsv, upper_hsv)
+        mask_hoop = cv2.inRange(hsv, np.array(lower_hsv), np.array(upper_hsv))
         Hoop._save_debug_pic(mask_hoop, 'hoop-mask')
         mask_hoop = cv2.erode(mask_hoop, None, iterations=2)
         Hoop._save_debug_pic(mask_hoop, 'hoop-mask-erode')
