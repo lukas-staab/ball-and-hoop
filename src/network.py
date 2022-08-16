@@ -76,3 +76,5 @@ class Client:
     def send(self, msg, debug_output=False):
         self.socket.sendall(str(msg).encode())
         return self.socket.recv(1024) == b'ok'
+
+

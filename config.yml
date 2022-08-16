@@ -38,5 +38,3 @@ rpi2:
   server_ip: 192.168.??
 rpi3:
   server_ip: 192.168.??
-
-

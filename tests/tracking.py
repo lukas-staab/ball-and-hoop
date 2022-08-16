@@ -2,7 +2,7 @@
 import repackage
 repackage.up()
 from collections import deque
-from src.PiVideoStream import PiVideoStream
+from src.ballandhoop.videostream import PiVideoStream
 import argparse
 import time
 from src.ballandhoop.imageComposer import ImageComposer

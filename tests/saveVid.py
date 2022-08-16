@@ -5,7 +5,7 @@ import os
 import time
 import cv2
 
-from src.PiVideoStream import PiVideoStream
+from src.ballandhoop.videostream import PiVideoStream
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-f", "--fps", type=int, default=60,

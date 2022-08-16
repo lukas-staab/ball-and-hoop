@@ -15,7 +15,8 @@ class Application:
         self.cfg = self.load_config_from_disk('yml')
         self.hostname = socket.gethostname()
         self.run_calibration()
-        # self.hoop = Hoop(** self.get_cfg('hoop'))
+        self.hoop = Hoop(** self.get_cfg('hoop'))
+
         self.save_config_to_disk()
 
     def load_config_from_disk(self, file_type='yml'):
@@ -85,6 +86,7 @@ class Application:
                 print('|-> NO HOOP FOUND! - see in storage/hoop/ for debug pictures')
         else:
             print('|-> [SKIPPING] Searching Hoop in new picture')
+        print('|-> Using Hoop @ ' + str(self.get_cfg('hoop', 'center')) + " with r=" + str(self.get_cfg('hoop', 'radius')))
 
 
 if __name__ == '__main__':

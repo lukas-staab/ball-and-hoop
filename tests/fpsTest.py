@@ -2,7 +2,7 @@
 from __future__ import print_function
 import repackage
 repackage.up()
-from src.PiVideoStream import PiVideoStream
+from src.ballandhoop.videostream import PiVideoStream
 import argparse
 import time
 import cv2

@@ -1,6 +1,5 @@
 # construct the argument parse and parse the arguments
 import argparse
-import socket
 import time
 
 import numpy
@@ -8,7 +7,7 @@ from datetime import datetime
 from tabulate import tabulate
 import repackage
 repackage.up()
-from src.ballandhoop.network import Server, Client
+from src.network import Server, Client
 
 ap = argparse.ArgumentParser()
 # ---------------------------------------------------

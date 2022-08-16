@@ -15,7 +15,7 @@ class ImageComposer:
     dist_matrix = None
     instance_number = 0
 
-    def __init__(self, image_raw, do_undistortion=True, do_blurring=True, debug_path: str = None):
+    def __init__(self, image_raw, do_undistortion=False, do_blurring=False, debug_path: str = None):
         self.idx = ImageComposer.instance_number
         ImageComposer._static_init()
         if image_raw is None:
@@ -68,6 +68,11 @@ class ImageComposer:
     def apply_blurring(self):
         self.image_history.append(cv2.GaussianBlur(self.image_history[-1], (11, 11), 0))
 
+    def apply_hoop_cutting(self, hoop: Hoop):
+        mask = np.zeros(self.image().shape, dtype='uint8')
+        cv2.circle(mask, hoop.center, hoop.radius, (255, 255, 255), -1)
+        self.image_history.append(cv2.bitwise_and(self.image(), self.image(), mask=mask))
+
     def get_hsv(self):
         return cv2.cvtColor(self.image(), cv2.COLOR_BGR2HSV)
 
@@ -94,7 +99,7 @@ class ImageComposer:
     def _static_init():
         if ImageComposer.instance_number == 0:
             ImageComposer.camera_matrix, ImageComposer.dist_matrix = utils.load_coefficients(
-            'storage/chessboard-calibration/calibration_chessboard.yml')
+                'storage/chessboard-calibration/calibration_chessboard.yml')
         ImageComposer.instance_number = ImageComposer.instance_number + 1
 
     def color_split(self, path, hsv_lower_bound, hsv_upper_bound):
@@ -102,7 +107,7 @@ class ImageComposer:
         for x in range(0, 255, 5):
             # lower bound and upper bound for Orange color
             lower_bound = np.array([x, hsv_lower_bound[1], hsv_lower_bound[2]])
-            upper_bound = np.array([(x + 20) % 255, hsv_upper_bound[1], hsv_upper_bound[2] ])
+            upper_bound = np.array([(x + 20) % 255, hsv_upper_bound[1], hsv_upper_bound[2]])
             # find the colors within the boundaries
             mask = cv2.inRange(self.get_hsv(), lower_bound, upper_bound)
 

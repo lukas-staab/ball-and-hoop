@@ -2,7 +2,7 @@ import numpy as np
 import repackage
 repackage.up()
 from src.ballandhoop.imageComposer import ImageComposer
-from src.PiVideoStream import PiVideoStream
+from src.ballandhoop.videostream import PiVideoStream
 from src.ballandhoop.hoop import Hoop
 import time
 import cv2
