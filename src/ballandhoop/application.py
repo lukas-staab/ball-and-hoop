@@ -1,22 +1,32 @@
 import os
+import random
+import time
 from os.path import abspath, join, dirname
 from src.ballandhoop import WhiteBalancing, Hoop
 import socket
 import yaml
 import scipy.io
 
+from src.network import Server, Client
+
 
 class Application:
     """loads config, starts network, starts tracking"""
 
-    fallback_hostname = 'rpi1'
-
-    def __init__(self):
+    def __init__(self, force_hostname=None):
         self.cfg = self.load_config_from_disk('yml')
-        self.hostname = socket.gethostname()
+        if force_hostname is None:
+            self.hostname = socket.gethostname()
+        else:
+            print('[WARN] Forcing host behaviour ' + force_hostname)
+            self.hostname = force_hostname
         self.run_calibration()
-        self.hoop = Hoop(** self.get_cfg('hoop'))
-
+        self.hoop = Hoop(**self.get_cfg('hoop'))
+        if self.get_cfg('is_server'):
+            self.network = Server(self.get_cfg('server_ip'), self.get_cfg('all', 'server_port'), print_debug=True)
+        else:
+            self.network = Client(self.get_cfg('server_ip'), self.get_cfg('all', 'server_port'))
+        self.run()
         self.save_config_to_disk()
 
     def load_config_from_disk(self, file_type='yml'):
@@ -32,9 +42,6 @@ class Application:
         return cfg
 
     def local_config(self, fallback_hostname='rpi1'):
-        if self.hostname not in self.cfg:
-            print('[WARN] Hostname not found - assuming you are on rpi1')
-            self.hostname = Application.fallback_hostname
         return self.cfg[self.hostname]
 
     def get_cfg(self, *arg):
@@ -61,7 +68,7 @@ class Application:
 
     def run_calibration(self):
         calibration = self.get_cfg('all', 'run_calibration')
-        print('Start Calibration')
+        print('=== Start Calibration')
         if calibration['white_balance']:
             print('|-> Start White Balancing Calibration')
             self.local_config()['wb_gains'] = WhiteBalancing(verboseOutput=False).calculate(cropping=True)
@@ -86,9 +93,22 @@ class Application:
                 print('|-> NO HOOP FOUND! - see in storage/hoop/ for debug pictures')
         else:
             print('|-> [SKIPPING] Searching Hoop in new picture')
-        print('|-> Using Hoop @ ' + str(self.get_cfg('hoop', 'center')) + " with r=" + str(self.get_cfg('hoop', 'radius')))
+        print('|-> Using Hoop @ ' + str(self.get_cfg('hoop', 'center')) + " with r=" + str(
+            self.get_cfg('hoop', 'radius')))
+        print('=== End Calibration')
+
+    def run(self):
+        try:
+            with self.network:
+                while True:
+                    # do the tracking and send the result here to the network
+                    self.network.send(random.randint(0, 10))
+                    time.sleep(1)
+        except KeyboardInterrupt:
+            # break infinite while loop
+            pass
 
 
 if __name__ == '__main__':
     os.chdir(abspath(dirname(dirname(dirname(__file__)))))
-    Application()
+    Application('rpi2')

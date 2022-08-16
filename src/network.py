@@ -2,6 +2,10 @@ import time
 import socket
 from threading import Thread
 
+import numpy as np
+
+from src.serial import SerialCom
+
 
 class Server(Thread):
     def __init__(self, server_ip, server_port, print_debug=False):
@@ -12,12 +16,16 @@ class Server(Thread):
         self.connections = []
         self.stop = False
         self.print_debug = print_debug
+        # self.serial = SerialCom()
+        self.values = np.zeros(shape=3, dtype=int)
+        print('Init Server')
 
     def __enter__(self):
         self.socket.__enter__()
         # setup websocket
         self.socket.bind((self.server_ip, self.server_port))
         self.print('Server binding')
+
         # backlog with 1 unaccepted connection
 
         self.start()
@@ -25,25 +33,26 @@ class Server(Thread):
 
     def run(self) -> None:
         self.print('Server is waiting for connections')
-        self.socket.settimeout(0.025)
+        self.socket.settimeout(20)
         self.socket.listen(2)
         while not self.stop:
             try:
                 # wait for new connection
-                conn, addr = self.socket.accept()
-                self.print(str(addr) + ': connection accepted')
-                conn.__enter__()
-                self.connections.append(conn)
+                while len(self.connections) < 2:
+                    conn, addr = self.socket.accept()
+                    self.print(str(addr) + ': connection accepted')
+                    conn.__enter__()
+                    self.connections.append(conn)
             except socket.timeout:
                 pass
 
             for idx, conn in enumerate(self.connections):
                 data = conn.recv(1024)
                 if data:
-                    self.print(str(idx) + ":" + str(data))
-                    # generic answer to clients
+                    self.values[idx + 1] = int(data)
+                    self.print(str(idx + 1) + ":" + str(int(data)))
+                    # generic answer for each client
                     conn.sendall('ok'.encode())
-            time.sleep(0.05)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.print('Closing Server')
@@ -51,6 +60,13 @@ class Server(Thread):
         for conn in self.connections:
             conn.__exit__(self, exc_type, exc_val, exc_tb)
         self.socket.__exit__(self, exc_type, exc_val, exc_tb)
+
+    def send(self, msg):
+        self.values[0] = int(msg)
+        # send to serial com instead of printing
+        print("Mean: " + str(np.mean(self.values)))
+
+        pass
 
     def print(self, msg):
         if self.print_debug:
@@ -73,7 +89,7 @@ class Client:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.socket.__exit__(exc_type, exc_val, exc_tb)
 
-    def send(self, msg, debug_output=False):
+    def send(self, msg):
         self.socket.sendall(str(msg).encode())
         return self.socket.recv(1024) == b'ok'
 

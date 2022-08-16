@@ -13,6 +13,7 @@ all:
     find_hoop: false
     interactive: false
     white_balance: false
+  server_port: 9999
 rpi1:
   hoop:
     center:
@@ -30,11 +31,44 @@ rpi1:
     - 10.12432861328125
     - 10.12432861328125
     - 5.147915363311768
-  server_ip: localhost
+  is_server: true
+  server_ip: 127.0.0.1
   wb_gains:
   - 1.4144569518716577
   - 1.7191847593582887
 rpi2:
-  server_ip: 192.168.??
+  hoop:
+    center:
+    - 382
+    - 136
+    center_dots:
+    - - 313
+      - 429
+    - - 577
+      - 366
+    - - 106
+      - 254
+    radius: 300
+    radius_dots:
+    - 10.12432861328125
+    - 10.12432861328125
+    - 5.147915363311768
+  server_ip: 127.0.0.1
 rpi3:
-  server_ip: 192.168.??
+  hoop:
+    center:
+    - 382
+    - 136
+    center_dots:
+    - - 313
+      - 429
+    - - 577
+      - 366
+    - - 106
+      - 254
+    radius: 300
+    radius_dots:
+    - 10.12432861328125
+    - 10.12432861328125
+    - 5.147915363311768
+  server_ip: 127.0.0.1
