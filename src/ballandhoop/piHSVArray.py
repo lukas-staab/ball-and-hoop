@@ -1,4 +1,4 @@
-from picamera.array.PiRGBArray import PiRGBArray
+from picamera.array import PiRGBArray
 
 
 class PiHSVArray(PiRGBArray):
