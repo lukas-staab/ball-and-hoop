@@ -29,7 +29,7 @@ def savePicture(file_name, resolution_no=2, wb_gains=None):
     if not os.path.exists(dirName):
         os.mkdir(dirName)
 
-    vid = VideoStream(resolution_no=resolution_no, framerate=fps, wb_gains=wb_gains)
+    vid = VideoStream(resolution_no=resolution_no, framerate=fps, wb_gains=wb_gains, as_hsv=False)
     idx = 1
     for frame in vid:
         cv2.imwrite(file_base + "-" + str(idx) + '.png', frame)
