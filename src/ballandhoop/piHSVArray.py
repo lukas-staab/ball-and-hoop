@@ -1,4 +1,5 @@
 from picamera.array import PiRGBArray
+import cv2
 
 
 class PiHSVArray(PiRGBArray):

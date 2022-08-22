@@ -12,13 +12,14 @@ def saveVideo(file_name, fps=60, length=1, resolution_no=2, wb_gains=None):
 
     video_writer = cv2.VideoWriter(file_path, cv2.VideoWriter_fourcc('I', '4', '2', '0'),
                                    fps, VideoStream.resolutions[resolution_no])
-    vid = VideoStream(resolution_no=resolution_no, framerate=fps, wb_gains=wb_gains)
+    vid = VideoStream(resolution_no=resolution_no, framerate=fps, wb_gains=wb_gains, as_hsv=False)
     sec = time.time()
     for frame in vid:
         if video_writer.isOpened() and time.time() - sec <= length:
             break
         video_writer.write(frame)
     video_writer.release()
+    vid.close()
 
 
 def savePicture(file_name, resolution_no=2, wb_gains=None):
@@ -28,10 +29,11 @@ def savePicture(file_name, resolution_no=2, wb_gains=None):
     if not os.path.exists(dirName):
         os.mkdir(dirName)
 
-    with VideoStream(resolution_no=resolution_no, framerate=fps, wb_gains=None) as vid:
-        idx = 1
-        for frame in vid:
-            cv2.imsave(file_base + "-" + idx + '.png', frame)
-            idx = idx + 1
-            if idx > 5:
-                break
+    vid = VideoStream(resolution_no=resolution_no, framerate=fps, wb_gains=wb_gains)
+    idx = 1
+    for frame in vid:
+        cv2.imwrite(file_base + "-" + idx + '.png', frame)
+        idx = idx + 1
+        if idx > 5:
+            break
+    vid.close()
