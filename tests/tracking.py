@@ -2,7 +2,7 @@
 import repackage
 repackage.up()
 from collections import deque
-from src.ballandhoop.videostream import PiVideoStream
+from src.ballandhoop.videostream import VideoStream
 import argparse
 import time
 from src.ballandhoop.imageComposer import ImageComposer
@@ -39,8 +39,8 @@ idx = 0
 
 gains = WhiteBalancing(verboseOutput=True).calculate()
 
-with PiVideoStream(resolution_no=args['resolution'], framerate=args['fps'], rotation=args['rotation'],
-                   encode=args['encode'], awb=gains) as cam:
+with VideoStream(resolution_no=args['resolution'], framerate=args['fps'], rotation=args['rotation'],
+                 encode=args['encode'], awb=gains) as cam:
     # allow the camera to warmup and start the FPS counter
     time.sleep(0.25)
     # capture frames from the camera

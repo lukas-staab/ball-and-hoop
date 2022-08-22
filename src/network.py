@@ -94,3 +94,10 @@ class Client:
         return self.socket.recv(1024) == b'ok'
 
 
+def init_network(is_server: bool, server_ip: str, server_port: int):
+    if is_server:
+        return Server(server_ip, server_port, print_debug=True)
+    else:
+        return Client(server_ip, server_port)
+
+

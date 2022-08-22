@@ -1,18 +1,12 @@
 # import the necessary packages
-from importlib.util import find_spec
-import threading
 import time
 import cv2
 from imutils.video import FPS
-from src.ballandhoop.whiteBalancing import WhiteBalancing
 
-if find_spec('picamera') is not None:
-    from picamera.array import PiRGBArray
-    from picamera.array import PiYUVArray
-    from picamera import PiCamera
+from src.ballandhoop.piHSVArray import PiHSVArray
 
 
-class PiVideoStream:
+class VideoStream:
     resolutions = {
         0: (160, 128),
         1: (320, 240),
@@ -25,124 +19,76 @@ class PiVideoStream:
         3: cv2.ROTATE_90_COUNTERCLOCKWISE,
     }
 
-    encodings = {
-        0: 'yuv',
-        1: 'bgr'
-    }
-
-    def __init__(self, resolution_no=2, framerate=30, rotation=0, encode=1, debug_path=None, awb='auto'):
-        self.debug_path = debug_path
+    def __init__(self, resolution_no=2, framerate=30, rotation=0, as_hsv=True, wb_gains=None, faker_path=None):
         resolution = self.resolutions[resolution_no]
         # initialize the camera and stream
-        self.isPi = find_spec('picamera') is not None
+        self.is_faked = faker_path is not None
         self.framerate = framerate
-        if self.isPi:
+        if self.is_faked:
+            self.stream = self.faker_stream_generator(faker_path)
+        else:
+            # assume we are on a raspberry pi then
+            from picamera.array import PiRGBArray
+            from picamera.array import PiYUVArray
+            from picamera import PiCamera
+
             self.camera = PiCamera(sensor_mode=7)
             self.camera.resolution = resolution
             self.camera.framerate = framerate
-            if type(awb) is tuple:
+
+            if type(wb_gains) is tuple or type(wb_gains) is list:
                 self.camera.awb_mode = 'off'
-                self.camera.awb_gains = awb
+                self.camera.awb_gains = wb_gains
+
+            if as_hsv:
+                self.rawCapture = PiHSVArray(self.camera, size=resolution)
             else:
-                self.camera.awb_mode = awb
-                self.camera.awb_gains = (0, 0)
-            if self.encodings[encode] == 'bgr':
                 self.rawCapture = PiRGBArray(self.camera, size=resolution)
-            else:
-                self.rawCapture = PiYUVArray(self.camera, size=resolution)
             self.stream = self.camera.capture_continuous(self.rawCapture,
-                                                         format=self.encodings[encode],
-                                                         use_video_port=True,)
-        else:
-            self.stream = self.faker_stream_generator()
+                                                         format='rgb',  # this is also needed for hsv
+                                                         use_video_port=True)
+
         # initialize the frame and the variable used to indicate
         # if the thread should be stopped
         self.raw_frame = None
         self.rotation = rotation
         self.stopped = False
         self.closed = False
-        self.fpsIn = FPS()
-        self.fpsOut = FPS()
+        self.fps = FPS()
 
-    def start(self):
-        # start the thread to read frames from the video stream
-        self.fpsIn = self.fpsIn.start()
-        self.fpsOut = self.fpsOut.start()
-        print('Try to start cam...')
-        threading.Thread(target=self.update, args=()).start()
+    def __iter__(self):
+        self.fps.start()
+        self.stream = iter(self.stream)
         return self
 
-    def __enter__(self):
-        self.start()
-        return self
-
-    def update(self):
-        # keep looping infinitely until the thread is stopped
-        print('Cam is running!')
-        try:
-            for f in self.stream:
-                # grab the frame from the stream and clear the stream in
-                # preparation for the next frame
-                if f is not None:
-                    if self.isPi:
-                        self.raw_frame = f.array
-                        self.rawCapture.truncate(0)
-                    else:
-                        self.raw_frame = f
-                        time.sleep(1 / self.framerate)
-                    self.fpsIn.update()
-                # if the thread indicator variable is set, stop the thread
-                # and resource camera resources
-                if self.stopped:
-                    print('Cam tries to close resources...')
-                    self.stream.close()
-                    self.rawCapture.close()
-                    self.camera.close()
-                    self.fpsIn.stop()
-                    self.closed = True
-                    print('All resources closed')
-                    return
-        except:
-            if self.isPi:
-                self.stream.close()
-                self.rawCapture.close()
-                self.camera.close()
-            self.fpsIn.stop()
-            self.closed = True
-
-    def read(self):
-        # return the frame most recently read
-        self.fpsOut.update()
-        frame = self.raw_frame
+    def __next__(self):
+        f = next(self.stream)
+        if f is None:
+            self.fps.stop()
+            print("elasped time: {:.2f}".format(self.fps.elapsed()))
+            print("FPS wanted: " + str(self.framerate))
+            print("taken FPS: {:.2f}".format(self.fps.fps()))
+            raise StopIteration
+        else:
+            if self.is_faked:
+                time.sleep(1 / self.framerate)
+            else:
+                f = f.array
+                self.rawCapture.truncate(0)
+            self.fps.update()
         if self.rotation != 0:
-            frame = cv2.rotate(frame, self.rotations[self.rotation])
-        return frame
+            f = cv2.rotate(f, self.rotations[self.rotation])
+        return f
 
-    def stop(self):
-        # indicate that the thread should be stopped
-        print('Cam is stopping...')
-        self.stopped = True
-        self.fpsOut.stop()
-        while not self.closed:
-            time.sleep(0.1)
-        print('Cam is stopped')
+    def close(self):
+        if not self.is_faked:
+            self.stream.close()
+            self.rawCapture.close()
+            self.camera.close()
+        self.fps.stop()
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.stop()
-        if exc_type is None:
-            self.print_stats()
-
-    def print_stats(self):
-        if not self.stopped:
-            print("[ERROR] thread not closed (yet)")
-            return
-        print("[IN] elasped time: {:.2f}".format(self.fpsIn.elapsed()))
-        print("[IN] approx. FPS: {:.2f}".format(self.fpsIn.fps()))
-        print("[OUT] elasped time: {:.2f}".format(self.fpsOut.elapsed()))
-        print("[OUT] approx. FPS: {:.2f}".format(self.fpsOut.fps()))
-
-    def faker_stream_generator(self):
-        cap = cv2.VideoCapture('fetch/rpi3.lan/video/test-off-1.79-1.14.avi')
+    def faker_stream_generator(self, faker_path):
+        cap = cv2.VideoCapture(faker_path)
         while cap.isOpened():
             success, frame = cap.read()
             if success:

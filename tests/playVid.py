@@ -2,13 +2,13 @@ import numpy as np
 import repackage
 repackage.up()
 from src.ballandhoop.imageComposer import ImageComposer
-from src.ballandhoop.videostream import PiVideoStream
+from src.ballandhoop.videostream import VideoStream
 from src.ballandhoop.hoop import Hoop
 import time
 import cv2
 
 
-cam = PiVideoStream()
+cam = VideoStream()
 cam.start()
 time.sleep(1)
 while True:

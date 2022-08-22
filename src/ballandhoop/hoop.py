@@ -10,14 +10,13 @@ import circle_fit as cf
 from .ball import Ball
 
 
-
 class Hoop:
 
     def __init__(self,
                  center: list,
                  radius: int,
-                 center_dots:list,
-                 radius_dots:list,
+                 center_dots: list,
+                 radius_dots: list,
                  ):
         self.center = center,
         # i do not know why i need this line, input is ok, self. ist not
@@ -28,12 +27,15 @@ class Hoop:
         self.radius_dots = radius_dots
 
     @staticmethod
-    def create_from_image(lower_hsv, upper_hsv, pic=None):
+    def create_from_image(lower, upper, pic=None):
         shutil.rmtree('storage/hoop/')
         os.makedirs('storage/hoop/')
-        lower_hsv = np.array(lower_hsv)
-        upper_hsv = np.array(upper_hsv)
-        if pic is None:
+        lower_hsv = np.array(lower)
+        upper_hsv = np.array(upper)
+        if pic is not None:
+            pic = cv2.imread(pic)
+        else:
+            # no fake picture given. expecting to be on a raspberry pi
             import picamera.array
             camera = picamera.PiCamera(sensor_mode=7)
             camera.resolution = (640, 480)
@@ -70,7 +72,7 @@ class Hoop:
                 dots_center.append(center_dot)
                 dots_radius.append(int(radius))
         if len(dots_radius) < 3:
-            return None # Exception('Less then 3 edge dots found for hoop. See in storage/hoop/ for debugging pictures')
+            return None  # Exception('Less then 3 edge dots found for hoop. See in storage/hoop/ for debugging pictures')
         xc, yc, radius_hoop, _ = cf.least_squares_circle(dots_center)
         hoop = Hoop([int(xc), int(yc)], int(radius_hoop), dots_center, dots_radius)
         imc.start_new_image()
@@ -89,8 +91,8 @@ class Hoop:
         y = np.dot(v1, v2)
         return math.atan2(x, y) / math.pi * 180
 
-    def find_ball(self, imc: ImageComposer, hue_low, hue_upper, saturation_low=50, saturation_upper=255, iterations=2):
-        mask_ball = cv2.inRange(imc.get_hsv(), (hue_low, saturation_low, 50), (hue_upper, saturation_upper, 255))
+    def find_ball(self, frame: PiHSVArray, cols: dict, iterations=2):
+        mask_ball = cv2.inRange(frame, cols['lower'], cols['upper'])
         self.save_debug_pic(mask_ball, 'ball-mask')
         mask_ball = cv2.erode(mask_ball, None, iterations=iterations)
         self.save_debug_pic(mask_ball, 'ball-mask-erode')

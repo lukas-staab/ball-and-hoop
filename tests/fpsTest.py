@@ -2,7 +2,7 @@
 from __future__ import print_function
 import repackage
 repackage.up()
-from src.ballandhoop.videostream import PiVideoStream
+from src.ballandhoop.videostream import VideoStream
 import argparse
 import time
 import cv2
@@ -25,8 +25,8 @@ ap.add_argument("-d", "--display", type=int, default=-1,
 
 args = vars(ap.parse_args())
 
-cam = PiVideoStream(resolution_no=args['resolution'],
-                    framerate=args['fps'], rotation=args['rotation'], encode=args['encode'])
+cam = VideoStream(resolution_no=args['resolution'], framerate=args['fps'], rotation=args['rotation'],
+                  encode=args['encode'])
 cam.start()
 time.sleep(0.25)
 # allow the camera to warmup and start the FPS counter

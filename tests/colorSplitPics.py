@@ -26,10 +26,10 @@ if 'filepath' in args and len(args['filepath']) > 0:
 else:
     # has to be on rpi
     print('Take pic from cam')
-    from src.ballandhoop.videostream import PiVideoStream
+    from src.ballandhoop.videostream import VideoStream
     from src.ballandhoop.whiteBalancing import WhiteBalancing
     gains = WhiteBalancing(verboseOutput=True).calculate()
-    with PiVideoStream(framerate=60, awb=gains) as vid:
+    with VideoStream(framerate=60, awb=gains) as vid:
         image = vid.read()
 
 dirName = input("Base dirName name: ")

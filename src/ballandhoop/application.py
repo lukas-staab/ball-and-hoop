@@ -1,4 +1,3 @@
-import os
 import random
 import time
 from os.path import abspath, join, dirname
@@ -7,27 +6,21 @@ import socket
 import yaml
 import scipy.io
 
-from src.network import Server, Client
+from src.network import init_network
+from src.ballandhoop.videostream import VideoStream
 
 
 class Application:
     """loads config, starts network, starts tracking"""
 
-    def __init__(self, force_hostname=None):
+    def __init__(self, force_hostname=None, verbose_output=False):
+        self.verbose = verbose_output
         self.cfg = self.load_config_from_disk('yml')
         if force_hostname is None:
             self.hostname = socket.gethostname()
         else:
-            print('[WARN] Forcing host behaviour ' + force_hostname)
+            self.print('[INFO] Forcing different hostname: ' + force_hostname)
             self.hostname = force_hostname
-        self.run_calibration()
-        self.hoop = Hoop(**self.get_cfg('hoop'))
-        if self.get_cfg('is_server'):
-            self.network = Server(self.get_cfg('server_ip'), self.get_cfg('all', 'server_port'), print_debug=True)
-        else:
-            self.network = Client(self.get_cfg('server_ip'), self.get_cfg('all', 'server_port'))
-        self.run()
-        self.save_config_to_disk()
 
     def load_config_from_disk(self, file_type='yml'):
         cfg = None
@@ -36,19 +29,16 @@ class Application:
                 cfg = yaml.load(cfgFile, Loader=yaml.Loader)
         elif file_type == 'mat':
             cfg = scipy.io.loadmat('config.mat')['pi_configs']
-        print('=== Start Config ===')
-        print(cfg)
-        print('=== End Config ===')
+        self.print('=== Start Config ===')
+        self.print(cfg)
+        self.print('=== End Config ===')
         return cfg
 
-    def local_config(self, fallback_hostname='rpi1'):
+    def local_config(self):
         return self.cfg[self.hostname]
 
     def get_cfg(self, *arg):
-        if arg[0] == 'all':
-            cfg = self.cfg
-        else:
-            cfg = self.local_config()
+        cfg = self.local_config()
         for key in arg:
             try:
                 cfg = cfg[key]
@@ -59,27 +49,23 @@ class Application:
         return cfg
 
     def save_config_to_disk(self) -> None:
-        print("Try to update config files - if this fails, remove keys with empty values from source config")
-        print(self.cfg)
+        self.print("Try to update config files - if this fails, remove keys with empty values from source config")
+        self.print(self.cfg)
         with open('config.yml', 'w') as outfile:
             yaml.dump(self.cfg, outfile, default_flow_style=False)
         scipy.io.savemat('config.mat', {'pi_configs': self.cfg})
-        print('Updated config file(s)')
+        self.print('Updated config file(s)')
 
-    def run_calibration(self):
-        calibration = self.get_cfg('all', 'run_calibration')
-        print('=== Start Calibration')
-        if calibration['white_balance']:
-            print('|-> Start White Balancing Calibration')
-            self.local_config()['wb_gains'] = WhiteBalancing(verboseOutput=False).calculate(cropping=True)
-        else:
-            print('|-> [SKIPPING] White Balancing Calibration')
-        print('|-> Using Gains: ' + str(self.get_cfg('wb_gains')))
-        if calibration['find_hoop']:
-            print('|-> Searching Hoop in new picture')
-            lower_hsv = self.get_cfg('all', 'hsv', 'hoop', 'lower')
-            upper_hsv = self.get_cfg('all', 'hsv', 'hoop', 'upper')
-            hoop = Hoop.create_from_image(lower_hsv=lower_hsv, upper_hsv=upper_hsv)
+    def run_calibration(self, calc_wb_gains: bool, search_hoop: bool, hoop_search_col: dict):
+        self.print('=== Start Calibration')
+        if calc_wb_gains:
+            self.print('|-> Start White Balancing Calibration')
+            self.local_config()['video']['wb_gains'] = WhiteBalancing(verboseOutput=False).calculate(cropping=True)
+        self.print('|-> Using white balancing Gains: ' + str(self.get_cfg('wb_gains')))
+        if search_hoop:
+            self.print('|-> Searching Hoop in new picture')
+            hoop_search_col = self.save_col_and_add_from_config('hoop', hoop_search_col)
+            hoop = Hoop.create_from_image(**hoop_search_col)
             if hoop is not None:
                 hoop_cfg = {
                     'radius': hoop.radius,
@@ -88,27 +74,60 @@ class Application:
                     'radius_dots': hoop.radius_dots,
                 }
                 self.local_config()['hoop'] = hoop_cfg
-                print('|-> Hoop found @ ' + str(self.get_cfg('hoop', 'center')))
+                self.print('|-> Hoop found @ ' + str(self.get_cfg('hoop', 'center')))
             else:
-                print('|-> NO HOOP FOUND! - see in storage/hoop/ for debug pictures')
-        else:
-            print('|-> [SKIPPING] Searching Hoop in new picture')
-        print('|-> Using Hoop @ ' + str(self.get_cfg('hoop', 'center')) + " with r=" + str(
+                self.print('|-> NO HOOP FOUND! - see in storage/hoop/ for debug pictures')
+        self.print('|-> Using Hoop @ ' + str(self.get_cfg('hoop', 'center')) + " with r=" + str(
             self.get_cfg('hoop', 'radius')))
-        print('=== End Calibration')
+        self.print('=== End Calibration')
 
-    def run(self):
+    def run(self, ball_search_col: dict):
+        # give config to objects to initialize
+        hoop = Hoop(**self.get_cfg('hoop'))
+        video = VideoStream(**self.get_cfg('video'))
+        network = init_network(**self.get_cfg('network'))
+
+        ball_search_col = self.save_col_and_add_from_config('ball', ball_search_col)
         try:
-            with self.network:
-                while True:
+            with network:
+                for f in video:
                     # do the tracking and send the result here to the network
-                    self.network.send(random.randint(0, 10))
-                    time.sleep(1)
+                    ball = hoop.find_ball(frame=f, cols=ball_search_col)
+                    # send the result
+                    if ball is not None:
+                        network.send(ball.angle_in_hoop())
+                    else:
+                        network.send('None')
         except KeyboardInterrupt:
-            # break infinite while loop
+            # break potential infinite loop
             pass
+        finally:
+            video.close()
 
+    def print(self, msg: str):
+        if self.verbose:
+            print(msg)
 
-if __name__ == '__main__':
-    os.chdir(abspath(dirname(dirname(dirname(__file__)))))
-    Application('rpi2')
+    def save_col_and_add_from_config(self, type: str, input: dict):
+        ret = {}
+        if input['lower'] is not None:
+            self.get_cfg()[type]['hsv']['lower'] = input['lower']
+        ret['lower'] = self.get_cfg()[type]['hsv']['lower']
+        if input['upper'] is not None:
+            self.get_cfg()[type]['hsv']['upper'] = input['upper']
+        ret['upper'] = self.get_cfg()[type]['hsv']['upper']
+        return ret
+
+    def generate_fakes(self, file_name, video=False, picture=False, wb_gains=None):
+        if wb_gains is None:
+            wb_gains = WhiteBalancing(verboseOutput=False).calculate(cropping=True)
+
+        if video:
+            from src.faker.save import saveVideo
+            saveVideo(file_name, wb_gains=wb_gains)
+            self.print('Saved Video')
+
+        if picture:
+            from src.faker.save import savePicture
+            savePicture(file_name, wb_gains=wb_gains)
+            self.print('Saved Picture')
