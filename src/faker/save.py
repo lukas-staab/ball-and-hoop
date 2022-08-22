@@ -32,7 +32,7 @@ def savePicture(file_name, resolution_no=2, wb_gains=None):
     vid = VideoStream(resolution_no=resolution_no, framerate=fps, wb_gains=wb_gains)
     idx = 1
     for frame in vid:
-        cv2.imwrite(file_base + "-" + idx + '.png', frame)
+        cv2.imwrite(file_base + "-" + str(idx) + '.png', frame)
         idx = idx + 1
         if idx > 5:
             break
