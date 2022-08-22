@@ -10,13 +10,14 @@ def saveVideo(file_name, fps=60, length=5, resolution_no=2, wb_gains=None):
     if not os.path.exists(dirName):
         os.mkdir(dirName)
 
-    video_writer = cv2.VideoWriter(file_path, cv2.VideoWriter_fourcc(* 'RGBA'),
+    video_writer = cv2.VideoWriter(file_path, cv2.VideoWriter_fourcc(* 'XVID'),
                                    fps, VideoStream.resolutions[resolution_no])
     vid = VideoStream(resolution_no=resolution_no, framerate=fps, wb_gains=wb_gains, as_hsv=False)
-    sec = time.time()
+    idx = 0
     for frame in vid:
-        if video_writer.isOpened() and time.time() - sec <= length:
+        if video_writer.isOpened() and idx <= fps * length:
             video_writer.write(frame)
+            idx = idx + 1
         else:
             break
     video_writer.release()
