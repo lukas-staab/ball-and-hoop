@@ -1,7 +1,7 @@
 from src.ballandhoop.videostream import VideoStream
 import time
 import os
-
+import cv2
 
 def saveVideo(file_name, fps=60, length=1, resolution_no=2, wb_gains=None):
     dirName = "storage/faker/"
@@ -12,13 +12,13 @@ def saveVideo(file_name, fps=60, length=1, resolution_no=2, wb_gains=None):
 
     video_writer = cv2.VideoWriter(file_path, cv2.VideoWriter_fourcc('I', '4', '2', '0'),
                                    fps, VideoStream.resolutions[resolution_no])
-    with VideoStream(resolution_no=resolution_no, framerate=fps, wb_gains=wb_gains) as vid:
-        sec = time.time()
-        for frame in vid:
-            if video_writer.isOpened() and time.time() - sec <= length:
-                break
-            video_writer.write(frame)
-        video_writer.release()
+    vid = VideoStream(resolution_no=resolution_no, framerate=fps, wb_gains=wb_gains)
+    sec = time.time()
+    for frame in vid:
+        if video_writer.isOpened() and time.time() - sec <= length:
+            break
+        video_writer.write(frame)
+    video_writer.release()
 
 
 def savePicture(file_name, resolution_no=2, wb_gains=None):
