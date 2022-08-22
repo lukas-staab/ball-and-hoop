@@ -16,8 +16,9 @@ def saveVideo(file_name, fps=60, length=1, resolution_no=2, wb_gains=None):
     sec = time.time()
     for frame in vid:
         if video_writer.isOpened() and time.time() - sec <= length:
+            video_writer.write(frame)
+        else:
             break
-        video_writer.write(frame)
     video_writer.release()
     vid.close()
 
