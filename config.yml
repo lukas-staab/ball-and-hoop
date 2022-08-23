@@ -23,7 +23,7 @@ rpi1:
 
 lyoga:
   video:
-    faker_path: fetch/rpi3.lan/video/test-off-1.5-1.0.avi
+    faker_path: fetch/rpi1.lan/faker/test/
   hoop:
     faker_path:
     center: [50, 50]

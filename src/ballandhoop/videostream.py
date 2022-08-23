@@ -1,4 +1,5 @@
 # import the necessary packages
+import os.path
 import time
 import cv2
 from imutils.video import FPS
@@ -88,11 +89,9 @@ class VideoStream:
         self.fps.stop()
 
     def faker_stream_generator(self, faker_path):
-        cap = cv2.VideoCapture(faker_path)
-        while cap.isOpened():
-            success, frame = cap.read()
-            if success:
-                yield frame
-            else:
-                break
-        cap.release()
+        idx = 1
+        file = faker_path + "/" + str(idx) + ".png"
+        while os.path.isfile(file):
+            yield cv2.imread(file)
+            idx = idx + 1
+            file = faker_path + "/" + str(idx) + ".png"

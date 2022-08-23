@@ -118,16 +118,11 @@ class Application:
         ret['upper'] = self.get_cfg()[type]['hsv']['upper']
         return ret
 
-    def generate_fakes(self, file_name, video=False, picture=False, wb_gains=None):
+    def generate_fakes(self, file_name, wb_gains=None):
         if wb_gains is None:
             wb_gains = WhiteBalancing(verboseOutput=False).calculate(cropping=True)
             self.print('Calced wb_gains: ' + str(wb_gains))
-        if video:
-            from src.faker.save import saveVideo
-            saveVideo(file_name, wb_gains=wb_gains)
-            self.print('Saved Video')
 
-        if picture:
-            from src.faker.save import savePicture
-            savePicture(file_name, wb_gains=wb_gains)
-            self.print('Saved Picture')
+        from src.faker.save import savePictures
+        savePictures(file_name, wb_gains=wb_gains, amount=300, fps=60)
+        self.print('Saved Picture')
