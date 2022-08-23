@@ -51,7 +51,7 @@ class Server(Thread):
                         # s is a client socket
                         data = s.recv(1024)
                         if data:
-                            self.print(addr(s) + ":" + str(float(data)))
+                            self.print(str(addr(s)) + ":" + str(float(data)))
                             self.values[addr(s)][now()] = float(data)
                             # generic answer for each client, message confirmed
                             s.sendall('ok'.encode())
