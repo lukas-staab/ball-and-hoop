@@ -11,6 +11,7 @@ from src.serial import SerialCom
 class Server(Thread):
     def __init__(self, server_ip, server_port, print_debug=False):
         super().__init__()
+        super.daemon = True  # kill it with parent
         self.server_ip = server_ip
         self.server_port = server_port
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -20,7 +21,7 @@ class Server(Thread):
         self.stopped = False
         self.print_debug = print_debug
         # self.serial = SerialCom()
-        self.values = {self.server: {}}
+        self.values = {'localhost': {}}
         print('Init Server')
 
     def __enter__(self):
@@ -35,13 +36,13 @@ class Server(Thread):
         self.print('Server is running')
         self.sockets.append(self.server)
         try:
-            while True:
+            while not self.stop:
                 readable, writable, errored = select.select(self.sockets, [], [])
                 for s in readable:
                     if s is self.server:
                         client_socket, address = self.server.accept()
                         client_socket.__enter__()
-                        self.values[client_socket] = {}
+                        self.values[addr(client_socket)] = {}
                         self.sockets.append(client_socket)
                         print("Connection from: " + str(address))
                     else:
@@ -50,14 +51,19 @@ class Server(Thread):
                         if data:
                             now = time.time()
                             self.print(str(s) + ":" + str(float(data)))
-                            self.values[s][now] = float(data)
+                            self.values[addr(s)][now] = float(data)
                             # generic answer for each client, message confirmed
                             s.sendall('ok'.encode())
                         else:
                             s.close()
                             self.sockets.remove(s)
+        except SystemExit:
+            pass
+        except KeyboardInterrupt:
+            pass
         finally:
             self.stopped = True
+            scipy.io.savemat('storage/result.mat', {'pi_result': self.values})
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.print('Closing Server')
@@ -65,13 +71,13 @@ class Server(Thread):
         while self.stopped is not True:
             time.sleep(0.1)
         for s in self.sockets:
-            s.__exit__(self, exc_type, exc_val, exc_tb)
-        scipy.io.savemat('storage/result.mat', {'pi_result': self.values})
+            s.close()
 
     def send(self, msg):
         # self.values[0] = msg
         # send to serial com instead of printing
-        self.values[self.server][time.time()] = int(msg)
+        self.values['localhost'][time.time()] = float(msg)
+        print("localhost: " + str(float(msg)))
         pass
 
     def print(self, msg):
@@ -107,3 +113,5 @@ def init_network(is_server: bool, server_ip: str, server_port: int):
         return Client(server_ip, server_port)
 
 
+def addr(s: socket.socket):
+    return s.getpeername()[0]
