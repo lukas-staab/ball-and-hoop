@@ -20,7 +20,7 @@ class Server(Thread):
         self.stopped = False
         self.print_debug = print_debug
         # self.serial = SerialCom()
-        self.values = {0: {}}
+        self.values = {self.server: {}}
         print('Init Server')
 
     def __enter__(self):
@@ -40,9 +40,9 @@ class Server(Thread):
                 for s in readable:
                     if s is self.server:
                         client_socket, address = self.server.accept()
-                        self.sockets.append(client_socket)
                         client_socket.__enter__()
-                        self.values[s] = {}
+                        self.values[client_socket] = {}
+                        self.sockets.append(client_socket)
                         print("Connection from: " + str(address))
                     else:
                         # this is a client socket
@@ -71,7 +71,7 @@ class Server(Thread):
     def send(self, msg):
         # self.values[0] = msg
         # send to serial com instead of printing
-        self.values[0][time.time()] = int(msg)
+        self.values[self.server][time.time()] = int(msg)
         pass
 
     def print(self, msg):
