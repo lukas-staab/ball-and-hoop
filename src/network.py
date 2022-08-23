@@ -50,7 +50,7 @@ class Server(Thread):
                         data = s.recv(1024)
                         if data:
                             now = time.time()
-                            self.print(str(s) + ":" + str(float(data)))
+                            self.print(addr(s) + ":" + str(float(data)))
                             self.values[addr(s)][now] = float(data)
                             # generic answer for each client, message confirmed
                             s.sendall('ok'.encode())
@@ -114,4 +114,4 @@ def init_network(is_server: bool, server_ip: str, server_port: int):
 
 
 def addr(s: socket.socket):
-    return s.getpeername()[0]
+    return s.getpeername()[1]
