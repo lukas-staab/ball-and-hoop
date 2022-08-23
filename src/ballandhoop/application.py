@@ -66,7 +66,7 @@ class Application:
         if calc_wb_gains:
             self.print('|-> Start White Balancing Calibration')
             self.local_config()['video']['wb_gains'] = WhiteBalancing(verboseOutput=False).calculate(cropping=True)
-        self.print('|-> Using white balancing Gains: ' + str(self.get_cfg('wb_gains')))
+        self.print('|-> Using white balancing Gains: ' + str(self.get_cfg('video', 'wb_gains')))
         if search_hoop:
             self.print('|-> Searching Hoop in new picture')
             hoop_search_col = self.save_col_and_add_from_config('hoop', hoop_search_col)
