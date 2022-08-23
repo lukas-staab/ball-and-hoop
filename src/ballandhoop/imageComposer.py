@@ -104,10 +104,10 @@ class ImageComposer:
 
     def color_split(self, path, hsv_lower_bound, hsv_upper_bound):
         os.makedirs(path, exist_ok=True)
-        for x in range(0, 255, 5):
+        for x in range(0, 360, 5):
             # lower bound and upper bound for Orange color
             lower_bound = np.array([x, hsv_lower_bound[1], hsv_lower_bound[2]])
-            upper_bound = np.array([(x + 20) % 255, hsv_upper_bound[1], hsv_upper_bound[2]])
+            upper_bound = np.array([(x + 20) % 360, hsv_upper_bound[1], hsv_upper_bound[2]])
             # find the colors within the boundaries
             mask = cv2.inRange(self.get_hsv(), lower_bound, upper_bound)
 
@@ -116,5 +116,5 @@ class ImageComposer:
             mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
             segmented_img = cv2.bitwise_and(self.image(), self.image(), mask=mask)
 
-            file_name = path + str(x) + "-" + str((x + 20) % 255) + ".png"
+            file_name = path + str(x) + "-" + str((x + 20) % 360) + ".png"
             cv2.imwrite(file_name, segmented_img)
