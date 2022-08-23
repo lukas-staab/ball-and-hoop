@@ -38,7 +38,7 @@ class Server(Thread):
             while True:
                 readable, writable, errored = select.select(self.sockets, [], [])
                 for s in readable:
-                    if s is self.sockets:
+                    if s is self.server:
                         client_socket, address = self.server.accept()
                         self.sockets.append(client_socket)
                         client_socket.__enter__()
