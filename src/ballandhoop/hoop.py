@@ -84,7 +84,7 @@ class Hoop:
         imc.start_new_image()
         imc.plot_hoop(hoop)
         Hoop._save_debug_pic(imc.image(), 'hoop')
-        return hoop
+        return hoop, imc.image()
 
     def angle_in_hoop(self, p: tuple):
         v1 = np.array((0, -self.radius))
