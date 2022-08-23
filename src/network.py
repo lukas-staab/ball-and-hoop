@@ -14,6 +14,7 @@ class Server(Thread):
         self.server_ip = server_ip
         self.server_port = server_port
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sockets = []
         self.stop = False
         self.stopped = False
