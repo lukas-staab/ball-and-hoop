@@ -81,7 +81,8 @@ class Server(Thread):
 
     def send(self, msg):
         # send to serial com instead of printing
-        self.values['localhost'][now()] = float(msg)
+        self.values['localhost']['angle'].append(float(msg))
+        self.values['localhost']['time'].append(now())
         print("localhost: " + str(float(msg)))
         pass
 
