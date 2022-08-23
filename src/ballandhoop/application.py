@@ -110,7 +110,7 @@ class Application:
                     if ball is not None:
                         network.send(ball.angle_in_hoop())
                     else:
-                        network.send('None')
+                        print('No ball found')
         except KeyboardInterrupt:
             # break potential infinite loop
             pass
