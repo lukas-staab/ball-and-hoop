@@ -132,7 +132,7 @@ class Application:
         self.save_config_to_disk()
         return ret
 
-    def debug(self, save_vid=None, wb_gains=None, ):
+    def debug(self, save_vid=None, wb_gains=None):
         if wb_gains is None:
             wb_gains = WhiteBalancing(verboseOutput=False).calculate(cropping=True)
             self.print('Calced wb_gains: ' + str(wb_gains))
@@ -141,4 +141,3 @@ class Application:
             from src.faker.save import savePictures
             savePictures(*save_vid, wb_gains=wb_gains)
             self.print('Saved Picture')
-

@@ -22,8 +22,8 @@ lyoga:
 rpi1:
   ball:
     hsv:
-      lower: [0, 150, 0]
-      upper: [30, 255, 255]
+      lower: [ 110, 40, 0 ]
+      upper: [ 150, 100, 75 ]
   hoop:
     center: [185, 79]
     center_dots:
@@ -43,8 +43,8 @@ rpi1:
 rpi2:
   ball:
     hsv:
-      lower: [0, 150, 0]
-      upper: [30, 255, 255]
+      lower: [110, 40, 0]
+      upper: [150, 100, 75]
   hoop:
     center: [159, 81]
     center_dots:
@@ -62,8 +62,8 @@ rpi2:
 rpi3:
   ball:
     hsv:
-      lower: [0, 150, 0]
-      upper: [30, 255, 255]
+      lower: [ 110, 40, 0 ]
+      upper: [ 150, 100, 75 ]
   hoop:
     center: [144, 81]
     center_dots:

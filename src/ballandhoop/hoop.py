@@ -12,13 +12,7 @@ from .ball import Ball
 
 class Hoop:
 
-    def __init__(self,
-                 center: list,
-                 radius: int,
-                 center_dots: list,
-                 radius_dots: list,
-                 **arg
-                 ):
+    def __init__(self,center: list, radius: int, center_dots: list, radius_dots: list, **arg):
         self.center = center,
         # i do not know why i need this line, input is ok, self. ist not
         self.center = self.center[0]
@@ -37,13 +31,11 @@ class Hoop:
         if pic is not None:
             print(pic)
             pic = cv2.imread(pic)
-            # cv2.imshow('debug', np.array(pic, dtype='uint8'))
-            time.sleep(5)
         else:
             # no fake picture given. expecting to be on a raspberry pi
             import picamera.array
             camera = picamera.PiCamera(sensor_mode=7)
-            camera.resolution = (640, 480)
+            camera.resolution = (320, 240)
             output = picamera.array.PiRGBArray(camera)
             camera.capture(output, format='rgb', use_video_port=True)
             pic = output.array

@@ -2,7 +2,7 @@
 #  import_playbook: setupRPi.yml
 - hosts: rpi
   vars:
-    cmd: "--vid top 180 60 1"
+    cmd: "--vid calib 4 60 1"
   tasks:
   - name: Execute command
     command:
