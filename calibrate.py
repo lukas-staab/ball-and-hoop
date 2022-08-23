@@ -26,8 +26,8 @@ args = vars(ap.parse_args())
 
 from src.ballandhoop.application import Application
 app = Application(verbose_output=args['verbose'], force_hostname=args['host'])
-app.run_calibration(search_hoop=args['hoop-calibration'],
-                    calc_wb_gains=args['white-calibration'],
+app.run_calibration(search_hoop=args['hoop_calibration'],
+                    calc_wb_gains=args['white_calibration'],
                     hoop_search_col={'upper' : args['uppercol'], 'lower': args['lowercol']})
 
 

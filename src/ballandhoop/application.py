@@ -65,7 +65,7 @@ class Application:
         if search_hoop:
             self.print('|-> Searching Hoop in new picture')
             hoop_search_col = self.save_col_and_add_from_config('hoop', hoop_search_col)
-            hoop = Hoop.create_from_image(**hoop_search_col)
+            hoop = Hoop.create_from_image(**hoop_search_col, pic=self.get_cfg('hoop', 'faker_path'))
             if hoop is not None:
                 hoop_cfg = {
                     'radius': hoop.radius,

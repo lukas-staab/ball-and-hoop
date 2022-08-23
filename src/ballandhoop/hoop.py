@@ -28,7 +28,8 @@ class Hoop:
 
     @staticmethod
     def create_from_image(lower, upper, pic=None):
-        shutil.rmtree('storage/hoop/')
+        if os.path.isdir('storage/hoop/'):
+            shutil.rmtree('storage/hoop/')
         os.makedirs('storage/hoop/')
         lower_hsv = np.array(lower)
         upper_hsv = np.array(upper)

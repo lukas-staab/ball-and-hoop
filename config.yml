@@ -25,11 +25,10 @@ lyoga:
   video:
     faker_path: fetch/rpi1.lan/faker/test/
   hoop:
-    faker_path:
-    center: [50, 50]
-    center_dots:
-    radius: 100
-    radius_dots:
+    hsv:
+      lower: [ 0, 0, 0 ]
+      upper: [ 255, 255, 255 ]
+    faker_path: fetch/rpi1.lan/faker/test/1.png
   ball:
     hsv:
       lower: [0, 0, 0]

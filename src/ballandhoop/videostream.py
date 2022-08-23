@@ -4,9 +4,6 @@ import time
 import cv2
 from imutils.video import FPS
 
-from src.ballandhoop.piHSVArray import PiHSVArray
-
-
 class VideoStream:
     resolutions = {
         0: (160, 128),
@@ -30,7 +27,7 @@ class VideoStream:
         else:
             # assume we are on a raspberry pi then
             from picamera.array import PiRGBArray
-            from picamera.array import PiYUVArray
+            from src.ballandhoop.piHSVArray import PiHSVArray
             from picamera import PiCamera
 
             self.camera = PiCamera(sensor_mode=7)
@@ -60,20 +57,13 @@ class VideoStream:
         return self
 
     def __next__(self):
-        f = next(self.stream, None)
-        if f is None:
-            self.fps.stop()
-            print("elasped time: {:.2f}".format(self.fps.elapsed()))
-            print("FPS wanted: " + str(self.framerate))
-            print("taken FPS: {:.2f}".format(self.fps.fps()))
-            raise StopIteration
+        f = next(self.stream)
+        if self.is_faked:
+            time.sleep(1 / self.framerate)
         else:
-            if self.is_faked:
-                time.sleep(1 / self.framerate)
-            else:
-                f = f.array
-                self.rawCapture.truncate(0)
-            self.fps.update()
+            f = f.array
+            self.rawCapture.truncate(0)
+        self.fps.update()
         if self.rotation != 0:
             f = cv2.rotate(f, self.rotations[self.rotation])
         return f
@@ -85,9 +75,8 @@ class VideoStream:
             self.rawCapture.close()
             self.camera.close()
 
-
     def faker_stream_generator(self, faker_path):
-        idx = 1
+        idx = 1  # 0th pic is sometimes weird
         file = faker_path + "/" + str(idx) + ".png"
         while os.path.isfile(file):
             yield cv2.imread(file)
