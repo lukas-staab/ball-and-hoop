@@ -2,12 +2,12 @@
 #  import_playbook: setupRPi.yml
 - hosts: rpi
   vars:
-    cmd: tracking.py
+    cmd: "--vid top 180 60 1"
   tasks:
   - name: Execute command
     command:
-      cmd: "python3 tests/{{ cmd }}"
+      cmd: "python3 debug.py {{ cmd }}"
       chdir: "~/ball-and-hoop/"
 
-- name: sync video back
+- name: sync stuff back
   import_playbook: pull-storage.yml

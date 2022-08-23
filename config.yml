@@ -1,3 +1,49 @@
+lyoga:
+  ball:
+    hsv:
+      lower:
+      - 0
+      - 150
+      - 0
+      upper:
+      - 30
+      - 255
+      - 255
+  hoop:
+    center:
+    - 159
+    - 81
+    center_dots:
+    - - 144
+      - 230
+    - - 273
+      - 179
+    - - 34
+      - 162
+    faker_path: storage/cheat2.png
+    hsv:
+      lower:
+      - 45
+      - 200
+      - 200
+      upper:
+      - 55
+      - 255
+      - 255
+    radius: 149
+    radius_dots:
+    - 5
+    - 5
+    - 5
+  network:
+    is_server: true
+    server_ip: 127.0.0.1
+    server_port: 9999
+  video:
+    faker_path: fetch/rpi2.lan/faker/move/
+    wb_gains:
+      - 1.4144569518716577
+      - 1.7191847593582887
 rpi1:
   hoop:
     center:
@@ -20,17 +66,3 @@ rpi1:
   wb_gains:
   - 1.4144569518716577
   - 1.7191847593582887
-
-lyoga:
-  video:
-    faker_path: fetch/rpi1.lan/faker/test/
-  hoop:
-    hsv:
-      lower: [ 80, 20, 20 ]
-      upper: [ 100, 255, 255 ]
-    faker_path: fetch/rpi1.lan/faker/still/1.png
-  ball:
-    hsv:
-      lower: [0, 0, 0]
-      upper: [255, 255, 255]
-  network:

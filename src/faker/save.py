@@ -1,7 +1,6 @@
 import shutil
 
 from src.ballandhoop.videostream import VideoStream
-import time
 import os
 import cv2
 

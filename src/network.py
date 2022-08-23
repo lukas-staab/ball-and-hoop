@@ -17,7 +17,7 @@ class Server(Thread):
         self.stop = False
         self.print_debug = print_debug
         # self.serial = SerialCom()
-        self.values = np.zeros(shape=3, dtype=int)
+        self.values = {}
         print('Init Server')
 
     def __enter__(self):
@@ -43,13 +43,15 @@ class Server(Thread):
                     self.print(str(addr) + ': connection accepted')
                     conn.__enter__()
                     self.connections.append(conn)
+                    self.values[len(self.connections)] = []
             except socket.timeout:
                 pass
 
             for idx, conn in enumerate(self.connections):
                 data = conn.recv(1024)
                 if data:
-                    self.values[idx + 1] = int(data)
+                    now = time.time()
+                    self.values[idx + 1][now] = int(data)
                     self.print(str(idx + 1) + ":" + str(int(data)))
                     # generic answer for each client
                     conn.sendall('ok'.encode())
@@ -62,10 +64,9 @@ class Server(Thread):
         self.socket.__exit__(self, exc_type, exc_val, exc_tb)
 
     def send(self, msg):
-        self.values[0] = int(msg)
+        # self.values[0] = msg
         # send to serial com instead of printing
-        print("Mean: " + str(np.mean(self.values)))
-
+        print(msg)
         pass
 
     def print(self, msg):

@@ -2,6 +2,7 @@ from __future__ import annotations
 import math
 import os
 import shutil
+import time
 
 import imutils
 import numpy as np
@@ -17,6 +18,7 @@ class Hoop:
                  radius: int,
                  center_dots: list,
                  radius_dots: list,
+                 **arg
                  ):
         self.center = center,
         # i do not know why i need this line, input is ok, self. ist not
@@ -27,14 +29,17 @@ class Hoop:
         self.radius_dots = radius_dots
 
     @staticmethod
-    def create_from_image(lower, upper, pic=None):
+    def create_from_image(lower, upper, pic=None, iterations=2):
         if os.path.isdir('storage/hoop/'):
             shutil.rmtree('storage/hoop/')
         os.makedirs('storage/hoop/')
         lower_hsv = np.array(lower)
         upper_hsv = np.array(upper)
         if pic is not None:
+            print(pic)
             pic = cv2.imread(pic)
+            # cv2.imshow('debug', np.array(pic, dtype='uint8'))
+            time.sleep(5)
         else:
             # no fake picture given. expecting to be on a raspberry pi
             import picamera.array
@@ -51,10 +56,11 @@ class Hoop:
         Hoop._save_debug_pic(hsv, 'hsv')
         mask_hoop = cv2.inRange(hsv, lower_hsv, upper_hsv)
         Hoop._save_debug_pic(mask_hoop, 'hoop-mask')
-        mask_hoop = cv2.erode(mask_hoop, None, iterations=2)
-        Hoop._save_debug_pic(mask_hoop, 'hoop-mask-erode')
-        mask_hoop = cv2.dilate(mask_hoop, None, iterations=2)
-        Hoop._save_debug_pic(mask_hoop, 'hoop-mask-dil')
+        if iterations > 0:
+            mask_hoop = cv2.erode(mask_hoop, None, iterations=iterations)
+            Hoop._save_debug_pic(mask_hoop, 'hoop-mask-erode')
+            mask_hoop = cv2.dilate(mask_hoop, None, iterations=iterations)
+            Hoop._save_debug_pic(mask_hoop, 'hoop-mask-erode-dil')
         cnts = cv2.findContours(mask_hoop.copy(), cv2.RETR_EXTERNAL,
                                 cv2.CHAIN_APPROX_SIMPLE)
         cnts = imutils.grab_contours(cnts)
@@ -67,7 +73,7 @@ class Hoop:
             # it to compute the minimum enclosing circle and
             # centroid
             ((x, y), radius) = cv2.minEnclosingCircle(c)
-            if radius > 5:
+            if radius > 3:
                 m = cv2.moments(c)
                 center_dot = [int(m["m10"] / m["m00"]), int(m["m01"] / m["m00"])]
                 dots_center.append(center_dot)
@@ -93,12 +99,13 @@ class Hoop:
         return math.atan2(x, y) / math.pi * 180
 
     def find_ball(self, frame: PiHSVArray, cols: dict, iterations=2):
-        mask_ball = cv2.inRange(frame, cols['lower'], cols['upper'])
+        mask_ball = cv2.inRange(frame, np.array(cols['lower']), np.array(cols['upper']))
         self.save_debug_pic(mask_ball, 'ball-mask')
-        mask_ball = cv2.erode(mask_ball, None, iterations=iterations)
-        self.save_debug_pic(mask_ball, 'ball-mask-erode')
-        mask_ball = cv2.dilate(mask_ball, None, iterations=iterations)
-        self.save_debug_pic(mask_ball, 'ball-mask-erode-dil')
+        if iterations > 0:
+            mask_ball = cv2.erode(mask_ball, None, iterations=iterations)
+            self.save_debug_pic(mask_ball, 'ball-mask-erode')
+            mask_ball = cv2.dilate(mask_ball, None, iterations=iterations)
+            self.save_debug_pic(mask_ball, 'ball-mask-erode-dil')
         cnts = cv2.findContours(mask_ball.copy(), cv2.RETR_EXTERNAL,
                                 cv2.CHAIN_APPROX_SIMPLE)
         cnts = imutils.grab_contours(cnts)

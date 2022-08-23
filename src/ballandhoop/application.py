@@ -65,21 +65,19 @@ class Application:
         if search_hoop:
             self.print('|-> Searching Hoop in new picture')
             hoop_search_col = self.save_col_and_add_from_config('hoop', hoop_search_col)
-            hoop = Hoop.create_from_image(**hoop_search_col, pic=self.get_cfg('hoop', 'faker_path'))
+            hoop = Hoop.create_from_image(**hoop_search_col, pic=self.get_cfg('hoop', 'faker_path'), iterations=0)
             if hoop is not None:
-                hoop_cfg = {
-                    'radius': hoop.radius,
-                    'center': hoop.center,
-                    'center_dots': hoop.center_dots,
-                    'radius_dots': hoop.radius_dots,
-                }
-                self.local_config()['hoop'] = hoop_cfg
+                self.local_config()['hoop']['radius'] = hoop.radius
+                self.local_config()['hoop']['center'] = hoop.center
+                self.local_config()['hoop']['center_dots'] = hoop.center_dots
+                self.local_config()['hoop']['radius_dots'] = hoop.radius_dots
                 self.print('|-> Hoop found @ ' + str(self.get_cfg('hoop', 'center')))
             else:
                 self.print('|-> NO HOOP FOUND! - see in storage/hoop/ for debug pictures')
         self.print('|-> Using Hoop @ ' + str(self.get_cfg('hoop', 'center')) + " with r=" + str(
             self.get_cfg('hoop', 'radius')))
         self.print('=== End Calibration')
+        self.save_config_to_disk()
 
     def run(self, ball_search_col: dict):
         # give config to objects to initialize
@@ -92,7 +90,7 @@ class Application:
             with network:
                 for f in video:
                     # do the tracking and send the result here to the network
-                    ball = hoop.find_ball(frame=f, cols=ball_search_col)
+                    ball = hoop.find_ball(frame=f, cols=ball_search_col, iterations=0)
                     # send the result
                     if ball is not None:
                         network.send(ball.angle_in_hoop())
@@ -111,19 +109,21 @@ class Application:
     def save_col_and_add_from_config(self, type: str, input: dict):
         ret = {}
         if input['lower'] is not None:
-            self.get_cfg()[type]['hsv']['lower'] = input['lower']
-        ret['lower'] = self.get_cfg()[type]['hsv']['lower']
+            self.local_config()[type]['hsv']['lower'] = input['lower']
+        ret['lower'] = self.get_cfg(type, 'hsv', 'lower')
         if input['upper'] is not None:
-            self.get_cfg()[type]['hsv']['upper'] = input['upper']
-        ret['upper'] = self.get_cfg()[type]['hsv']['upper']
+            self.local_config()[type]['hsv']['upper'] = input['upper']
+        ret['upper'] = self.get_cfg(type, 'hsv', 'upper')
+        self.save_config_to_disk()
         return ret
 
-    def debug(self, save_vid=None, wb_gains = None):
+    def debug(self, save_vid=None, wb_gains=None, ):
         if wb_gains is None:
             wb_gains = WhiteBalancing(verboseOutput=False).calculate(cropping=True)
             self.print('Calced wb_gains: ' + str(wb_gains))
 
         if save_vid is not None:
             from src.faker.save import savePictures
-            savePictures(* save_vid, wb_gains=wb_gains)
+            savePictures(*save_vid, wb_gains=wb_gains)
             self.print('Saved Picture')
+

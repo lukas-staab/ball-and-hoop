@@ -79,6 +79,6 @@ class VideoStream:
         idx = 1  # 0th pic is sometimes weird
         file = faker_path + "/" + str(idx) + ".png"
         while os.path.isfile(file):
-            yield cv2.imread(file)
+            yield cv2.cvtColor(cv2.imread(file), cv2.COLOR_BGR2HSV)
             idx = idx + 1
             file = faker_path + "/" + str(idx) + ".png"
