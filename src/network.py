@@ -5,6 +5,7 @@ import datetime
 from threading import Thread
 
 import scipy.io
+import yaml
 
 from src.serial import SerialCom
 
@@ -38,17 +39,18 @@ class Server(Thread):
         self.sockets.append(self.server)
         try:
             while not self.stop:
+                # sort sockets by states
                 readable, writable, errored = select.select(self.sockets, [], [])
                 for s in readable:
                     if s is self.server:
-                        # s is the server
+                        # s is the server, so there is a new connection
                         client_socket, address = self.server.accept()
                         client_socket.__enter__()
                         self.values[addr(client_socket)] = {}
                         self.sockets.append(client_socket)
                         print("Connection from: " + str(address))
                     else:
-                        # s is a client socket
+                        # s is a client socket, so there is data
                         data = s.recv(1024)
                         if data:
                             self.print(str(addr(s)) + ":" + str(float(data)))
@@ -65,6 +67,7 @@ class Server(Thread):
         finally:
             self.stopped = True
             scipy.io.savemat('storage/result.mat', {'pi_result': self.values})
+            yaml.dump(self.values, open('storage/result.yml'))
             self.print(self.values.keys())
 
     def __exit__(self, exc_type, exc_val, exc_tb):
