@@ -23,7 +23,7 @@ class Server(Thread):
         self.stopped = False
         self.print_debug = print_debug
         # self.serial = SerialCom()
-        self.values = {'localhost': {}}
+        self.values = {'localhost': {'angle': [], 'time': []}}
         print('Init Server')
 
     def __enter__(self):
@@ -46,7 +46,7 @@ class Server(Thread):
                         # s is the server, so there is a new connection
                         client_socket, address = self.server.accept()
                         client_socket.__enter__()
-                        self.values[addr(client_socket)] = {}
+                        self.values[addr(client_socket)] = {'angle': [], 'time': []}
                         self.sockets.append(client_socket)
                         print("Connection from: " + str(address))
                     else:
@@ -54,7 +54,8 @@ class Server(Thread):
                         data = s.recv(1024)
                         if data:
                             self.print(str(addr(s)) + ":" + str(float(data)))
-                            self.values[addr(s)][now()] = float(data)
+                            self.values[addr(s)]['angle'].append(float(data))
+                            self.values[addr(s)]['time'].append(now())
                             # generic answer for each client, message confirmed
                             s.sendall('ok'.encode())
                         else:
