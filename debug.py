@@ -14,7 +14,7 @@ ap.add_argument("-w", "--wb-gains", default=None, type=float, nargs=2,
                 help="Enter custom wb_gains, if empty it will measure them")
 ap.add_argument('-v', "--verbose", default=False, action='store_true',
                 help='Give more output to console')
-ap.add_argument('--vid', nargs='+', metavar=('name', 'amount', 'fps'))
+ap.add_argument('--vid', nargs='+', help=str(('name', 'amount', 'fps')))
 ap.add_argument('--host', type=str, default=None,
                 help='Forces a different hostname. Helpful for writing outside the real host')
 args = vars(ap.parse_args())
