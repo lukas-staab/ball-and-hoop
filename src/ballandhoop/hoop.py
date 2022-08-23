@@ -3,7 +3,6 @@ import math
 import os
 import shutil
 import time
-
 import imutils
 import numpy as np
 import cv2
@@ -98,7 +97,7 @@ class Hoop:
         y = np.dot(v1, v2)
         return math.atan2(x, y) / math.pi * 180
 
-    def find_ball(self, frame: PiHSVArray, cols: dict, iterations=2):
+    def find_ball(self, frame, cols: dict, iterations=2):
         mask_ball = cv2.inRange(frame, np.array(cols['lower']), np.array(cols['upper']))
         self.save_debug_pic(mask_ball, 'ball-mask')
         if iterations > 0:
@@ -120,7 +119,7 @@ class Hoop:
         ((x, y), radius) = cv2.minEnclosingCircle(c)
         m = cv2.moments(c)
         center_ball = (int(m["m10"] / m["m00"]), int(m["m01"] / m["m00"]))
-        # only proceed if the radius meets a minimum size
+        # TODO: only proceed if the radius meets a minimum size?
         return Ball(self, center_ball, int(radius))
 
     def save_debug_pic(self, img, name):

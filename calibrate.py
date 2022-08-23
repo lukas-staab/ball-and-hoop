@@ -14,6 +14,8 @@ ap.add_argument("-w", "--white-calibration", default=False, action='store_true',
                 help="Flag if white calibration should run")
 ap.add_argument('-o', "--hoop-calibration", action='store_true', default=False,
                 help="Flag if hoop calibration should run")
+ap.add_argument('-b', "--ball-calibration", action='store_true', default=False,
+                help="Flag if ball calibration should run")
 ap.add_argument('-l', "--lowercol", type=int, nargs=3, default=None,
                 help="Only used with hoop: Lower bound of hoop border dots color in HSV color format")
 ap.add_argument('-u', "--uppercol", type=int, nargs=3, default=None,
@@ -25,9 +27,10 @@ ap.add_argument('--host', type=str, default=None,
 args = vars(ap.parse_args())
 
 from src.ballandhoop.application import Application
+
 app = Application(verbose_output=args['verbose'], force_hostname=args['host'])
-app.run_calibration(search_hoop=args['hoop_calibration'],
-                    calc_wb_gains=args['white_calibration'],
-                    hoop_search_col={'upper' : args['uppercol'], 'lower': args['lowercol']})
-
-
+app.run_calibration(calc_wb_gains=args['white_calibration'],
+                    search_hoop=args['hoop_calibration'],
+                    hoop_search_col={'upper' : args['uppercol'], 'lower': args['lowercol']},
+                    search_ball=args['ball_calibration'],
+                    ball_search_col={'upper': None, 'lower': None})

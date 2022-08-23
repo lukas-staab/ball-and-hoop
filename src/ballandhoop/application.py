@@ -1,6 +1,9 @@
 import random
 import time
 from os.path import abspath, join, dirname
+
+import cv2
+
 from src.ballandhoop import WhiteBalancing, Hoop
 import socket
 import yaml
@@ -52,11 +55,13 @@ class Application:
         self.print("Try to update config files - if this fails, remove keys with empty values from source config")
         self.print(self.cfg)
         with open('config.yml', 'w') as outfile:
-            yaml.dump(self.cfg, outfile, default_flow_style=False)
+            yaml.dump(self.cfg, outfile, default_flow_style=None)
         scipy.io.savemat('config.mat', {'pi_configs': self.cfg})
         self.print('Updated config file(s)')
 
-    def run_calibration(self, calc_wb_gains: bool, search_hoop: bool, hoop_search_col: dict):
+    def run_calibration(self, calc_wb_gains: bool,
+                        search_hoop: bool, hoop_search_col: dict,
+                        search_ball: bool, ball_search_col: dict):
         self.print('=== Start Calibration')
         if calc_wb_gains:
             self.print('|-> Start White Balancing Calibration')
@@ -74,8 +79,18 @@ class Application:
                 self.print('|-> Hoop found @ ' + str(self.get_cfg('hoop', 'center')))
             else:
                 self.print('|-> NO HOOP FOUND! - see in storage/hoop/ for debug pictures')
-        self.print('|-> Using Hoop @ ' + str(self.get_cfg('hoop', 'center')) + " with r=" + str(
-            self.get_cfg('hoop', 'radius')))
+        self.print('|-> Using Hoop @ ' + str(self.get_cfg('hoop', 'center')) + " with r=" +
+                   str(self.get_cfg('hoop', 'radius')))
+        if search_ball and self.get_cfg('hoop', 'center') is not None:
+            self.print('|-> searching for ball')
+            ball_search_col = self.save_col_and_add_from_config('ball', ball_search_col)
+            hoop = Hoop(**self.get_cfg('hoop'))
+            pic = cv2.cvtColor(cv2.imread(self.get_cfg('hoop', 'faker_path')), cv2.COLOR_BGR2HSV)
+            ball = hoop.find_ball(frame=pic, cols=ball_search_col, iterations=1)
+            if ball is not None:
+                self.print("|-> Ball found @ " + str(ball.center) + " with r=" + str(ball.radius))
+            else:
+                self.print("|-> NO BALL FOUND!")
         self.print('=== End Calibration')
         self.save_config_to_disk()
 

@@ -1,11 +1,9 @@
-import shutil
-
 from src.ballandhoop.videostream import VideoStream
+import shutil
 import os
 import cv2
 
-
-def savePictures(dir_name, amount: int = 10, fps: int = 60, resolution_no: int = 0, wb_gains=None):
+def savePictures(dir_name, amount: int = 10, fps: int = 60, resolution_no: int = 1, wb_gains=None):
     dir_base = "storage/faker/"
     dir_name = dir_base + dir_name + "/"
     if os.path.exists(dir_name):

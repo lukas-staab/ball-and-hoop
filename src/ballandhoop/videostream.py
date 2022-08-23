@@ -43,7 +43,7 @@ class VideoStream:
             else:
                 self.rawCapture = PiRGBArray(self.camera, size=resolution)
             self.stream = self.camera.capture_continuous(self.rawCapture,
-                                                         format='rgb',  # this is also needed for hsv
+                                                         format='bgr',  # this is also needed for hsv
                                                          use_video_port=True)
 
         # initialize the frame and the variable used to indicate
