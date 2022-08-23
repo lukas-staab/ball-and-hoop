@@ -123,4 +123,4 @@ def addr(s: socket.socket):
 
 
 def now():
-    return int(datetime.datetime.utcnow().timestamp() * 1_000_000)
+    return int((datetime.datetime.utcnow().timestamp() % 100) * 1_000_000)
