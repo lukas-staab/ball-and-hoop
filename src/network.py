@@ -2,7 +2,7 @@ import time
 import socket
 from threading import Thread
 
-import numpy as np
+import scipy.io
 
 from src.serial import SerialCom
 
@@ -62,6 +62,7 @@ class Server(Thread):
         for conn in self.connections:
             conn.__exit__(self, exc_type, exc_val, exc_tb)
         self.socket.__exit__(self, exc_type, exc_val, exc_tb)
+        scipy.io.savemat('result.mat', {'pi_result': self.values})
 
     def send(self, msg):
         # self.values[0] = msg
