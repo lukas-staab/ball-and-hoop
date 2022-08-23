@@ -41,13 +41,14 @@ class Server(Thread):
                 readable, writable, errored = select.select(self.sockets, [], [])
                 for s in readable:
                     if s is self.server:
+                        # s is the server
                         client_socket, address = self.server.accept()
                         client_socket.__enter__()
                         self.values[addr(client_socket)] = {}
                         self.sockets.append(client_socket)
                         print("Connection from: " + str(address))
                     else:
-                        # this is a client socket
+                        # s is a client socket
                         data = s.recv(1024)
                         if data:
                             self.print(addr(s) + ":" + str(float(data)))
@@ -64,6 +65,7 @@ class Server(Thread):
         finally:
             self.stopped = True
             scipy.io.savemat('storage/result.mat', {'pi_result': self.values})
+            self.print(self.values.keys())
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.print('Closing Server')
