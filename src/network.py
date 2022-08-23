@@ -1,6 +1,7 @@
 import select
 import time
 import socket
+import datetime
 from threading import Thread
 
 import scipy.io
@@ -49,9 +50,8 @@ class Server(Thread):
                         # this is a client socket
                         data = s.recv(1024)
                         if data:
-                            now = time.time()
                             self.print(addr(s) + ":" + str(float(data)))
-                            self.values[addr(s)][now] = float(data)
+                            self.values[addr(s)][now()] = float(data)
                             # generic answer for each client, message confirmed
                             s.sendall('ok'.encode())
                         else:
@@ -74,9 +74,8 @@ class Server(Thread):
             s.close()
 
     def send(self, msg):
-        # self.values[0] = msg
         # send to serial com instead of printing
-        self.values['localhost'][time.time()] = float(msg)
+        self.values['localhost'][now()] = float(msg)
         print("localhost: " + str(float(msg)))
         pass
 
@@ -115,3 +114,7 @@ def init_network(is_server: bool, server_ip: str, server_port: int):
 
 def addr(s: socket.socket):
     return s.getpeername()[1]
+
+
+def now():
+    return datetime.datetime.utcnow().timestamp()
