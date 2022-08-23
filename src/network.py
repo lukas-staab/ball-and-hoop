@@ -11,7 +11,7 @@ from src.serial import SerialCom
 class Server(Thread):
     def __init__(self, server_ip, server_port, print_debug=False):
         super().__init__()
-        super.daemon = True  # kill it with parent
+        self.daemon = True  # kill it with parent
         self.server_ip = server_ip
         self.server_port = server_port
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
