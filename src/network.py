@@ -103,6 +103,7 @@ class Client:
         self.socket.__exit__(exc_type, exc_val, exc_tb)
 
     def send(self, msg):
+        print("Sending: " + str(msg))
         self.socket.sendall(str(msg).encode())
         return self.socket.recv(1024) == b'ok'
 
