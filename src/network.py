@@ -67,7 +67,7 @@ class Server(Thread):
         finally:
             self.stopped = True
             scipy.io.savemat('storage/result.mat', {'pi_result': self.values})
-            yaml.dump(self.values, open('storage/result.yml'))
+            yaml.dump(self.values, open('storage/result.yml', 'w'))
             self.print(self.values.keys())
 
     def __exit__(self, exc_type, exc_val, exc_tb):
