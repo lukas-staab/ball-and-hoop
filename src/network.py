@@ -41,6 +41,7 @@ class Server(Thread):
                     if s is self.sockets:
                         client_socket, address = self.server.accept()
                         self.sockets.append(client_socket)
+                        client_socket.__enter__()
                         self.values[s] = {}
                         print("Connection from: " + str(address))
                     else:
