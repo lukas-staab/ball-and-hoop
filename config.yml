@@ -38,7 +38,7 @@ rpi1:
       upper: [55, 255, 255]
     radius: 139
     radius_dots: [5, 5, 4, 5, 5]
-  network: {server_ip: 127.0.0.1, server_port: 9999, is_server:false}
+  network: {server_ip: 127.0.0.1, server_port: 9999, is_server: false}
   video:
     wb_gains: [1.4144569518716577, 1.7191847593582887]
 rpi2:
@@ -58,7 +58,7 @@ rpi2:
       upper: [55, 255, 255]
     radius: 149
     radius_dots: [5, 5, 5]
-  network: {server_ip: 127.0.0.1, server_port: 9999, is_server:false}
+  network: {server_ip: 127.0.0.1, server_port: 9999, is_server: false}
   video:
     wb_gains: [1.4144569518716577, 1.7191847593582887]
 rpi3:
