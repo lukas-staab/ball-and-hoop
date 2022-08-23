@@ -53,17 +53,14 @@ class VideoStream:
         # if the thread should be stopped
         self.raw_frame = None
         self.rotation = rotation
-        self.stopped = False
-        self.closed = False
         self.fps = FPS()
 
     def __iter__(self):
         self.fps.start()
-        self.stream = iter(self.stream)
         return self
 
     def __next__(self):
-        f = next(self.stream)
+        f = next(self.stream, None)
         if f is None:
             self.fps.stop()
             print("elasped time: {:.2f}".format(self.fps.elapsed()))
@@ -82,11 +79,12 @@ class VideoStream:
         return f
 
     def close(self):
+        self.fps.stop()
         if not self.is_faked:
             self.stream.close()
             self.rawCapture.close()
             self.camera.close()
-        self.fps.stop()
+
 
     def faker_stream_generator(self, faker_path):
         idx = 1

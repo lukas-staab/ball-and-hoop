@@ -22,5 +22,5 @@ args = vars(ap.parse_args())
 from src.ballandhoop.application import Application
 
 app = Application(verbose_output=args['verbose'], force_hostname=args['host'])
-app.debug(save_vid=args['vid'], wb_gains=args['wb-gains'])
+app.debug(save_vid=args['vid'], wb_gains=args['wb_gains'])
 
