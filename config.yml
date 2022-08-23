@@ -32,7 +32,6 @@ rpi1:
     - [318, 125]
     - [45, 84]
     - [314, 28]
-    faker_path: storage/cheat1.png
     hsv:
       lower: [45, 200, 200]
       upper: [55, 255, 255]
@@ -52,7 +51,6 @@ rpi2:
     - [144, 230]
     - [273, 179]
     - [34, 162]
-    faker_path: storage/cheat2.png
     hsv:
       lower: [45, 200, 200]
       upper: [55, 255, 255]
@@ -74,7 +72,6 @@ rpi3:
     - [272, 150]
     - [2, 68]
     - [280, 43]
-    faker_path: storage/cheat3.png
     hsv:
       lower: [45, 200, 200]
       upper: [55, 255, 255]
