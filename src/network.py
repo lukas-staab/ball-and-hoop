@@ -49,9 +49,9 @@ class Server(Thread):
                         data = s.recv(1024)
                         if data:
                             now = time.time()
-                            self.values[s][now] = int(data)
-                            self.print(str(s) + ":" + str(int(data)))
-                            # generic answer for each client
+                            self.print(str(s) + ":" + str(float(data)))
+                            self.values[s][now] = float(data)
+                            # generic answer for each client, message confirmed
                             s.sendall('ok'.encode())
                         else:
                             s.close()
