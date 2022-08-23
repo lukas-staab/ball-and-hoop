@@ -119,8 +119,8 @@ def init_network(is_server: bool, server_ip: str, server_port: int):
 
 
 def addr(s: socket.socket):
-    return s.getpeername()[1]
+    return 's' + str(s.getpeername()[1])
 
 
 def now():
-    return datetime.datetime.utcnow().timestamp()
+    return int(datetime.datetime.utcnow().timestamp() * 1_000_000)
