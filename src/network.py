@@ -1,3 +1,4 @@
+import select
 import time
 import socket
 from threading import Thread
@@ -12,61 +13,57 @@ class Server(Thread):
         super().__init__()
         self.server_ip = server_ip
         self.server_port = server_port
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.connections = []
+        self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sockets = []
         self.stop = False
         self.stopped = False
         self.print_debug = print_debug
         # self.serial = SerialCom()
-        self.values = {}
+        self.values = {0: {}}
         print('Init Server')
 
     def __enter__(self):
-        self.socket.__enter__()
-        # setup websocket
-        self.socket.bind((self.server_ip, self.server_port))
-        self.print('Server binding')
-
-        # backlog with 2 unaccepted connection
+        self.server.__enter__()
+        self.server.bind((self.server_ip, self.server_port))
+        self.server.settimeout(5)
+        self.server.listen(2)
         self.start()
         return self
 
     def run(self) -> None:
         self.print('Server is running')
-        self.socket.settimeout(0.1)
-        self.socket.listen(2)
-        while not self.stop:
-            try:
-                # wait for new connection
-                while len(self.connections) < 2:
-                    self.print("Server is waiting for connections")
-                    conn, addr = self.socket.accept()
-                    self.print(str(addr) + ': connection accepted')
-                    conn.__enter__()
-                    self.connections.append(conn)
-                    self.values[len(self.connections)] = []
-            except socket.timeout:
-                self.print('Timed out')
-                pass
-
-            for idx, conn in enumerate(self.connections):
-                data = conn.recv(1024)
-                if data:
-                    now = time.time()
-                    self.values[idx + 1][now] = int(data)
-                    self.print(str(idx + 1) + ":" + str(int(data)))
-                    # generic answer for each client
-                    conn.sendall('ok'.encode())
-        self.stopped = True
+        self.sockets.append(self.server)
+        try:
+            while True:
+                readable, writable, errored = select.select(self.sockets, [], [])
+                for s in readable:
+                    if s is self.sockets:
+                        client_socket, address = self.server.accept()
+                        self.sockets.append(client_socket)
+                        self.values[s] = {}
+                        print("Connection from: " + str(address))
+                    else:
+                        # this is a client socket
+                        data = s.recv(1024)
+                        if data:
+                            now = time.time()
+                            self.values[s][now] = int(data)
+                            self.print(str(s) + ":" + str(int(data)))
+                            # generic answer for each client
+                            s.sendall('ok'.encode())
+                        else:
+                            s.close()
+                            self.sockets.remove(s)
+        finally:
+            self.stopped = True
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.print('Closing Server')
         self.stop = True
         while self.stopped is not True:
             time.sleep(0.1)
-        for conn in self.connections:
-            conn.__exit__(self, exc_type, exc_val, exc_tb)
-        self.socket.__exit__(self, exc_type, exc_val, exc_tb)
+        for s in self.sockets:
+            s.__exit__(self, exc_type, exc_val, exc_tb)
         scipy.io.savemat('storage/result.mat', {'pi_result': self.values})
 
     def send(self, msg):
