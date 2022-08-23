@@ -15,6 +15,7 @@ class Server(Thread):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.connections = []
         self.stop = False
+        self.stopped = False
         self.print_debug = print_debug
         # self.serial = SerialCom()
         self.values = {}
@@ -26,25 +27,26 @@ class Server(Thread):
         self.socket.bind((self.server_ip, self.server_port))
         self.print('Server binding')
 
-        # backlog with 1 unaccepted connection
-
+        # backlog with 2 unaccepted connection
         self.start()
         return self
 
     def run(self) -> None:
-        self.print('Server is waiting for connections')
-        self.socket.settimeout(20)
+        self.print('Server is running')
+        self.socket.settimeout(0.1)
         self.socket.listen(2)
         while not self.stop:
             try:
                 # wait for new connection
                 while len(self.connections) < 2:
+                    self.print("Server is waiting for connections")
                     conn, addr = self.socket.accept()
                     self.print(str(addr) + ': connection accepted')
                     conn.__enter__()
                     self.connections.append(conn)
                     self.values[len(self.connections)] = []
             except socket.timeout:
+                self.print('Timed out')
                 pass
 
             for idx, conn in enumerate(self.connections):
@@ -55,10 +57,13 @@ class Server(Thread):
                     self.print(str(idx + 1) + ":" + str(int(data)))
                     # generic answer for each client
                     conn.sendall('ok'.encode())
+        self.stopped = True
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.print('Closing Server')
         self.stop = True
+        while self.stopped is not True:
+            time.sleep(0.1)
         for conn in self.connections:
             conn.__exit__(self, exc_type, exc_val, exc_tb)
         self.socket.__exit__(self, exc_type, exc_val, exc_tb)
@@ -67,7 +72,7 @@ class Server(Thread):
     def send(self, msg):
         # self.values[0] = msg
         # send to serial com instead of printing
-        print(msg)
+        self.values[0][time.time()] = int(msg)
         pass
 
     def print(self, msg):
