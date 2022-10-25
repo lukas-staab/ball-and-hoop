@@ -120,7 +120,7 @@ class Client:
         return self.socket.recv(1024) == b'ok'
 
 
-def init_network(is_server: bool, server_ip: str, server_port: int, use_serial: bool):
+def init_network(is_server: bool, server_ip: str, server_port: int, use_serial: bool = True):
     if is_server:
         return Server(server_ip, server_port, print_debug=True, use_serial=use_serial)
     else:
