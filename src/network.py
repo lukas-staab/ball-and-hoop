@@ -22,6 +22,7 @@ class Server(Thread):
         self.stop = False
         self.stopped = False
         self.print_debug = print_debug
+        self.serial = SerialCom()
         # self.serial = SerialCom()
         self.values = {'localhost': {'angle': [], 'time': []}}
         print('Init Server')
@@ -80,10 +81,12 @@ class Server(Thread):
             s.close()
 
     def send(self, msg):
-        # send to serial com instead of printing
-        self.values['localhost']['angle'].append(float(msg))
+        # FIXME: remove debug printing
+        self.values['localhost']['angle'].append(int(msg))
         self.values['localhost']['time'].append(now())
-        print("localhost: " + str(float(msg)))
+        print("localhost: " + str(int(msg)))
+        # TODO: do not only send the server values but a average or so
+        self.serial.write(int(msg))
         pass
 
     def print(self, msg):

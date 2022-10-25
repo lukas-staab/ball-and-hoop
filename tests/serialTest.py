@@ -4,7 +4,7 @@ import time
 
 #port = "/dev/ttyAMA0"  # Raspberry Pi 2
 #port = "/dev/ttyS0"    # Raspberry Pi 3
-port = "/dev/serial0"
+port = "/dev/serial0" # Raspberry Pi 4
 
 ser = serial.Serial(port, baudrate = 9600)
 print("starting")

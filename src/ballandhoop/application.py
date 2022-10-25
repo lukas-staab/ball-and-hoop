@@ -95,7 +95,7 @@ class Application:
         self.save_config_to_disk()
 
     def run(self, ball_search_col: dict):
-        # give config to objects to initialize
+        # give config to object constructors to initialize like defined in config
         hoop = Hoop(**self.get_cfg('hoop'))
         video = VideoStream(**self.get_cfg('video'))
         network = init_network(**self.get_cfg('network'))
@@ -103,9 +103,9 @@ class Application:
         ball_search_col = self.save_col_and_add_from_config('ball', ball_search_col)
         try:
             with network:
-                for f in video:
+                for frame in video:
                     # do the tracking and send the result here to the network
-                    ball = hoop.find_ball(frame=f, cols=ball_search_col, iterations=0)
+                    ball = hoop.find_ball(frame=frame, cols=ball_search_col, iterations=0)
                     # send the result
                     if ball is not None:
                         network.send(ball.angle_in_hoop())
