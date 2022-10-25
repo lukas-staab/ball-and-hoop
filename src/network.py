@@ -1,4 +1,5 @@
 import select
+import threading
 import time
 import socket
 import datetime
@@ -11,7 +12,7 @@ from src.serial import SerialCom
 
 
 class Server(Thread):
-    def __init__(self, server_ip, server_port, print_debug=False):
+    def __init__(self, server_ip, server_port, print_debug=False, use_serial=False):
         super().__init__()
         self.daemon = True  # kill it with parent
         self.server_ip = server_ip
@@ -19,11 +20,9 @@ class Server(Thread):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sockets = []
-        self.stop = False
-        self.stopped = False
+        self.interrupt = threading.Event()
         self.print_debug = print_debug
-        self.serial = SerialCom()
-        # self.serial = SerialCom()
+        self.serial = SerialCom(verbose=print_debug, use_serial=use_serial)
         self.values = {'localhost': {'angle': [], 'time': []}}
         print('Init Server')
 
@@ -39,7 +38,8 @@ class Server(Thread):
         self.print('Server is running')
         self.sockets.append(self.server)
         try:
-            while not self.stop:
+            while not self.interrupt.is_set():
+                self.print('Checking for new Connection')
                 # sort sockets by states
                 readable, writable, errored = select.select(self.sockets, [], [])
                 for s in readable:
@@ -67,29 +67,33 @@ class Server(Thread):
         except KeyboardInterrupt:
             pass
         finally:
-            self.stopped = True
-            scipy.io.savemat('storage/result.mat', {'pi_result': self.values})
-            yaml.dump(self.values, open('storage/result.yml', 'w'))
-            self.print(self.values.keys())
+            self.stop()
+
+    def stop(self):
+        self.print('Interrupt received. Saving measured values to ./storage/result ...')
+        scipy.io.savemat('storage/result.mat', {'pi_result': self.values})
+        yaml.dump(self.values, open('storage/result.yml', 'w'))
+        self.print(self.values.keys())
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.print('Closing Server')
-        self.stop = True
-        while self.stopped is not True:
-            time.sleep(0.1)
+        self.interrupt.set()
+        self.stop()
         for s in self.sockets:
             s.close()
 
-    def send(self, msg):
-        # FIXME: remove debug printing
-        self.values['localhost']['angle'].append(int(msg))
+    def send(self, val):
+        # make sure to have a non-negative integer val with  0 <= val < 360
+        val = (int(val) + 360) % 360
+        # save value history for later
+        self.values['localhost']['angle'].append(val)
         self.values['localhost']['time'].append(now())
-        print("localhost: " + str(int(msg)))
         # TODO: do not only send the server values but a average or so
-        self.serial.write(int(msg))
+        self.serial.write(val)
         pass
 
     def print(self, msg):
+        """ Helper method which suppresses debug output if not wanted """
         if self.print_debug:
             print(msg)
 
@@ -116,9 +120,9 @@ class Client:
         return self.socket.recv(1024) == b'ok'
 
 
-def init_network(is_server: bool, server_ip: str, server_port: int):
+def init_network(is_server: bool, server_ip: str, server_port: int, use_serial: bool):
     if is_server:
-        return Server(server_ip, server_port, print_debug=True)
+        return Server(server_ip, server_port, print_debug=True, use_serial=use_serial)
     else:
         return Client(server_ip, server_port)
 
