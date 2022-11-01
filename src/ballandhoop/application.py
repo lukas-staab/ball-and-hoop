@@ -129,7 +129,8 @@ class Application:
                         # TODO?: callback for errors in apply_async - right now it fails silent
                         # if in debuging mode save every 30th frame for debugging purposes
                         if self.verbose and i % 30 == 0:
-                            cv2.imwrite('./storage/debug/' + str(i) + ".png", frame)
+                            cv2.imwrite('./storage/debug/' + str(i) + "-hsv.png", frame)
+                            cv2.imwrite('./storage/debug/' + str(i) + "-rgb.png", cv2.cvtColor(frame, cv2.COLOR_HSV2RGB))
 
         except KeyboardInterrupt:
             # break potential infinite loop
