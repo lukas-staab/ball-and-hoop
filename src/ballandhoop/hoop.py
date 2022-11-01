@@ -7,6 +7,8 @@ import imutils
 import numpy as np
 import cv2
 import circle_fit as cf
+
+from . import helper
 from .ball import Ball
 
 
@@ -28,17 +30,9 @@ class Hoop:
         os.makedirs('storage/hoop/')
         lower_hsv = np.array(lower)
         upper_hsv = np.array(upper)
-        if pic is not None:
-            print(pic)
-            pic = cv2.imread(pic)
-        else:
-            # no fake picture given. expecting to be on a raspberry pi
-            import picamera.array
-            camera = picamera.PiCamera(sensor_mode=7)
-            camera.resolution = (320, 240)
-            output = picamera.array.PiRGBArray(camera)
-            camera.capture(output, format='rgb', use_video_port=True)
-            pic = output.array
+
+        pic = helper.get_rgb_picture(pic)
+
         from . import ImageComposer
         imc = ImageComposer(pic, do_undistortion=False, do_blurring=False)
         imc.color_split('storage/hoop/details/', lower_hsv, upper_hsv)

@@ -4,7 +4,7 @@ import shutil
 
 import cv2
 
-from src.ballandhoop import WhiteBalancing, Hoop, Ball
+from src.ballandhoop import WhiteBalancing, Hoop, Ball, helper
 import socket
 import yaml
 import scipy.io
@@ -91,7 +91,7 @@ class Application:
             self.print('|-> searching for ball')
             ball_search_col = self.save_col_and_add_from_config('ball', ball_search_col)
             hoop = Hoop(**self.get_cfg('hoop'))
-            pic = cv2.cvtColor(cv2.imread(self.get_cfg('hoop', 'faker_path')), cv2.COLOR_BGR2HSV)
+            pic = helper.get_hsv_picture(self.get_cfg('hoop', 'faker_path'))
             ball = hoop.find_ball(frame=pic, cols=ball_search_col, iterations=1)
             if ball is not None:
                 self.print("|-> Ball found @ " + str(ball.center) + " with r=" + str(ball.radius))

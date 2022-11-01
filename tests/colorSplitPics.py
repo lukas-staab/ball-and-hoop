@@ -29,7 +29,7 @@ else:
     from src.ballandhoop.videostream import VideoStream
     from src.ballandhoop.whiteBalancing import WhiteBalancing
     gains = WhiteBalancing(verboseOutput=True).calculate()
-    with VideoStream(framerate=60, awb=gains) as vid:
+    with VideoStream(framerate=60, wb_gains=gains) as vid:
         image = vid.read()
 
 dirName = input("Base dirName name: ")
@@ -39,10 +39,10 @@ im = ImageComposer(image, do_undistortion=False, do_blurring=False,
                    debug_path=storagePath + dirName)
 hsv = im.get_hsv()
 
-for x in range(0, 255, 5):
+for x in range(0, 180, 5):
     # lower bound and upper bound for Orange color
     lower_bound = np.array([x, args['lowerBound'], args['lowerBound']])
-    upper_bound = np.array([(x+20) % 255, args['upperBound'], args['upperBound']])
+    upper_bound = np.array([(x+20) % 180, args['upperBound'], args['upperBound']])
     # find the colors within the boundaries
     mask = cv2.inRange(hsv, lower_bound, upper_bound)
 
