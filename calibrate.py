@@ -15,9 +15,9 @@ ap.add_argument("-w", "--white-calibration", default=False, action='store_true',
 ap.add_argument('-o', "--hoop-calibration", action='store_true', default=False,
                 help="Flag if hoop calibration should run")
 ap.add_argument('-l', "--lowercol", type=int, nargs=3, default=None,
-                help="Only used with hoop: Lower bound of hoop border dots color in HSV color format")
+                help="Only used with hoop: Lower bound of hoop border dots color in HSV color format (H: 0-180, S and V: 0-255 range)")
 ap.add_argument('-u', "--uppercol", type=int, nargs=3, default=None,
-                help="Only used with hoop: Upper bound of hoop border dots color in HSV color format")
+                help="Only used with hoop: Upper bound of hoop border dots color in HSV color format (H: 0-180, S and V: 0-255 range)")
 ap.add_argument('-b', "--ball-calibration", action='store_true', default=False,
                 help="Flag if ball calibration should run")
 ap.add_argument('-v', "--verbose", default=False, action='store_true',

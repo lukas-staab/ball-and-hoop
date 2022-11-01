@@ -1,7 +1,6 @@
 import multiprocessing
-import random
-import time
-from os.path import abspath, join, dirname
+import os
+import shutil
 
 import cv2
 
@@ -26,6 +25,11 @@ class Application:
             self.print('[INFO] Forcing different hostname: ' + force_hostname)
             self.hostname = force_hostname
         self.network = None
+
+        # if debug folder exists, delete it (and its contents) and re-create a new one
+        if os.path.isdir('storage/debug/'):
+            shutil.rmtree('storage/debug/')
+        os.makedirs('storage/debug/')
 
     def load_config_from_disk(self, file_type='yml'):
         cfg = None
@@ -108,16 +112,25 @@ class Application:
         try:
             # start network
             with self.network:
-                # start thread-worker pool
-                with multiprocessing.Pool(processes=4) as pool:
+                # start thread-worker pool,
+                with multiprocessing.Pool(processes=os.cpu_count()) as pool:
+                    # count the number of frames, this might be important to reconstruct original frame order
+                    i = 0
                     # iterate over the video frames
                     for frame in video:
+                        # increase frame counter
+                        i = i + 1
                         # send the task to the next available thread-worker, from the pool
                         # the threads will call hoop.find_ball(frame=frame, cols=ball_search_col, iterations=0)
                         # search for the ball in the frame with the given color borders
                         pool.apply_async(hoop.find_ball,
                                          args=(frame, ball_search_col, 0),
                                          callback=self.network_async_callback)
+                        # TODO?: callback for errors in apply_async - right now it fails silent
+                        # if in debuging mode save every 30th frame for debugging purposes
+                        if self.verbose and i % 30 == 0:
+                            cv2.imwrite('./storage/debug/' + i + ".png", frame)
+
         except KeyboardInterrupt:
             # break potential infinite loop
             pass

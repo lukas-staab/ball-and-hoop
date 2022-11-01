@@ -11,9 +11,9 @@ sys.path.append(directory)
 # definition of parameters which can be used
 ap = argparse.ArgumentParser()
 ap.add_argument('-l', "--lowercol", type=int, nargs=3, default=None,
-                help="Lower bound of ball color in HSV color format")
+                help="Lower bound of ball color in HSV color format (H: 0-180, S and V: 0-255 range)")
 ap.add_argument('-u', "--uppercol", type=int, nargs=3, default=None,
-                help="Lower bound of ball color in HSV color format")
+                help="Lower bound of ball color in HSV color format (H: 0-180, S and V: 0-255 range)")
 ap.add_argument('-v', "--verbose", default=False, action='store_true',
                 help='Give more output to console')
 ap.add_argument('-t', "--time", default=False, action='store_true',
