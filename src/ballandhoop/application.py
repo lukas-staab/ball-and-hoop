@@ -1,10 +1,11 @@
+import multiprocessing
 import random
 import time
 from os.path import abspath, join, dirname
 
 import cv2
 
-from src.ballandhoop import WhiteBalancing, Hoop
+from src.ballandhoop import WhiteBalancing, Hoop, Ball
 import socket
 import yaml
 import scipy.io
@@ -24,6 +25,7 @@ class Application:
         else:
             self.print('[INFO] Forcing different hostname: ' + force_hostname)
             self.hostname = force_hostname
+        self.network = None
 
     def load_config_from_disk(self, file_type='yml'):
         cfg = None
@@ -96,26 +98,38 @@ class Application:
 
     def run(self, ball_search_col: dict):
         # give config to object constructors to initialize like defined in config
+        # ** does flatten the array to arguments, with their corresponding keys as argument names
         hoop = Hoop(**self.get_cfg('hoop'))
         video = VideoStream(**self.get_cfg('video'))
-        network = init_network(**self.get_cfg('network'))
-
+        # the network needs object context for better access in the async callback method from the workers
+        self.network = init_network(**self.get_cfg('network'))
+        # get ball color from console parameters and save the new one to config - if not given get values from config
         ball_search_col = self.save_col_and_add_from_config('ball', ball_search_col)
         try:
-            with network:
-                for frame in video:
-                    # do the tracking and send the result here to the network
-                    ball = hoop.find_ball(frame=frame, cols=ball_search_col, iterations=0)
-                    # send the result
-                    if ball is not None:
-                        network.send(ball.angle_in_hoop())
-                    else:
-                        print('No ball found')
+            # start network
+            with self.network:
+                # start thread-worker pool
+                with multiprocessing.Pool(processes=4) as pool:
+                    # iterate over the video frames
+                    for frame in video:
+                        # send the task to the next available thread-worker, from the pool
+                        # the threads will call hoop.find_ball(frame=frame, cols=ball_search_col, iterations=0)
+                        # search for the ball in the frame with the given color borders
+                        pool.apply_async(hoop.find_ball,
+                                         args=(frame, ball_search_col, 0),
+                                         callback=self.network_async_callback)
         except KeyboardInterrupt:
             # break potential infinite loop
             pass
         finally:
             video.close()
+
+    def network_async_callback(self, ball: Ball):
+        # send the ball angle result to the network
+        if ball is not None:
+            self.network.send(ball.angle_in_hoop())
+        else:
+            print('No ball found')
 
     def print(self, msg: str):
         if self.verbose:
@@ -139,5 +153,6 @@ class Application:
 
         if save_vid is not None:
             from src.faker.save import savePictures
+            # the * does flatten the array to arguments, without key as name
             savePictures(*save_vid, wb_gains=wb_gains)
             self.print('Saved Picture')

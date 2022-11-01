@@ -58,9 +58,7 @@ class VideoStream:
 
     def __next__(self):
         f = next(self.stream)
-        if self.is_faked:
-            time.sleep(1 / self.framerate)
-        else:
+        if not self.is_faked:
             f = f.array
             self.rawCapture.truncate(0)
         self.fps.update()

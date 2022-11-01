@@ -1,8 +1,8 @@
 lyoga:
   ball:
     hsv:
-      lower: [0, 150, 0]
-      upper: [30, 255, 255]
+      lower: [105, 50, 50]
+      upper: [120, 100, 100]
   hoop:
     center: [159, 81]
     center_dots:
@@ -15,15 +15,15 @@ lyoga:
       upper: [55, 255, 255]
     radius: 149
     radius_dots: [5, 5, 5]
-  network: {is_server: true, server_ip: 127.0.0.1, server_port: 9999}
+  network: {is_server: true, server_ip: 127.0.0.1, server_port: 9999, use_serial: false}
   video:
-    faker_path: fetch/rpi2.lan/faker/move/
+    faker_path: fetch/rpi3.lan/faker/runtest
     wb_gains: [1.4144569518716577, 1.7191847593582887]
 rpi1:
   ball:
     hsv:
-      lower: [ 110, 40, 0 ]
-      upper: [ 150, 100, 75 ]
+      lower: [110, 40, 0]
+      upper: [150, 100, 75]
   hoop:
     center: [185, 79]
     center_dots:
@@ -62,8 +62,8 @@ rpi2:
 rpi3:
   ball:
     hsv:
-      lower: [ 110, 40, 0 ]
-      upper: [ 150, 100, 75 ]
+      lower: [ 105, 50, 50 ]
+      upper: [ 120, 100, 100 ]
   hoop:
     center: [144, 81]
     center_dots:

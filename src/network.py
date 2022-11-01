@@ -120,9 +120,11 @@ class Client:
         return self.socket.recv(1024) == b'ok'
 
 
-def init_network(is_server: bool, server_ip: str, server_port: int, use_serial: bool = True):
+def init_network(is_server: bool, server_ip: str, server_port: int, use_serial: bool = True, print_debug: bool = False):
+    """ This function is a wrapper for dynamic construction of the Client or Server Class depending on the config
+    file, some parameters are only relevant in a server context """
     if is_server:
-        return Server(server_ip, server_port, print_debug=True, use_serial=use_serial)
+        return Server(server_ip, server_port, print_debug=print_debug, use_serial=use_serial)
     else:
         return Client(server_ip, server_port)
 
