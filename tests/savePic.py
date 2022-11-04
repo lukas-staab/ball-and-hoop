@@ -15,7 +15,7 @@ time.sleep(0.1)
 name = input("File number: ")
 
 # capture frames from the camera
-camera.capture(rawCapture, format="bgr", use_video_port=True)
+camera.capture(rawCapture, format="rgb", use_video_port=True)
 # grab the raw NumPy array representing the image, then initialize the timestamp
 # and occupied/unoccupied text
 image = rawCapture.array
@@ -23,4 +23,5 @@ filename = "storage/chessboard-calibration/" + name + ".png"
 # save the frame
 cv2.imwrite(filename, image)
 print("Saved")
+
 

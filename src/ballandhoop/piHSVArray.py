@@ -1,8 +1,8 @@
-from picamera.array import PiRGBArray
+from picamera.array import PiBGRArray
 import cv2
 
 
-class PiHSVArray(PiRGBArray):
+class PiHSVArray(PiBGRArray):
 
     def __init__(self, camera, size=None):
         super(PiHSVArray, self).__init__(camera, size)
@@ -11,4 +11,4 @@ class PiHSVArray(PiRGBArray):
         # method is called after data is written
         super(PiHSVArray, self).flush()
         # super().flush() wrote RGB Data to self.array, now convert it
-        self.array = cv2.cvtColor(self.array, cv2.COLOR_RGB2HSV)
+        self.array = cv2.cvtColor(self.array, cv2.COLOR_BGR2HSV)

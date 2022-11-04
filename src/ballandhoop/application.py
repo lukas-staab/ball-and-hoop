@@ -130,7 +130,8 @@ class Application:
                         # if in debuging mode save every 30th frame for debugging purposes
                         if self.verbose and i % 30 == 0:
                             cv2.imwrite('./storage/debug/' + str(i) + "-hsv.png", frame)
-                            cv2.imwrite('./storage/debug/' + str(i) + "-rgb.png", cv2.cvtColor(frame, cv2.COLOR_HSV2RGB))
+                            # cv2 expects bgr format as default
+                            cv2.imwrite('./storage/debug/' + str(i) + "-rgb.png", cv2.cvtColor(frame, cv2.COLOR_HSV2BGR))
 
         except KeyboardInterrupt:
             # break potential infinite loop

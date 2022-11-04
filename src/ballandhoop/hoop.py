@@ -31,7 +31,7 @@ class Hoop:
         lower_hsv = np.array(lower)
         upper_hsv = np.array(upper)
 
-        pic = helper.get_rgb_picture(pic)
+        pic = helper.get_bgr_picture(pic)
 
         from . import ImageComposer
         imc = ImageComposer(pic, do_undistortion=False, do_blurring=False)

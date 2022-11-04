@@ -4,6 +4,7 @@ import time
 import cv2
 from imutils.video import FPS
 
+
 class VideoStream:
     resolutions = {
         0: (160, 128),
@@ -23,10 +24,12 @@ class VideoStream:
         self.is_faked = faker_path is not None
         self.framerate = framerate
         if self.is_faked:
+            print('WARN: using video material from "' + faker_path + '", instead of live footage. '
+                                                                     'Please change in config if you want live data')
             self.stream = self.faker_stream_generator(faker_path)
         else:
             # assume we are on a raspberry pi then
-            from picamera.array import PiRGBArray
+            from picamera.array import PiBGRArray
             from src.ballandhoop.piHSVArray import PiHSVArray
             from picamera import PiCamera
 
@@ -41,7 +44,7 @@ class VideoStream:
             if as_hsv:
                 self.rawCapture = PiHSVArray(self.camera, size=resolution)
             else:
-                self.rawCapture = PiRGBArray(self.camera, size=resolution)
+                self.rawCapture = PiBGRArray(self.camera, size=resolution)
             self.stream = self.camera.capture_continuous(self.rawCapture,
                                                          format='bgr',  # this is also needed for hsv
                                                          use_video_port=True)
@@ -59,11 +62,19 @@ class VideoStream:
     def __next__(self):
         f = next(self.stream)
         if not self.is_faked:
-            f = f.array
+            # reset pointer to first place (just to be sure)
+            self.rawCapture.seek()
+            # copy frame
+            f = f.array.copy()
+            # reset pointer to first place (this usually should have been enough)
+            self.rawCapture.seek()
+            # delete content of frame
             self.rawCapture.truncate(0)
         self.fps.update()
+        # rotate frame if wanted
         if self.rotation != 0:
             f = cv2.rotate(f, self.rotations[self.rotation])
+        # return frame
         return f
 
     def close(self):
