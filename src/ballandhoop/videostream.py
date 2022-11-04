@@ -29,7 +29,7 @@ class VideoStream:
             self.stream = self.faker_stream_generator(faker_path)
         else:
             # assume we are on a raspberry pi then
-            from picamera.array import PiBGRArray
+            from picamera.array import PiRGBArray
             from src.ballandhoop.piHSVArray import PiHSVArray
             from picamera import PiCamera
 
@@ -44,7 +44,7 @@ class VideoStream:
             if as_hsv:
                 self.rawCapture = PiHSVArray(self.camera, size=resolution)
             else:
-                self.rawCapture = PiBGRArray(self.camera, size=resolution)
+                self.rawCapture = PiRGBArray(self.camera, size=resolution)
             self.stream = self.camera.capture_continuous(self.rawCapture,
                                                          format='bgr',  # this is also needed for hsv
                                                          use_video_port=True)

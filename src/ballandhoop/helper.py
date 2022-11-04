@@ -10,7 +10,7 @@ def get_bgr_picture(faker_path:str = None):
         import picamera.array
         camera = picamera.PiCamera(sensor_mode=7)
         camera.resolution = (320, 240)
-        output = picamera.array.PiBGRArray(camera)
+        output = picamera.array.PiRGBArray(camera)
         camera.capture(output, format='bgr', use_video_port=True)
         return output.array
 

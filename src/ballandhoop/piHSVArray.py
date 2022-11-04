@@ -1,8 +1,8 @@
-from picamera.array import PiBGRArray
+from picamera.array import PiRGBArray
 import cv2
 
 
-class PiHSVArray(PiBGRArray):
+class PiHSVArray(PiRGBArray):
 
     def __init__(self, camera, size=None):
         super(PiHSVArray, self).__init__(camera, size)

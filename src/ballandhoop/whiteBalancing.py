@@ -23,7 +23,7 @@ class WhiteBalancing:
             camera.awb_mode = 'off'
             # Start off with ridiculously low gains
             rg, bg = (0.5, 0.5)
-            with picamera.array.PiBGRArray(camera) as output:
+            with picamera.array.PiRGBArray(camera) as output:
                 # Allow 30 attempts to fix AWB
                 for i in range(10):
                     # Capture a tiny resized image in RGB format, and extract the
