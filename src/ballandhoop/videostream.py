@@ -63,11 +63,11 @@ class VideoStream:
         f = next(self.stream)
         if not self.is_faked:
             # reset pointer to first place (just to be sure)
-            self.rawCapture.seek()
+            self.rawCapture.seek(0)
             # copy frame
             f = f.array.copy()
             # reset pointer to first place (this usually should have been enough)
-            self.rawCapture.seek()
+            self.rawCapture.seek(0)
             # delete content of frame
             self.rawCapture.truncate(0)
         self.fps.update()
