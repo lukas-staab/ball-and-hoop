@@ -1,4 +1,8 @@
+import os
+import shutil
+
 import cv2
+
 
 def get_bgr_picture(faker_path:str = None):
     """ If faker_path is given, return the picture in path, otherwise take a picture from pi cam """
@@ -18,3 +22,8 @@ def get_bgr_picture(faker_path:str = None):
 def get_hsv_picture(faker_path:str = None):
     """ See @get_bgr_picture - but transformed to HLS Colors """
     return cv2.cvtColor(get_bgr_picture(faker_path), cv2.COLOR_BGR2HLS)
+
+def reset_content_of_dir(dir_name : str):
+    if os.path.exists(dir_name):
+        shutil.rmtree(dir_name)
+    os.makedirs(dir_name)

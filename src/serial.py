@@ -1,6 +1,5 @@
 import serial
 
-
 class SerialCom:
     def __init__(self, port='/dev/serial0', baud=9600, verbose=False, use_serial=True):
         self.use_serial = use_serial

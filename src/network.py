@@ -1,6 +1,5 @@
 import select
 import threading
-import time
 import socket
 import datetime
 from threading import Thread
@@ -93,7 +92,7 @@ class Server(Thread):
         pass
 
     def print(self, msg):
-        """ Helper method which suppresses debug output if not wanted """
+        """ Helper method which suppresses debug output if not configured """
         if self.print_debug:
             print(msg)
 

@@ -4,7 +4,7 @@ import shutil
 
 import cv2
 
-from src.ballandhoop import WhiteBalancing, Hoop, Ball, helper
+from src.ballandhoop import WhiteBalancing, Hoop, Ball, helper, ImageComposer
 import socket
 import yaml
 import scipy.io
@@ -68,6 +68,7 @@ class Application:
     def run_calibration(self, calc_wb_gains: bool,
                         search_hoop: bool, hoop_search_col: dict,
                         search_ball: bool, ball_search_col: dict):
+        helper.reset_content_of_dir('storage/calibration/')
         self.print('=== Start Calibration')
         if calc_wb_gains:
             self.print('|-> Start White Balancing Calibration')
@@ -88,15 +89,20 @@ class Application:
         self.print('|-> Using Hoop @ ' + str(self.get_cfg('hoop', 'center')) + " with r=" +
                    str(self.get_cfg('hoop', 'radius')))
         if search_ball and self.get_cfg('hoop', 'center') is not None:
-            self.print('|-> searching for ball')
+            self.print('|-> searching for ball / Testing color')
             ball_search_col = self.save_col_and_add_from_config('ball', ball_search_col)
             hoop = Hoop(**self.get_cfg('hoop'))
             pic = helper.get_hsv_picture(self.get_cfg('hoop', 'faker_path'))
             ball = hoop.find_ball(frame=pic, cols=ball_search_col, iterations=1)
+            imc = ImageComposer(pic)
             if ball is not None:
                 self.print("|-> Ball found @ " + str(ball.center) + " with r=" + str(ball.radius))
+                imc.plot_ball(ball)
             else:
                 self.print("|-> NO BALL FOUND!")
+            self.print('Save debug hsv image to storage/calibration/ball/')
+            cv2.imwrite('storage/calibration/ball/img-hsv.png', imc.image())
+            cv2.imwrite('storage/calibration/ball/img-rgb.png', cv2.cvtColor(imc.image(), cv2.COLOR_HSV2BGR))
         self.print('=== End Calibration')
         self.save_config_to_disk()
 
