@@ -6,4 +6,5 @@
         src: ~/ball-and-hoop/storage/
         dest: "{{ playbook_dir }}/../fetch/{{ inventory_hostname }}/"
         mode: pull
+        delete: yes
         delay_updates: false
