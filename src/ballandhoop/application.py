@@ -102,7 +102,8 @@ class Application:
             else:
                 self.print("|-> NO BALL FOUND!")
             self.print('Save debug images to storage/calibration/')
-            im.color_split('storage/calibration/ball-colsplit', ball_search_col['lower'], ball_search_col['upper'])
+            im.color_split('storage/calibration/ball-colsplit-bgr', ball_search_col['lower'], ball_search_col['upper'], return_hsv=False)
+            im.color_split('storage/calibration/ball-colsplit-hsv', ball_search_col['lower'], ball_search_col['upper'], return_hsv=True)
             cv2.imwrite('storage/calibration/ball-hsv.png', im.image_hsv)
             cv2.imwrite('storage/calibration/ball-rgb.png', im.image_bgr)
 
