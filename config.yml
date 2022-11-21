@@ -65,20 +65,19 @@ rpi3:
       lower: [110, 30, 30]
       upper: [130, 120, 120]
   hoop:
-    center: [144, 81]
+    center: [144, 78]
     center_dots:
-    - [163, 221]
-    - [36, 174]
-    - [272, 150]
-    - [2, 68]
-    - [280, 43]
+    - [176, 218]
+    - [45, 184]
+    - [275, 141]
+    - [1, 78]
     hsv:
-      lower: [45, 200, 200]
-      upper: [55, 255, 255]
-    radius: 142
-    radius_dots: [5, 5, 5, 5, 5]
+      lower: [160, 100, 50]
+      upper: [180, 200, 200]
     min_radius_dots: 2
     morph_iterations: 1
+    radius: 144
+    radius_dots: [3, 2, 2, 3]
   network: {is_server: true, server_ip: '', server_port: 9999}
   video:
     wb_gains: [1.43, 1.63]
