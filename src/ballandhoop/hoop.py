@@ -2,14 +2,12 @@ from __future__ import annotations
 import math
 import os
 import shutil
-import time
 import imutils
 import numpy as np
 import cv2
 import circle_fit as cf
 
-from . import helper
-from .ball import Ball
+from src.ballandhoop import helper, Ball, Image
 
 
 class Hoop:
@@ -24,28 +22,29 @@ class Hoop:
         self.radius_dots = radius_dots
 
     @staticmethod
-    def create_from_image(lower, upper, pic=None, iterations=2):
-        if os.path.isdir('storage/hoop/'):
-            shutil.rmtree('storage/hoop/')
-        os.makedirs('storage/hoop/')
+    def create_from_image(lower, upper, pic=None, iterations=2, debug_output_path=None):
         lower_hsv = np.array(lower)
         upper_hsv = np.array(upper)
 
-        pic = helper.get_bgr_picture(pic)
+        if debug_output_path is not None and debug_output_path[-1] != '/':
+            debug_output_path = debug_output_path + "/"
 
-        from . import ImageComposer
-        imc = ImageComposer(pic, do_undistortion=False, do_blurring=False)
-        imc.color_split('storage/hoop/details/', lower_hsv, upper_hsv)
-        hsv = imc.get_hsv()
-        Hoop._save_debug_pic(pic, 'raw')
-        Hoop._save_debug_pic(hsv, 'hsv')
+        if type(pic) is str or pic is None:
+            im = Image.create(pic)
+        else:
+            im = Image(image_bgr=pic)
+
+        im.color_split(debug_output_path + 'hoop-colsplit/', lower_hsv, upper_hsv)
+        hsv = im.image_hsv
+        Hoop._save_debug_pic(pic, 'raw', debug_output_path)
+        Hoop._save_debug_pic(hsv, 'hsv', debug_output_path)
         mask_hoop = cv2.inRange(hsv, lower_hsv, upper_hsv)
-        Hoop._save_debug_pic(mask_hoop, 'hoop-mask')
+        Hoop._save_debug_pic(mask_hoop, 'hoop-mask', debug_output_path)
         if iterations > 0:
             mask_hoop = cv2.erode(mask_hoop, None, iterations=iterations)
-            Hoop._save_debug_pic(mask_hoop, 'hoop-mask-erode')
+            Hoop._save_debug_pic(mask_hoop, 'hoop-mask-erode', debug_output_path)
             mask_hoop = cv2.dilate(mask_hoop, None, iterations=iterations)
-            Hoop._save_debug_pic(mask_hoop, 'hoop-mask-erode-dil')
+            Hoop._save_debug_pic(mask_hoop, 'hoop-mask-erode-dil', debug_output_path)
         cnts = cv2.findContours(mask_hoop.copy(), cv2.RETR_EXTERNAL,
                                 cv2.CHAIN_APPROX_SIMPLE)
         cnts = imutils.grab_contours(cnts)
@@ -64,13 +63,12 @@ class Hoop:
                 dots_center.append(center_dot)
                 dots_radius.append(int(radius))
         if len(dots_radius) < 3:
-            return None  # Exception('Less then 3 edge dots found for hoop. See in storage/hoop/ for debugging pictures')
+            return None, im  # Exception('Less then 3 edge dots found for hoop. See in storage/hoop/ for debugging pictures')
         xc, yc, radius_hoop, _ = cf.least_squares_circle(dots_center)
         hoop = Hoop([int(xc), int(yc)], int(radius_hoop), dots_center, dots_radius)
-        imc.start_new_image()
-        imc.plot_hoop(hoop)
-        Hoop._save_debug_pic(imc.image(), 'hoop')
-        return hoop, imc.image()
+        im = im.plot_hoop(hoop)
+        Hoop._save_debug_pic(im.image_bgr, 'hoop', debug_output_path)
+        return hoop, im
 
     def angle_in_hoop(self, p: tuple):
         v1 = np.array((0, -self.radius))
@@ -108,12 +106,14 @@ class Hoop:
         # TODO: only proceed if the radius meets a minimum size?
         return Ball(self, center_ball, int(radius))
 
-    def save_debug_pic(self, img, name):
-        Hoop._save_debug_pic(img, name)
+    def save_debug_pic(self, img, name, dir_path):
+        Hoop._save_debug_pic(img, name, dir_path)
 
     @staticmethod
-    def _save_debug_pic(img, name):
+    def _save_debug_pic(img, name, dir_path):
+        if dir_path is None:
+            return
         if not name.endswith(".png"):
             name = name + ".png"
         os.makedirs('storage/hoop/', exist_ok=True)
-        cv2.imwrite('storage/hoop/' + name, img)
+        cv2.imwrite(dir_path + name, img)

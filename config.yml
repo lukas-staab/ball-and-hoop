@@ -62,8 +62,8 @@ rpi2:
 rpi3:
   ball:
     hsv:
-      lower: [ 105, 50, 50 ]
-      upper: [ 120, 100, 100 ]
+      lower: [105, 50, 50]
+      upper: [120, 100, 100]
   hoop:
     center: [144, 81]
     center_dots:

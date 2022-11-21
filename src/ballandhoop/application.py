@@ -4,7 +4,7 @@ import shutil
 
 import cv2
 
-from src.ballandhoop import WhiteBalancing, Hoop, Ball, helper, ImageComposer
+from src.ballandhoop import WhiteBalancing, Hoop, Ball, helper, Image
 import socket
 import yaml
 import scipy.io
@@ -77,7 +77,8 @@ class Application:
         if search_hoop:
             self.print('|-> Searching Hoop in new picture')
             hoop_search_col = self.save_col_and_add_from_config('hoop', hoop_search_col)
-            hoop = Hoop.create_from_image(**hoop_search_col, pic=self.get_cfg('hoop', 'faker_path'), iterations=0)
+            hoop, im = Hoop.create_from_image(**hoop_search_col, pic=self.get_cfg('hoop', 'faker_path'),
+                                              iterations=0, debug_output_path='storage/calibration/')
             if hoop is not None:
                 self.local_config()['hoop']['radius'] = hoop.radius
                 self.local_config()['hoop']['center'] = hoop.center
@@ -85,7 +86,7 @@ class Application:
                 self.local_config()['hoop']['radius_dots'] = hoop.radius_dots
                 self.print('|-> Hoop found @ ' + str(self.get_cfg('hoop', 'center')))
             else:
-                self.print('|-> NO HOOP FOUND! - see in storage/hoop/ for debug pictures')
+                self.print('|-> NO HOOP FOUND! - see in storage/calibration/ for debug pictures')
         self.print('|-> Using Hoop @ ' + str(self.get_cfg('hoop', 'center')) + " with r=" +
                    str(self.get_cfg('hoop', 'radius')))
         if search_ball and self.get_cfg('hoop', 'center') is not None:
@@ -94,15 +95,15 @@ class Application:
             hoop = Hoop(**self.get_cfg('hoop'))
             pic = helper.get_hsv_picture(self.get_cfg('hoop', 'faker_path'))
             ball = hoop.find_ball(frame=pic, cols=ball_search_col, iterations=1)
-            imc = ImageComposer(pic)
+            im = Image(image_hsv=pic)
             if ball is not None:
                 self.print("|-> Ball found @ " + str(ball.center) + " with r=" + str(ball.radius))
-                imc.plot_ball(ball)
+                im = im.plot_ball(ball)
             else:
                 self.print("|-> NO BALL FOUND!")
             self.print('Save debug images to storage/calibration/')
-            cv2.imwrite('storage/calibration/ball-hsv.png', imc.image())
-            cv2.imwrite('storage/calibration/ball-rgb.png', cv2.cvtColor(imc.image(), cv2.COLOR_HSV2BGR))
+            cv2.imwrite('storage/calibration/ball-hsv.png', im.image_hsv)
+            cv2.imwrite('storage/calibration/ball-rgb.png', im.image_bgr)
         self.print('=== End Calibration')
         self.save_config_to_disk()
 
