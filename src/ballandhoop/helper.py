@@ -14,8 +14,11 @@ def get_bgr_picture(faker_path:str = None, wb_gains=None):
         import picamera.array
         camera = picamera.PiCamera(sensor_mode=7)
         camera.resolution = (320, 240)
-        camera.awb_mode = 'off'
-        camera.awb_gains = wb_gains
+        if wb_gains is not None:
+            camera.awb_mode = 'off'
+            camera.awb_gains = wb_gains
+        else:
+            print('[WARN] a picture with white balancing auto is taken - results can widely differ')
         output = picamera.array.PiRGBArray(camera)
         camera.capture(output, format='bgr', use_video_port=True)
         if output.array.shape[1] == 0 or output.array.shape[2] == 0:
