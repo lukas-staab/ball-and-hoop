@@ -68,7 +68,7 @@ class Application:
     def run_calibration(self, calc_wb_gains: bool,
                         search_hoop: bool, hoop_search_col: dict,
                         search_ball: bool, ball_search_col: dict):
-        helper.reset_content_of_dir('storage/calibration/')
+        helper.reset_content_of_dir('./storage/calibration/')
         self.print('=== Start Calibration')
         if calc_wb_gains:
             self.print('|-> Start White Balancing Calibration')
@@ -77,14 +77,16 @@ class Application:
         if search_hoop:
             self.print('|-> Searching Hoop in new picture')
             hoop_search_col = self.save_col_and_add_from_config('hoop', hoop_search_col)
-            hoop, im = Hoop.create_from_image(**hoop_search_col, pic=self.get_cfg('hoop', 'faker_path'),
-                                              iterations=0, debug_output_path='./storage/calibration/')
+            image = Image.create(self.get_cfg('hoop', 'faker_path'))
+            hoop = Hoop.create_from_image(**hoop_search_col, image=image,
+                                              iterations=1, debug_output_path='./storage/calibration/')
             if hoop is not None:
                 self.local_config()['hoop']['radius'] = hoop.radius
                 self.local_config()['hoop']['center'] = hoop.center
                 self.local_config()['hoop']['center_dots'] = hoop.center_dots
                 self.local_config()['hoop']['radius_dots'] = hoop.radius_dots
                 self.print('|-> Hoop found @ ' + str(self.get_cfg('hoop', 'center')))
+                image.plot_hoop(hoop).save('./storage/calibration/', 'hoop-result')
             else:
                 self.print('|-> NO HOOP FOUND! - see in storage/calibration/ for debug pictures')
         self.print('|-> Using Hoop @ ' + str(self.get_cfg('hoop', 'center')) + " with r=" +

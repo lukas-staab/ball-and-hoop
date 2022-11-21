@@ -22,23 +22,16 @@ class Hoop:
         self.radius_dots = radius_dots
 
     @staticmethod
-    def create_from_image(lower, upper, pic=None, iterations=2, debug_output_path=None):
+    def create_from_image(lower, upper, image:Image, iterations=2, debug_output_path=None):
         lower_hsv = np.array(lower)
         upper_hsv = np.array(upper)
 
         if debug_output_path is not None and debug_output_path[-1] != '/':
             debug_output_path = debug_output_path + "/"
 
-        if type(pic) is str or pic is None:
-            im = Image.create(pic)
-        else:
-            im = Image(image_bgr=pic)
-
-        im.color_split(debug_output_path + 'hoop-colsplit/', lower_hsv, upper_hsv)
-        hsv = im.image_hsv
-        Hoop._save_debug_pic(pic, 'raw', debug_output_path)
-        Hoop._save_debug_pic(hsv, 'hsv', debug_output_path)
-        mask_hoop = cv2.inRange(hsv, lower_hsv, upper_hsv)
+        Hoop._save_debug_pic(image.image_bgr, 'raw', debug_output_path)
+        Hoop._save_debug_pic(image.image_hsv, 'hsv', debug_output_path)
+        mask_hoop = cv2.inRange(image.image_hsv, lower_hsv, upper_hsv)
         Hoop._save_debug_pic(mask_hoop, 'hoop-mask', debug_output_path)
         if iterations > 0:
             mask_hoop = cv2.erode(mask_hoop, None, iterations=iterations)
@@ -63,12 +56,10 @@ class Hoop:
                 dots_center.append(center_dot)
                 dots_radius.append(int(radius))
         if len(dots_radius) < 3:
-            return None, im  # Exception('Less then 3 edge dots found for hoop. See in storage/hoop/ for debugging pictures')
+            return None  # Exception('Less then 3 edge dots found for hoop. See in storage/hoop/ for debugging pictures')
         xc, yc, radius_hoop, _ = cf.least_squares_circle(dots_center)
         hoop = Hoop([int(xc), int(yc)], int(radius_hoop), dots_center, dots_radius)
-        im = im.plot_hoop(hoop)
-        Hoop._save_debug_pic(im.image_bgr, 'hoop', debug_output_path)
-        return hoop, im
+        return hoop
 
     def angle_in_hoop(self, p: tuple):
         v1 = np.array((0, -self.radius))

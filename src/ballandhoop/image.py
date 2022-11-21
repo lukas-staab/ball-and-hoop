@@ -123,6 +123,6 @@ class Image:
             cv2.imwrite(file_name, segmented_img)
 
     @staticmethod
-    def create(path: str = None):
-        pic = helper.get_bgr_picture(path)
+    def create(path: str = None, wb_gains=None):
+        pic = helper.get_bgr_picture(path, wb_gains)
         return Image(image_bgr=pic)
