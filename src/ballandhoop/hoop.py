@@ -108,7 +108,12 @@ class Hoop:
             # if found ball is too small, it is probably not a real ball but noise
             return None
         if dir_path is not None:
-            Image(image_hsv=frame).plot_hoop(self).plot_ball(ball).save(dir_path, 'result')
+            # save a result picture if debug dir path is set
+            Image(image_hsv=frame)\
+                .plot_hoop(self)\
+                .plot_ball(ball)\
+                .plot_angle(self, ball)\
+                .save(dir_path, 'result')
         return ball
 
     def save_debug_pic(self, img, name, dir_path):
