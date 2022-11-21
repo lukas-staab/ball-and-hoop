@@ -37,7 +37,7 @@ class Image:
         pic = cv2.circle(self.image_bgr, hoop.center, int(hoop.radius), color, thickness)
         if with_dots:
             for i, center in enumerate(hoop.center_dots):
-                pic = cv2.circle(pic, center, hoop.radius_dots[i], color, -1)
+                pic = cv2.circle(pic, center, hoop.radius_dots[i] + 1, color, -1)
         return Image(image_bgr=pic)
 
 
