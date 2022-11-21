@@ -114,10 +114,9 @@ class Image:
             hsv_upper_bound[0] = (x + 10) % 180
             # find the colors within the boundaries
             mask = cv2.inRange(self.image_hsv, hsv_lower_bound, hsv_upper_bound)
-
-            kernel = np.ones((3, 3), np.uint8)
-            mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
-            mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+            # kernel = np.ones((3, 3), np.uint8)
+            # mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+            # mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
             segmented_img = cv2.bitwise_and(source_pic, source_pic, mask=mask)
 
             file_name = dir_path + str(x) + "-" + str((x + 10) % 180) + ".png"
