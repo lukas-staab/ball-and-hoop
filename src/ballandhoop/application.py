@@ -102,8 +102,10 @@ class Application:
             else:
                 self.print("|-> NO BALL FOUND!")
             self.print('Save debug images to storage/calibration/')
+            im.color_split('storage/calibration/ball-colsplit', ball_search_col['lower'], ball_search_col['upper'])
             cv2.imwrite('storage/calibration/ball-hsv.png', im.image_hsv)
             cv2.imwrite('storage/calibration/ball-rgb.png', im.image_bgr)
+
         self.print('=== End Calibration')
         self.save_config_to_disk()
 
