@@ -104,7 +104,10 @@ class Hoop:
         m = cv2.moments(c)
         center_ball = (int(m["m10"] / m["m00"]), int(m["m01"] / m["m00"]))
         # TODO: only proceed if the radius meets a minimum size?
-        return Ball(self, center_ball, int(radius))
+        ball = Ball(self, center_ball, int(radius))
+        if dir_path is not None:
+            Image(image_hsv=frame).plot_ball(ball).save(dir_path, 'result')
+        return ball
 
     def save_debug_pic(self, img, name, dir_path):
         Hoop._save_debug_pic(img, name, dir_path)
