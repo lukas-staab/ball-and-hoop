@@ -100,9 +100,9 @@ class Application:
                 imc.plot_ball(ball)
             else:
                 self.print("|-> NO BALL FOUND!")
-            self.print('Save debug hsv image to storage/calibration/ball/')
-            cv2.imwrite('storage/calibration/ball/img-hsv.png', imc.image())
-            cv2.imwrite('storage/calibration/ball/img-rgb.png', cv2.cvtColor(imc.image(), cv2.COLOR_HSV2BGR))
+            self.print('Save debug images to storage/calibration/')
+            cv2.imwrite('storage/calibration/ball-hsv.png', imc.image())
+            cv2.imwrite('storage/calibration/ball-rgb.png', cv2.cvtColor(imc.image(), cv2.COLOR_HSV2BGR))
         self.print('=== End Calibration')
         self.save_config_to_disk()
 
