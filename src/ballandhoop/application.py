@@ -78,7 +78,7 @@ class Application:
             self.print('|-> Searching Hoop in new picture')
             hoop_search_col = self.save_col_and_add_from_config('hoop', hoop_search_col)
             hoop, im = Hoop.create_from_image(**hoop_search_col, pic=self.get_cfg('hoop', 'faker_path'),
-                                              iterations=0, debug_output_path='storage/calibration/')
+                                              iterations=0, debug_output_path='./storage/calibration/')
             if hoop is not None:
                 self.local_config()['hoop']['radius'] = hoop.radius
                 self.local_config()['hoop']['center'] = hoop.center

@@ -16,6 +16,8 @@ def get_bgr_picture(faker_path:str = None):
         camera.resolution = (320, 240)
         output = picamera.array.PiRGBArray(camera)
         camera.capture(output, format='bgr', use_video_port=True)
+        if output.array.shape[1] == 0 or output.array.shape[2] == 0:
+            raise Exception('Pi Camera returned an empty picture, please check your cam config')
         return output.array
 
 
