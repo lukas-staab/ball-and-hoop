@@ -94,7 +94,7 @@ class Application:
             ball_search_col = self.save_col_and_add_from_config('ball', ball_search_col)
             hoop = Hoop(**self.get_cfg('hoop'))
             pic = helper.get_hsv_picture(self.get_cfg('hoop', 'faker_path'))
-            ball = hoop.find_ball(frame=pic, cols=ball_search_col, iterations=1)
+            ball = hoop.find_ball(frame=pic, cols=ball_search_col, iterations=1, dir_path='storage/calibration/')
             im = Image(image_hsv=pic)
             if ball is not None:
                 self.print("|-> Ball found @ " + str(ball.center) + " with r=" + str(ball.radius))
@@ -104,8 +104,8 @@ class Application:
             self.print('Save debug images to storage/calibration/')
             im.color_split('storage/calibration/ball-colsplit-bgr', ball_search_col['lower'], ball_search_col['upper'], return_hsv=False)
             im.color_split('storage/calibration/ball-colsplit-hsv', ball_search_col['lower'], ball_search_col['upper'], return_hsv=True)
-            cv2.imwrite('storage/calibration/ball-hsv.png', im.image_hsv)
-            cv2.imwrite('storage/calibration/ball-rgb.png', im.image_bgr)
+            cv2.imwrite('storage/calibration/ball-result-hsv.png', im.image_hsv)
+            cv2.imwrite('storage/calibration/ball-result-rgb.png', im.image_bgr)
 
         self.print('=== End Calibration')
         self.save_config_to_disk()
