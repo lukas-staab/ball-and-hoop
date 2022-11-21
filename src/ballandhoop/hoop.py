@@ -103,8 +103,10 @@ class Hoop:
         ((x, y), radius) = cv2.minEnclosingCircle(c)
         m = cv2.moments(c)
         center_ball = (int(m["m10"] / m["m00"]), int(m["m01"] / m["m00"]))
-        # TODO: only proceed if the radius meets a minimum size?
         ball = Ball(self, center_ball, int(radius))
+        if ball.radius < 8:
+            # if found ball is too small, it is probably not a real ball but noise
+            return None
         if dir_path is not None:
             Image(image_hsv=frame).plot_ball(ball).save(dir_path, 'result')
         return ball
