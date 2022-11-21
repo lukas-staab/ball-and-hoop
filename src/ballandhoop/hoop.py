@@ -29,8 +29,6 @@ class Hoop:
         if debug_output_path is not None and debug_output_path[-1] != '/':
             debug_output_path = debug_output_path + "/"
 
-        Hoop._save_debug_pic(image.image_bgr, 'raw', debug_output_path)
-        Hoop._save_debug_pic(image.image_hsv, 'hsv', debug_output_path)
         mask_hoop = cv2.inRange(image.image_hsv, lower_hsv, upper_hsv)
         Hoop._save_debug_pic(mask_hoop, 'hoop-mask', debug_output_path)
         if iterations > 0:

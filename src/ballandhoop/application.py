@@ -78,6 +78,7 @@ class Application:
             self.print('|-> Searching Hoop in new picture')
             hoop_search_col = self.save_col_and_add_from_config('hoop', hoop_search_col)
             image = Image.create(self.get_cfg('hoop', 'faker_path'), wb_gains=self.local_config()['video']['wb_gains'])
+            image.save('./storage/calibration/', 'hoop')
             hoop = Hoop.create_from_image(**hoop_search_col, image=image,
                                               iterations=1, debug_output_path='./storage/calibration/')
             if hoop is not None:
