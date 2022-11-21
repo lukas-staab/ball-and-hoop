@@ -81,14 +81,14 @@ class Hoop:
         y = np.dot(v1, v2)
         return math.atan2(x, y) / math.pi * 180
 
-    def find_ball(self, frame, cols: dict, iterations=2):
+    def find_ball(self, frame, cols: dict, iterations=2, dir_path=None):
         mask_ball = cv2.inRange(frame, np.array(cols['lower']), np.array(cols['upper']))
-        self.save_debug_pic(mask_ball, 'ball-mask')
+        self.save_debug_pic(mask_ball, 'ball-mask', dir_path)
         if iterations > 0:
             mask_ball = cv2.erode(mask_ball, None, iterations=iterations)
-            self.save_debug_pic(mask_ball, 'ball-mask-erode')
+            self.save_debug_pic(mask_ball, 'ball-mask-erode', dir_path)
             mask_ball = cv2.dilate(mask_ball, None, iterations=iterations)
-            self.save_debug_pic(mask_ball, 'ball-mask-erode-dil')
+            self.save_debug_pic(mask_ball, 'ball-mask-erode-dil', dir_path)
         cnts = cv2.findContours(mask_ball.copy(), cv2.RETR_EXTERNAL,
                                 cv2.CHAIN_APPROX_SIMPLE)
         cnts = imutils.grab_contours(cnts)
@@ -115,5 +115,7 @@ class Hoop:
             return
         if not name.endswith(".png"):
             name = name + ".png"
-        os.makedirs('storage/hoop/', exist_ok=True)
+        if not dir_path.endswith('/'):
+            dir_path = dir_path + "/"
+        os.makedirs(dir_path, exist_ok=True)
         cv2.imwrite(dir_path + name, img)
