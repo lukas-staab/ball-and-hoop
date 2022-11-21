@@ -22,19 +22,19 @@ class Hoop:
         self.radius_dots = radius_dots
 
     @staticmethod
-    def create_from_image(lower, upper, image:Image, iterations=2, debug_output_path=None):
-        lower_hsv = np.array(lower)
-        upper_hsv = np.array(upper)
+    def create_from_image(hsv, image:Image, morph_iterations=0, debug_output_path=None, min_dots_radius=2, **arg):
+        lower_hsv = np.array(hsv['lower'])
+        upper_hsv = np.array(hsv['upper'])
 
         if debug_output_path is not None and debug_output_path[-1] != '/':
             debug_output_path = debug_output_path + "/"
 
         mask_hoop = cv2.inRange(image.image_hsv, lower_hsv, upper_hsv)
         Hoop._save_debug_pic(mask_hoop, 'hoop-mask', debug_output_path)
-        if iterations > 0:
-            mask_hoop = cv2.erode(mask_hoop, None, iterations=iterations)
+        if morph_iterations > 0:
+            mask_hoop = cv2.erode(mask_hoop, None, iterations=morph_iterations)
             Hoop._save_debug_pic(mask_hoop, 'hoop-mask-erode', debug_output_path)
-            mask_hoop = cv2.dilate(mask_hoop, None, iterations=iterations)
+            mask_hoop = cv2.dilate(mask_hoop, None, iterations=morph_iterations)
             Hoop._save_debug_pic(mask_hoop, 'hoop-mask-erode-dil', debug_output_path)
         cnts = cv2.findContours(mask_hoop.copy(), cv2.RETR_EXTERNAL,
                                 cv2.CHAIN_APPROX_SIMPLE)
@@ -48,7 +48,7 @@ class Hoop:
             # it to compute the minimum enclosing circle and
             # centroid
             ((x, y), radius) = cv2.minEnclosingCircle(c)
-            if radius > 3:
+            if radius >= min_dots_radius:
                 m = cv2.moments(c)
                 center_dot = [int(m["m10"] / m["m00"]), int(m["m01"] / m["m00"])]
                 dots_center.append(center_dot)

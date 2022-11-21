@@ -79,8 +79,11 @@ class Application:
             hoop_search_col = self.save_col_and_add_from_config('hoop', hoop_search_col)
             image = Image.create(self.get_cfg('hoop', 'faker_path'), wb_gains=self.local_config()['video']['wb_gains'])
             image.save('./storage/calibration/', 'hoop')
-            hoop = Hoop.create_from_image(**hoop_search_col, image=image,
-                                              iterations=1, debug_output_path='./storage/calibration/')
+            image.color_split('storage/calibration/hoop-colsplit-bgr', hoop_search_col['lower'], hoop_search_col['upper'],
+                           return_hsv=False)
+            image.color_split('storage/calibration/hoop-colsplit-hsv', hoop_search_col['lower'], hoop_search_col['upper'],
+                           return_hsv=True)
+            hoop = Hoop.create_from_image(image=image, debug_output_path='./storage/calibration/', **self.get_cfg('hoop'))
             if hoop is not None:
                 self.local_config()['hoop']['radius'] = hoop.radius
                 self.local_config()['hoop']['center'] = hoop.center
@@ -107,8 +110,7 @@ class Application:
             self.print('Save debug images to storage/calibration/')
             im.color_split('storage/calibration/ball-colsplit-bgr', ball_search_col['lower'], ball_search_col['upper'], return_hsv=False)
             im.color_split('storage/calibration/ball-colsplit-hsv', ball_search_col['lower'], ball_search_col['upper'], return_hsv=True)
-            cv2.imwrite('storage/calibration/ball-result-hsv.png', im.image_hsv)
-            cv2.imwrite('storage/calibration/ball-result-rgb.png', im.image_bgr)
+            im.save('storage/calibration', 'ball-result')
 
         self.print('=== End Calibration')
         self.save_config_to_disk()

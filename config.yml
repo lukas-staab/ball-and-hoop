@@ -77,6 +77,8 @@ rpi3:
       upper: [55, 255, 255]
     radius: 142
     radius_dots: [5, 5, 5, 5, 5]
+    min_radius_dots: 2
+    morph_iterations: 1
   network: {is_server: true, server_ip: '', server_port: 9999}
   video:
     wb_gains: [1.43, 1.63]
