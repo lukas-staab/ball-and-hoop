@@ -119,6 +119,7 @@ class Application:
         self.network = init_network(**self.get_cfg('network'))
         # get ball color from console parameters and save the new one to config - if not given get values from config
         ball_search_col = self.save_col_and_add_from_config('ball', ball_search_col)
+        self.print('Searching ball between ' + str(ball_search_col['lower']) + " and " + str(ball_search_col['upper']))
         try:
             # start network
             with self.network:
