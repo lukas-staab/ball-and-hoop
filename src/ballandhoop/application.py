@@ -130,18 +130,21 @@ class Application:
                     for frame in video:
                         # increase frame counter
                         i = i + 1
+                        # if in debugging mode save every 30th frame in this folder for that frame
+                        debug_dir_path = None
+                        if self.verbose and i % 30 == 0:
+                            debug_dir_path = './storage/debug/' + str(i) + "/"
+                            cv2.imwrite(debug_dir_path + 'raw-hsv.png', frame)
+                            # cv2 expects bgr format as default
+                            cv2.imwrite(debug_dir_path + 'raw-rgb.png', cv2.cvtColor(frame, cv2.COLOR_HSV2BGR))
+                        # normal loop:
                         # send the task to the next available thread-worker, from the pool
                         # the threads will call hoop.find_ball(frame=frame, cols=ball_search_col, iterations=0)
                         # search for the ball in the frame with the given color borders
                         pool.apply_async(hoop.find_ball,
-                                         args=(frame, ball_search_col, 0),
+                                         args=(frame, ball_search_col, 0, debug_dir_path),
                                          callback=self.network_async_callback)
                         # TODO?: callback for errors in apply_async - right now it fails silent
-                        # if in debuging mode save every 30th frame for debugging purposes
-                        if self.verbose and i % 30 == 0:
-                            cv2.imwrite('./storage/debug/' + str(i) + "-hsv.png", frame)
-                            # cv2 expects bgr format as default
-                            cv2.imwrite('./storage/debug/' + str(i) + "-rgb.png", cv2.cvtColor(frame, cv2.COLOR_HSV2BGR))
 
         except KeyboardInterrupt:
             # break potential infinite loop
