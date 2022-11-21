@@ -15,11 +15,11 @@ class Hoop:
     def __init__(self,center: list, radius: int, center_dots: list, radius_dots: list, **arg):
         self.center = center,
         # i do not know why i need this line, input is ok, self. ist not
-        self.center = self.center[0]
+        self.center = list(self.center[0])
         # end of confusion
         self.radius = int(radius)
-        self.center_dots = np.array(center_dots)
-        self.radius_dots = np.array(radius_dots)
+        self.center_dots = list(center_dots)
+        self.radius_dots = list(radius_dots)
 
     @staticmethod
     def create_from_image(hsv, image:Image, morph_iterations=0, debug_output_path=None, min_dots_radius=2, **arg):

@@ -90,7 +90,7 @@ class Application:
                 self.local_config()['hoop']['center_dots'] = hoop.center_dots
                 self.local_config()['hoop']['radius_dots'] = hoop.radius_dots
                 self.print('|-> Hoop found @ ' + str(self.get_cfg('hoop', 'center')))
-                image.plot_hoop(hoop).save('./storage/calibration/', 'hoop-result')
+                image.plot_hoop(hoop, with_dots=True).save('./storage/calibration/', 'hoop-result')
             else:
                 self.print('|-> NO HOOP FOUND! - see in storage/calibration/ for debug pictures')
         self.print('|-> Using Hoop @ ' + str(self.get_cfg('hoop', 'center')) + " with r=" +

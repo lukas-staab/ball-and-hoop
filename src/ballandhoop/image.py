@@ -33,11 +33,13 @@ class Image:
         else:
             self.image_hsv = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2HSV)
 
-    def plot_hoop(self, hoop: Hoop, color: tuple = (255, 0, 0), thickness=2):
+    def plot_hoop(self, hoop: Hoop, color: tuple = (255, 0, 0), thickness=2, with_dots=False):
         pic = cv2.circle(self.image_bgr, hoop.center, int(hoop.radius), color, thickness)
-        for i, center in enumerate(hoop.center_dots):
-            pic = cv2.circle(pic, center, hoop.radius_dots[i], color, -1)
+        if with_dots:
+            for i, center in enumerate(hoop.center_dots):
+                pic = cv2.circle(pic, center, hoop.radius_dots[i], color, -1)
         return Image(image_bgr=pic)
+
 
     def plot_ball(self, ball: Ball, color_outline: tuple = (0, 255, 0),
                   color_center: tuple = (0, 255, 0)):
