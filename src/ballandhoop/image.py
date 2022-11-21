@@ -35,6 +35,8 @@ class Image:
 
     def plot_hoop(self, hoop: Hoop, color: tuple = (255, 0, 0), thickness=2):
         pic = cv2.circle(self.image_bgr, hoop.center, int(hoop.radius), color, thickness)
+        for i, center in enumerate(hoop.center_dots):
+            pic = cv2.circle(pic, center, hoop.radius_dots[i])
         return Image(image_bgr=pic)
 
     def plot_ball(self, ball: Ball, color_outline: tuple = (0, 255, 0),
