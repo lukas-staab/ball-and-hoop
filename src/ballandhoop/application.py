@@ -3,7 +3,6 @@ import os
 import shutil
 import time
 import traceback
-from queue import Queue
 
 import cv2
 
@@ -29,6 +28,8 @@ class Application:
             self.hostname = force_hostname
         self.network = None
         self.timings = dict()
+        self.latest_frame_number = 0
+        self.result_lock = multiprocessing.Lock()
         # if debug folder exists, delete it (and its contents) and re-create a new one
         if os.path.isdir('storage/debug/'):
             shutil.rmtree('storage/debug/')
@@ -167,6 +168,8 @@ class Application:
             pass
         finally:
             video.close()
+            pool.close()
+            pool.join()
 
     def ball_search_error_callback(self, e):
         print('Error')
@@ -175,13 +178,23 @@ class Application:
     def ball_found_async_callback(self, result):
         # callback merges all return values in one parameter, so unmerge it
         frame_number, ball = result
+        # announce that you would like to do network stuff
+        self.result_lock.acquire()
         # send the ball angle result to the network
+        if frame_number <= self.latest_frame_number:
+            # frame is too old, discard
+            self.network.send(410)
+            return
+        # set new highest evaluated frame
+        self.latest_frame_number = frame_number
+        # send angle or error code, that no ball was found
         if ball is not None:
-            self.network.send(frame_number, ball.angle_in_hoop())
+            self.network.send(ball.angle_in_hoop())
         else:
-            self.network.send(frame_number, 500)
+            self.network.send(404)
         # remove time and calc how long whole frame took
         start_time = self.timings.pop(frame_number)
+        self.result_lock.release()
         self.print("Frame " + str(frame_number) + " took " + str(int((time.time() - start_time)*1000)) + "ms")
 
 
