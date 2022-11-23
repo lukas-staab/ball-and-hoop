@@ -2,6 +2,7 @@ import multiprocessing
 import os
 import shutil
 import time
+import traceback
 from queue import Queue
 
 import cv2
@@ -157,7 +158,8 @@ class Application:
                         # search for the ball in the frame with the given color borders
                         pool.apply_async(hoop.find_ball_async,
                                          args=(i, frame, ball_search_col, morph_iterations, debug_dir_path),
-                                         callback=self.network_async_callback)
+                                         callback=self.ball_found_async_callback,
+                                         error_callback=self.ball_search_error_callback)
                         # TODO?: callback for errors in apply_async - right now it fails silent
 
         except KeyboardInterrupt:
@@ -166,7 +168,10 @@ class Application:
         finally:
             video.close()
 
-    def network_async_callback(self, frame_number: int, ball: Ball):
+    def ball_search_error_callback(self, e):
+        traceback.print_exception(type(e), e, e.__traceback__)
+
+    def ball_found_async_callback(self, frame_number: int, ball: Ball):
         # send the ball angle result to the network
         if ball is not None:
             self.network.send(frame_number, ball.angle_in_hoop())
