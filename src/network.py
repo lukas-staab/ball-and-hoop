@@ -81,7 +81,7 @@ class Server(Thread):
         for s in self.sockets:
             s.close()
 
-    def send(self, val):
+    def send(self, frame_number, val):
         # make sure to have a non-negative integer val with  0 <= val < 360
         val = (int(val) + 360) % 360
         # save value history for later
@@ -113,7 +113,7 @@ class Client:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.socket.__exit__(exc_type, exc_val, exc_tb)
 
-    def send(self, msg):
+    def send(self, frame_number, msg):
         print("Sending: " + str(msg))
         self.socket.sendall(str(msg).encode())
         return self.socket.recv(1024) == b'ok'

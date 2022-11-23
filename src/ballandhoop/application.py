@@ -27,6 +27,7 @@ class Application:
             self.print('[INFO] Forcing different hostname: ' + force_hostname)
             self.hostname = force_hostname
         self.network = None
+        self.timings = dict()
         # if debug folder exists, delete it (and its contents) and re-create a new one
         if os.path.isdir('storage/debug/'):
             shutil.rmtree('storage/debug/')
@@ -140,6 +141,8 @@ class Application:
                     for frame in video:
                         # increase frame counter
                         i = i + 1
+                        # log the time of frame delivery
+                        self.timings[i] = time.time()
                         # if in debugging mode save every 30th frame in this folder for that frame
                         debug_dir_path = None
                         if self.verbose and i % 30 == 0:
@@ -152,9 +155,9 @@ class Application:
                         # send the task to the next available thread-worker, from the pool
                         # the threads will call hoop.find_ball(frame=frame, cols=ball_search_col, iterations=0)
                         # search for the ball in the frame with the given color borders
-                        pool.apply_async(self.search_ball_async,
-                                         args=(hoop, i, frame, ball_search_col, morph_iterations , debug_dir_path),
-                                         )
+                        pool.apply_async(hoop.find_ball_async,
+                                         args=(frame, ball_search_col, morph_iterations, debug_dir_path),
+                                         callback=self.network_async_callback)
                         # TODO?: callback for errors in apply_async - right now it fails silent
 
         except KeyboardInterrupt:
@@ -163,15 +166,16 @@ class Application:
         finally:
             video.close()
 
-    def search_ball_async(self, hoop : Hoop, frame_number, frame, ball_search_col, morph_iterations, debug_dir_path):
-        start_time = time.time()
-        ball = hoop.find_ball(frame, ball_search_col, morph_iterations, debug_dir_path)
+    def network_async_callback(self, frame_number, ball: Ball):
+        # send the ball angle result to the network
         if ball is not None:
-            self.network.send(ball.angle_in_hoop())
+            self.network.send(frame_number, ball.angle_in_hoop())
         else:
-            self.network.send(500)
-            print('No ball found')
-        self.print('Frame ' + str(frame_number) + ": took " + str(int((time.time() - start_time) * 1000)) + "ms")
+            self.network.send(frame_number, 500)
+        # remove time and calc how long whole frame took
+        start_time = self.timings.pop(frame_number)
+        self.print("Frame " + str(frame_number) + " took " + str(int((time.time() - start_time)*1000)) + "ms")
+
 
     def print(self, msg: str):
         if self.verbose:
