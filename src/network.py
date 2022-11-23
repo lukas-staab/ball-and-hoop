@@ -81,9 +81,11 @@ class Server(Thread):
         for s in self.sockets:
             s.close()
 
-    def send(self, val):
-        # make sure to have a non-negative integer val with  0 <= val < 360
-        val = (int(val) + 360) % 360
+    def send(self, val, is_error=False):
+        # if this is an error code do not modify its value
+        if not is_error:
+            # make sure to have a non-negative integer val with  0 <= val < 360
+            val = (int(val) + 360) % 360
         # save value history for later
         self.values['localhost']['angle'].append(val)
         self.values['localhost']['time'].append(now())
@@ -113,9 +115,12 @@ class Client:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.socket.__exit__(exc_type, exc_val, exc_tb)
 
-    def send(self, msg):
-        print("Sending: " + str(msg))
-        self.socket.sendall(str(msg).encode())
+    def send(self, val, is_error=False):
+        if not is_error:
+            # make sure to have a non-negative integer val with  0 <= val < 360
+            val = (int(val) + 360) % 360
+        print("Sending: " + str(val))
+        self.socket.sendall(str(val).encode())
         return self.socket.recv(1024) == b'ok'
 
 

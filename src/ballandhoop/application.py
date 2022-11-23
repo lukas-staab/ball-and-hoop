@@ -183,7 +183,7 @@ class Application:
             # send the ball angle result to the network
             if frame_number <= self.latest_frame_number:
                 # frame is too old, discard
-                self.network.send(410)
+                self.network.send(410, is_error=True)
                 return
             # set new highest evaluated frame
             self.latest_frame_number = frame_number
@@ -191,7 +191,7 @@ class Application:
             if ball is not None:
                 self.network.send(ball.angle_in_hoop())
             else:
-                self.network.send(404)
+                self.network.send(404, is_error=True)
             # remove time and calc how long whole frame took
             start_time = self.timings.pop(frame_number)
         self.print("Frame " + str(frame_number) + " took " + str(int((time.time() - start_time)*1000)) + "ms")
