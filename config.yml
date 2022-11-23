@@ -35,6 +35,7 @@ rpi1:
     hsv:
       lower: [45, 200, 200]
       upper: [55, 255, 255]
+    min_radius_dots: 2
     radius: 139
     radius_dots: [5, 5, 4, 5, 5]
   network: {is_server: false, server_ip: 192.168.1.103, server_port: 9999}
@@ -43,22 +44,23 @@ rpi1:
 rpi2:
   ball:
     hsv:
-      lower: [ 110, 30, 30 ]
-      upper: [ 130, 120, 120 ]
+      lower: [110, 50, 30]
+      upper: [130, 150, 120]
   hoop:
-    center: [159, 81]
+    center: [159, 87]
     center_dots:
-    - [144, 230]
-    - [273, 179]
-    - [34, 162]
+    - [122, 227]
+    - [259, 193]
+    - [28, 149]
+    - [304, 84]
     hsv:
-      lower: [ 160, 100, 50 ]
-      upper: [ 180, 200, 200 ]
-    radius: 149
-    radius_dots: [5, 5, 5]
+      lower: [160, 100, 50]
+      upper: [180, 200, 200]
+    radius: 144
+    radius_dots: [4, 3, 2, 2]
   network: {is_server: false, server_ip: 192.168.1.103, server_port: 9999}
   video:
-    wb_gains: [1.4144569518716577, 1.7191847593582887]
+    wb_gains: [1.396570053475936, 1.8325647058823529]
 rpi3:
   ball:
     hsv:
