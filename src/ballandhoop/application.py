@@ -136,40 +136,40 @@ class Application:
             # start network
             with self.network:
                 # start thread-worker pool,
-                with multiprocessing.Pool(processes=os.cpu_count()) as pool:
-                    # count the number of frames, this might be important to reconstruct original frame order
-                    i = 0
-                    # iterate over the video frames
-                    for frame in video:
-                        # increase frame counter
-                        i = i + 1
-                        # log the time of frame delivery
-                        self.timings[i] = time.time()
-                        # if in debugging mode save every 30th frame in this folder for that frame
-                        debug_dir_path = None
-                        if self.verbose and i % 30 == 0:
-                            debug_dir_path = './storage/debug/' + str(i) + "/"
-                            os.makedirs(debug_dir_path, exist_ok=True)
-                            cv2.imwrite(debug_dir_path + 'raw-hsv.png', frame)
-                            # cv2 expects bgr format as default
-                            cv2.imwrite(debug_dir_path + 'raw-rgb.png', cv2.cvtColor(frame, cv2.COLOR_HSV2BGR))
-                        # normal loop:
-                        # send the task to the next available thread-worker, from the pool
-                        # the threads will call hoop.find_ball(frame=frame, cols=ball_search_col, iterations=0)
-                        # search for the ball in the frame with the given color borders
-                        pool.apply_async(hoop.find_ball_async,
-                                         args=(i, frame, ball_search_col, morph_iterations, debug_dir_path),
-                                         callback=self.ball_found_async_callback,
-                                         error_callback=self.ball_search_error_callback)
-                        # TODO?: callback for errors in apply_async - right now it fails silent
+                pool = multiprocessing.Pool(processes=os.cpu_count())
+                # count the number of frames, this might be important to reconstruct original frame order
+                i = 0
+                # iterate over the video frames
+                for frame in video:
+                    # increase frame counter
+                    i = i + 1
+                    # log the time of frame delivery
+                    self.timings[i] = time.time()
+                    # if in debugging mode save every 30th frame in this folder for that frame
+                    debug_dir_path = None
+                    if self.verbose and i % 30 == 0:
+                        debug_dir_path = './storage/debug/' + str(i) + "/"
+                        os.makedirs(debug_dir_path, exist_ok=True)
+                        cv2.imwrite(debug_dir_path + 'raw-hsv.png', frame)
+                        # cv2 expects bgr format as default
+                        cv2.imwrite(debug_dir_path + 'raw-rgb.png', cv2.cvtColor(frame, cv2.COLOR_HSV2BGR))
+                    # normal loop:
+                    # send the task to the next available thread-worker, from the pool
+                    # the threads will call hoop.find_ball(frame=frame, cols=ball_search_col, iterations=0)
+                    # search for the ball in the frame with the given color borders
+                    pool.apply_async(hoop.find_ball_async,
+                                     args=(i, frame, ball_search_col, morph_iterations, debug_dir_path),
+                                     callback=self.ball_found_async_callback,
+                                     error_callback=self.ball_search_error_callback)
 
         except KeyboardInterrupt:
             # break potential infinite loop
             pass
         finally:
             video.close()
+            pool.terminate()
             pool.close()
-            pool.join()
+            #pool.join()
 
     def ball_search_error_callback(self, e):
         print('Error')
@@ -178,23 +178,22 @@ class Application:
     def ball_found_async_callback(self, result):
         # callback merges all return values in one parameter, so unmerge it
         frame_number, ball = result
-        # announce that you would like to do network stuff
-        self.result_lock.acquire()
-        # send the ball angle result to the network
-        if frame_number <= self.latest_frame_number:
-            # frame is too old, discard
-            self.network.send(410)
-            return
-        # set new highest evaluated frame
-        self.latest_frame_number = frame_number
-        # send angle or error code, that no ball was found
-        if ball is not None:
-            self.network.send(ball.angle_in_hoop())
-        else:
-            self.network.send(404)
-        # remove time and calc how long whole frame took
-        start_time = self.timings.pop(frame_number)
-        self.result_lock.release()
+        # announce that you would like to do network stuff, and reserve the resources
+        with self.result_lock:
+            # send the ball angle result to the network
+            if frame_number <= self.latest_frame_number:
+                # frame is too old, discard
+                self.network.send(410)
+                return
+            # set new highest evaluated frame
+            self.latest_frame_number = frame_number
+            # send angle or error code, that no ball was found
+            if ball is not None:
+                self.network.send(ball.angle_in_hoop())
+            else:
+                self.network.send(404)
+            # remove time and calc how long whole frame took
+            start_time = self.timings.pop(frame_number)
         self.print("Frame " + str(frame_number) + " took " + str(int((time.time() - start_time)*1000)) + "ms")
 
 
