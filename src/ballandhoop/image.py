@@ -19,7 +19,7 @@ class Image:
     def __init__(self, image_bgr=None, image_hsv=None, image_bw=None):
         self.image_bgr = None
         self.image_hsv = None
-        self.image_bw = None
+        self.image_bw = image_bw
         if image_bgr is None and image_hsv is None and image_bw is None:
             raise Exception('Cannot work with empty/none image')
         if image_bw is None:
@@ -101,7 +101,7 @@ class Image:
             dir_path = dir_path + "/"
         os.makedirs(dir_path, exist_ok=True)
         # hsv has to be BGR2RGB converted, so the RGB result in png will be in correct order, open cv expects BGR
-        if self.image_bw is None:
+        if self.image_bgr is not None and self.image_hsv is not None:
             cv2.imwrite(dir_path + filename + "-hsv.png", cv2.cvtColor(self.image_hsv, cv2.COLOR_RGB2BGR))
             cv2.imwrite(dir_path + filename + "-rgb.png", self.image_bgr)
         else:
