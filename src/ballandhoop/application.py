@@ -156,7 +156,7 @@ class Application:
                         # the threads will call hoop.find_ball(frame=frame, cols=ball_search_col, iterations=0)
                         # search for the ball in the frame with the given color borders
                         pool.apply_async(hoop.find_ball_async,
-                                         args=(frame, ball_search_col, morph_iterations, debug_dir_path),
+                                         args=(i, frame, ball_search_col, morph_iterations, debug_dir_path),
                                          callback=self.network_async_callback)
                         # TODO?: callback for errors in apply_async - right now it fails silent
 
@@ -166,7 +166,7 @@ class Application:
         finally:
             video.close()
 
-    def network_async_callback(self, frame_number, ball: Ball):
+    def network_async_callback(self, frame_number: int, ball: Ball):
         # send the ball angle result to the network
         if ball is not None:
             self.network.send(frame_number, ball.angle_in_hoop())
