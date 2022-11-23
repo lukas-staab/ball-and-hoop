@@ -2,6 +2,7 @@ import multiprocessing
 import os
 import shutil
 import time
+from queue import Queue
 
 import cv2
 
@@ -26,7 +27,7 @@ class Application:
             self.print('[INFO] Forcing different hostname: ' + force_hostname)
             self.hostname = force_hostname
         self.network = None
-        self.times = []
+        self.times = Queue()
         # if debug folder exists, delete it (and its contents) and re-create a new one
         if os.path.isdir('storage/debug/'):
             shutil.rmtree('storage/debug/')
@@ -137,7 +138,7 @@ class Application:
                     for frame in video:
                         # increase frame counter
                         i = i + 1
-                        self.times.append(time.time())
+                        self.times.put(time.time())
                         # if in debugging mode save every 30th frame in this folder for that frame
                         debug_dir_path = None
                         if self.verbose and i % 30 == 0:
@@ -163,7 +164,7 @@ class Application:
 
     def network_async_callback(self, ball: Ball):
         # send the ball angle result to the network
-        start = self.times.pop()
+        start = self.times.get()
         end = time.time()
         print(end - start)
         if ball is not None:
