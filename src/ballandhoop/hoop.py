@@ -71,7 +71,8 @@ class Hoop:
         return math.atan2(x, y) / math.pi * 180
 
     def find_ball_async(self, frame_number, frame, cols, iterations=2, dir_path=None):
-        return frame_number, self.find_ball(frame, cols, iterations, dir_path)
+        ball = self.find_ball(frame, cols, iterations, dir_path)
+        return frame_number, ball
 
     def find_ball(self, frame, cols: dict, iterations=2, dir_path=None):
         mask_ball = cv2.inRange(frame, np.array(cols['lower']), np.array(cols['upper']))
