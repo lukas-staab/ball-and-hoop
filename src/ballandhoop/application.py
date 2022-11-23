@@ -172,7 +172,9 @@ class Application:
         print('Error')
         traceback.print_exception(type(e), e, e.__traceback__)
 
-    def ball_found_async_callback(self, frame_number: int, ball: Ball):
+    def ball_found_async_callback(self, result):
+        # callback merges all return values in one parameter, so unmerge it
+        frame_number, ball = result
         # send the ball angle result to the network
         if ball is not None:
             self.network.send(frame_number, ball.angle_in_hoop())
