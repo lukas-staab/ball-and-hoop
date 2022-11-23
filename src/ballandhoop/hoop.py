@@ -12,7 +12,7 @@ from src.ballandhoop import helper, Ball, Image
 
 class Hoop:
 
-    def __init__(self,center: list, radius: int, center_dots: list, radius_dots: list, **kwargs):
+    def __init__(self,center: list, radius: int, center_dots: list, radius_dots: list, angle_offset=0, **kwargs):
         self.center = center,
         # i do not know why i need this line, input is ok, self. ist not
         self.center = list(self.center[0])
@@ -20,6 +20,7 @@ class Hoop:
         self.radius = int(radius)
         self.center_dots = list(center_dots)
         self.radius_dots = list(radius_dots)
+        self.angle_offset = angle_offset
 
     @staticmethod
     def create_from_image(hsv, image:Image, morph_iterations=0, debug_output_path=None, min_dots_radius=2, **kwargs):
@@ -30,12 +31,12 @@ class Hoop:
             debug_output_path = debug_output_path + "/"
 
         mask_hoop = cv2.inRange(image.image_hsv, lower_hsv, upper_hsv)
-        Hoop._save_debug_pic(mask_hoop, 'hoop-mask', debug_output_path)
+        Image(image_bw=mask_hoop).save(debug_output_path, 'hoop-mask')
         if morph_iterations > 0:
             mask_hoop = cv2.erode(mask_hoop, None, iterations=morph_iterations)
-            Hoop._save_debug_pic(mask_hoop, 'hoop-mask-erode', debug_output_path)
+            Image(image_bw=mask_hoop).save(debug_output_path, 'hoop-mask-erode')
             mask_hoop = cv2.dilate(mask_hoop, None, iterations=morph_iterations)
-            Hoop._save_debug_pic(mask_hoop, 'hoop-mask-erode-dil', debug_output_path)
+            Image(image_bw=mask_hoop).save(debug_output_path, 'hoop-mask-erode-dil')
         cnts = cv2.findContours(mask_hoop.copy(), cv2.RETR_EXTERNAL,
                                 cv2.CHAIN_APPROX_SIMPLE)
         cnts = imutils.grab_contours(cnts)
@@ -62,7 +63,7 @@ class Hoop:
     def angle_in_hoop(self, p: tuple):
         v1 = np.array((0, -self.radius))
         v2 = np.array(p) - np.array(self.center)
-        return self.angle_of_vectors(v1, v2)
+        return self.angle_of_vectors(v1, v2) + self.angle_offset
 
     @staticmethod
     def angle_of_vectors(v1, v2):

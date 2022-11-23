@@ -7,5 +7,5 @@ class Ball:
         self.center = tuple(center)
         self.radius = int(radius)
 
-    def angle_in_hoop(self):
+    def angle(self):
         return self.hoop.angle_in_hoop(self.center)

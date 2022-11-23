@@ -162,9 +162,6 @@ class Application:
                                      args=(i, frame, self.local_config()['ball'], debug_dir_path),
                                      callback=self.ball_found_async_callback,
                                      error_callback=self.ball_search_error_callback)
-                    time.sleep(0.2)
-                    if i > 10:
-                        video.close()
         except KeyboardInterrupt:
             # break potential infinite loop
             pass
@@ -193,7 +190,7 @@ class Application:
             self.latest_frame_number = frame_number
             # send angle or error code, that no ball was found
             if ball is not None:
-                self.network.send(ball.angle_in_hoop())
+                self.network.send(ball.angle())
             else:
                 self.network.send(self.network.NOT_FOUND)
             # remove time and calc how long whole frame took

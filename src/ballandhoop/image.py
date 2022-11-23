@@ -95,6 +95,8 @@ class Image:
         return Image(image_bgr=pic)
 
     def save(self, dir_path, filename="image"):
+        if dir_path is None:
+            return
         if dir_path[-1] != "/":
             dir_path = dir_path + "/"
         os.makedirs(dir_path, exist_ok=True)
