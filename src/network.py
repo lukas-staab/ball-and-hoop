@@ -10,18 +10,50 @@ import yaml
 from src.serial import SerialCom
 
 
-class Server(Thread):
-    def __init__(self, server_ip, server_port, serial_conf, print_debug=False):
-        super().__init__()
-        self.daemon = True  # kill it with parent
+class NetworkInterface():
+    def __init__(self, send_errors: bool = True, precision: int = 360, message_bytes: int = 2):
+        self.precision = int(precision)
+        self.send_errors = send_errors
+        self.message_bytes = message_bytes
+
+        # 10 values are reserved for Errors
+        self.max_precision = 2 ** (8 * message_bytes)
+        if precision + 10 > self.max_precision:
+            raise ArithmeticError('Not enough message_bytes to fulfill precision')
+
+        self.NOT_FOUND = self.max_precision - 1
+        self.WRONG_ORDER = self.max_precision - 2
+        self.ERROR = self.max_precision - 3
+        self.LOST_CONNECTION = self.max_precision - 4
+
+    def preprocess_message(self, data: float | int ) -> (int, bool):
+        if data >= self.max_precision - 10:
+            # this is an error code
+            if self.send_errors:
+                return data, True
+        # rescale data, if needed
+        if self.precision != 360:
+            data = int(data / 360.0 * self.precision)
+        # shift negative values
+        return int((data + self.precision) % self.precision), False
+
+    def send(self, val):
+        raise Exception('Has to be overwritten by child class')
+
+
+class Server(Thread, NetworkInterface):
+    def __init__(self, server_ip, server_port, serial, print_debug=False, **kwargs):
+        NetworkInterface.__init__(self, **kwargs)
+        Thread.__init__(self, daemon=True)  # init Thread, deamon=True: kill it if parent tread is killed
         self.server_ip = server_ip
         self.server_port = server_port
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sockets = []
         self.interrupt = threading.Event()
+        self.write_value_lock = threading.Lock()
         self.print_debug = print_debug
-        self.serial = SerialCom(verbose=print_debug, **serial_conf)
+        self.serial = SerialCom(verbose=print_debug, message_bytes=self.message_bytes, **serial)
         self.values = {'localhost': {'angle': [], 'time': []}}
         print('Init Server')
 
@@ -54,10 +86,11 @@ class Server(Thread):
                         data = s.recv(1024)
                         if data:
                             self.print(str(addr(s)) + ":" + str(float(data)))
-                            self.values[addr(s)]['angle'].append(float(data))
-                            self.values[addr(s)]['time'].append(now())
                             # generic answer for each client, message confirmed
                             s.sendall('ok'.encode())
+                            # save values for later
+                            data, is_error = self.preprocess_message(data)
+                            self.save_values(data, addr(s), is_error=is_error)
                         else:
                             s.close()
                             self.sockets.remove(s)
@@ -81,17 +114,26 @@ class Server(Thread):
         for s in self.sockets:
             s.close()
 
-    def send(self, val, is_error=False):
-        # if this is an error code do not modify its value
-        if not is_error:
-            # make sure to have a non-negative integer val with  0 <= val < 360
-            val = (int(val) + 360) % 360
-        # save value history for later
-        self.values['localhost']['angle'].append(val)
-        self.values['localhost']['time'].append(now())
-        # TODO: do not only send the server values but a average or so
-        self.serial.write(val)
-        pass
+    def save_values(self, data, source, is_error:bool):
+        with self.write_value_lock:
+            self.values[source]['time'].append(now())
+            if is_error:
+                self.values[source]['error'].append(data - self.max_precision + 10)
+                self.values[source]['angle'].append(self.values[source]['angle'][-1])
+            else:
+                self.values[source]['angle'].append(int(data))
+                self.values[source]['error'].append(0)
+
+    def latest_values(self):
+        with self.write_value_lock:
+            return []
+    def send(self, val):
+        val, is_error = self.preprocess_message(val)
+        if not is_error or (is_error and self.send_errors):
+            # save value history for later
+            self.save_values(val, 'localhost', is_error=is_error)
+            vals = self.latest_values()
+            self.serial.write(vals)
 
     def print(self, msg):
         """ Helper method which suppresses debug output if not configured """
@@ -99,14 +141,15 @@ class Server(Thread):
             print(msg)
 
 
-class Client:
+class Client(NetworkInterface):
 
     def __enter__(self):
         self.socket.__enter__()
         self.socket.connect((self.server_ip, self.server_port))
         return self
 
-    def __init__(self, server_ip, server_port):
+    def __init__(self, server_ip, server_port, **kwargs):
+        NetworkInterface.__init__(self, **kwargs)
         self.server_ip = server_ip
         self.server_port = server_port
         print('Verbindungsaubau zu: ' + str(self.server_ip) + ':' + str(self.server_port))
@@ -115,22 +158,22 @@ class Client:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.socket.__exit__(exc_type, exc_val, exc_tb)
 
-    def send(self, val, is_error=False):
-        if not is_error:
-            # make sure to have a non-negative integer val with  0 <= val < 360
-            val = (int(val) + 360) % 360
-        print("Sending: " + str(val))
-        self.socket.sendall(str(val).encode())
-        return self.socket.recv(1024) == b'ok'
+    def send(self, val):
+        val, is_error = self.preprocess_message(val)
+        if not is_error or (is_error and self.send_errors):
+            print("Sending: " + str(val))
+            self.socket.sendall(str(val).encode())
+            return self.socket.recv(1024) == b'ok'
+        return False
 
 
-def init_network(is_server: bool, server_ip: str, server_port: int, serial, print_debug: bool = False):
+def init_network(is_server: bool, server_ip: str, server_port: int = 9999, **kwargs) -> NetworkInterface:
     """ This function is a wrapper for dynamic construction of the Client or Server Class depending on the config
     file, some parameters are only relevant in a server context """
     if is_server:
-        return Server(server_ip, server_port, print_debug=print_debug, serial_conf=serial)
+        return Server(server_ip, server_port, **kwargs)
     else:
-        return Client(server_ip, server_port)
+        return Client(server_ip, server_port, **kwargs)
 
 
 def addr(s: socket.socket):
@@ -138,4 +181,4 @@ def addr(s: socket.socket):
 
 
 def now():
-    return int((datetime.datetime.utcnow().timestamp() % 100) * 1_000_000)
+    return int((datetime.datetime.now().timestamp() % 10_000) * 1_000)

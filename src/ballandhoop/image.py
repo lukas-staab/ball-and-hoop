@@ -15,7 +15,6 @@ from src.chessboard import utils
 class Image:
     camera_matrix = None
     dist_matrix = None
-    instance_number = 0
 
     def __init__(self, image_bgr=None, image_hsv=None, debug_path: str = None):
         self.image_bgr = None
@@ -98,7 +97,8 @@ class Image:
         if dir_path[-1] != "/":
             dir_path = dir_path + "/"
         os.makedirs(dir_path, exist_ok=True)
-        cv2.imwrite(dir_path + filename + "-hsv.png", self.image_hsv)
+        # hsv has to be BGR2RGB converted, so the RGB result in png will be in correct order, open cv expects BGR
+        cv2.imwrite(dir_path + filename + "-hsv.png", cv2.cvtColor(self.image_hsv, cv2.COLOR_RGB2BGR))
         cv2.imwrite(dir_path + filename + "-rgb.png", self.image_bgr)
 
     def color_split(self, dir_path, hsv_lower_bound, hsv_upper_bound, return_hsv=False):
@@ -108,7 +108,8 @@ class Image:
         os.makedirs(dir_path, exist_ok=True)
         source_pic = self.image_bgr
         if return_hsv:
-            source_pic = self.image_hsv
+            # hsv has to be BGR2RGB converted, so the RGB result in png will be in correct order, open cv expects BGR
+            source_pic = cv2.cvtColor(self.image_hsv, cv2.COLOR_RGB2BGR)
 
         hsv_lower_bound = np.array(hsv_lower_bound)
         hsv_upper_bound = np.array(hsv_upper_bound)

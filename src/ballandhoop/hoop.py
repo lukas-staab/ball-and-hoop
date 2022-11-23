@@ -12,7 +12,7 @@ from src.ballandhoop import helper, Ball, Image
 
 class Hoop:
 
-    def __init__(self,center: list, radius: int, center_dots: list, radius_dots: list, **arg):
+    def __init__(self,center: list, radius: int, center_dots: list, radius_dots: list, **kwargs):
         self.center = center,
         # i do not know why i need this line, input is ok, self. ist not
         self.center = list(self.center[0])
@@ -22,7 +22,7 @@ class Hoop:
         self.radius_dots = list(radius_dots)
 
     @staticmethod
-    def create_from_image(hsv, image:Image, morph_iterations=0, debug_output_path=None, min_dots_radius=2, **arg):
+    def create_from_image(hsv, image:Image, morph_iterations=0, debug_output_path=None, min_dots_radius=2, **kwargs):
         lower_hsv = np.array(hsv['lower'])
         upper_hsv = np.array(hsv['upper'])
 
@@ -70,36 +70,44 @@ class Hoop:
         y = np.dot(v1, v2)
         return math.atan2(x, y) / math.pi * 180
 
-    def find_ball_async(self, frame_number, frame, cols, iterations=2, dir_path=None):
-        ball = self.find_ball(frame, cols, iterations, dir_path)
+    def find_ball_async(self, frame_number, frame, ball_config, dir_path=None):
+        ball = self.find_ball(frame, **ball_config, dir_path=dir_path)
         return frame_number, ball
 
-    def find_ball(self, frame, cols: dict, iterations=2, dir_path=None):
-        mask_ball = cv2.inRange(frame, np.array(cols['lower']), np.array(cols['upper']))
+    def find_ball(self, frame, hsv, morph_iterations=1, min_radius=5, max_radius=20, dir_path=None, **kwargs):
+        mask_ball = cv2.inRange(frame, np.array(hsv['lower']), np.array(hsv['upper']))
         self.save_debug_pic(mask_ball, 'ball-mask', dir_path)
-        if iterations is None or iterations > 0:
-            mask_ball = cv2.dilate(mask_ball, None, iterations=iterations)
+        if morph_iterations > 0:
+            mask_ball = cv2.dilate(mask_ball, None, iterations=morph_iterations)
             self.save_debug_pic(mask_ball, 'ball-mask-dil', dir_path)
-            mask_ball = cv2.erode(mask_ball, None, iterations=iterations)
+            mask_ball = cv2.erode(mask_ball, None, iterations=morph_iterations)
             self.save_debug_pic(mask_ball, 'ball-mask-dil-erode', dir_path)
         cnts = cv2.findContours(mask_ball.copy(), cv2.RETR_EXTERNAL,
                                 cv2.CHAIN_APPROX_SIMPLE)
-        cnts = imutils.grab_contours(cnts)
+        # this function only wraps the different opencv signatures, it does nothing else
+        cnts = list(imutils.grab_contours(cnts))
+        # if there are no contours in the picture, return no ball found
         if len(cnts) == 0:
             # cv2.imshow('debug', hsv)
             # time.sleep(5)
             return None
-        # find the largest contour in the mask, then use
-        # it to compute the minimum enclosing circle and
-        # centroid
-        c = max(cnts, key=cv2.contourArea)
-        ((x, y), radius) = cv2.minEnclosingCircle(c)
-        m = cv2.moments(c)
-        center_ball = (int(m["m10"] / m["m00"]), int(m["m01"] / m["m00"]))
-        ball = Ball(self, center_ball, int(radius))
-        if ball.radius < 8:
-            # if found ball is too small, it is probably not a real ball but noise
-            return None
+        # sort contours in the mask by area, then try if the
+        #  minimum enclosing circle is fitting in the ball radius range
+        cnts = sorted(cnts, key=cv2.contourArea, reverse=True)
+
+        ball = None
+        for c in cnts:
+            ((x, y), radius) = cv2.minEnclosingCircle(c)
+            if radius < min_radius or radius > max_radius:
+                # skip this entry if to big or too small
+                continue
+            # otherwise continue with the calculation
+            m = cv2.moments(c)
+            center_ball = (int(m["m10"] / m["m00"]), int(m["m01"] / m["m00"]))
+            ball = Ball(self, center_ball, int(radius))
+            # keep the first fitting ball and do not loop further
+            break
+
         if dir_path is not None:
             # save a result picture if debug dir path is set
             Image(image_hsv=frame)\
@@ -107,6 +115,7 @@ class Hoop:
                 .plot_ball(ball)\
                 .plot_angle(self, ball)\
                 .save(dir_path, 'result')
+        # returns None if there was no valid contour in the list, the first found ball otherwise
         return ball
 
     def save_debug_pic(self, img, name, dir_path):

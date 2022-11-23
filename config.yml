@@ -19,8 +19,7 @@ lyoga:
     is_server: true
     serial: {active: false, baud: 9600, com: /dev/serial0}
     server_ip: 127.0.0.1
-    server_port: 9999
-  video:
+  camera:
     faker_path: fetch/rpi3.lan/faker/runtest
     wb_gains: [1.4144569518716577, 1.7191847593582887]
 rpi1:
@@ -42,8 +41,8 @@ rpi1:
     min_radius_dots: 2
     radius: 139
     radius_dots: [5, 5, 4, 5, 5]
-  network: {is_server: false, server_ip: 192.168.1.103, server_port: 9999}
-  video:
+  network: {is_server: false, server_ip: 192.168.1.103}
+  camera:
     wb_gains: [1.4144569518716577, 1.7191847593582887]
 rpi2:
   ball:
@@ -63,13 +62,16 @@ rpi2:
     radius: 144
     radius_dots: [4, 3, 2, 2]
   network: {is_server: false, server_ip: 192.168.1.103, server_port: 9999}
-  video:
+  camera:
     wb_gains: [1.396570053475936, 1.8325647058823529]
 rpi3:
   ball:
     hsv:
       lower: [110, 30, 30]
       upper: [130, 120, 120]
+    max_radius: 20
+    min_radius: 5
+    morph_iterations: 1
   hoop:
     center: [144, 78]
     center_dots:
@@ -86,8 +88,10 @@ rpi3:
     radius_dots: [3, 2, 2, 3]
   network:
     is_server: true
-    serial: {active: true, baud: 9600, com: /dev/serial0}
+    serial: {active: true, baud: 9600, com: /dev/serial0, send_mode: 1}
     server_ip: ''
-    server_port: 9999
-  video:
+    send_errors: True
+    message_bytes: 2
+
+  camera:
     wb_gains: [1.43, 1.63]
