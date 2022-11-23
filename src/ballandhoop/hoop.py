@@ -76,12 +76,12 @@ class Hoop:
 
     def find_ball(self, frame, hsv, morph_iterations=1, min_radius=5, max_radius=20, dir_path=None, **kwargs):
         mask_ball = cv2.inRange(frame, np.array(hsv['lower']), np.array(hsv['upper']))
-        self.save_debug_pic(mask_ball, 'ball-mask', dir_path)
+        Image(image_bw=mask_ball).save(dir_path, 'ball-mask')
         if morph_iterations > 0:
             mask_ball = cv2.dilate(mask_ball, None, iterations=morph_iterations)
-            self.save_debug_pic(mask_ball, 'ball-mask-dil', dir_path)
+            Image(image_bw=mask_ball).save(dir_path, 'ball-mask-dil')
             mask_ball = cv2.erode(mask_ball, None, iterations=morph_iterations)
-            self.save_debug_pic(mask_ball, 'ball-mask-dil-erode', dir_path)
+            Image(image_bw=mask_ball).save(dir_path, 'ball-mask-dil-erode')
         cnts = cv2.findContours(mask_ball.copy(), cv2.RETR_EXTERNAL,
                                 cv2.CHAIN_APPROX_SIMPLE)
         # this function only wraps the different opencv signatures, it does nothing else
@@ -117,17 +117,3 @@ class Hoop:
                 .save(dir_path, 'result')
         # returns None if there was no valid contour in the list, the first found ball otherwise
         return ball
-
-    def save_debug_pic(self, img, name, dir_path):
-        Hoop._save_debug_pic(img, name, dir_path)
-
-    @staticmethod
-    def _save_debug_pic(img, name, dir_path):
-        if dir_path is None:
-            return
-        if not name.endswith(".png"):
-            name = name + ".png"
-        if not dir_path.endswith('/'):
-            dir_path = dir_path + "/"
-        os.makedirs(dir_path, exist_ok=True)
-        cv2.imwrite(dir_path + name, img)

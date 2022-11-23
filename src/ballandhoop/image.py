@@ -16,21 +16,22 @@ class Image:
     camera_matrix = None
     dist_matrix = None
 
-    def __init__(self, image_bgr=None, image_hsv=None, debug_path: str = None):
+    def __init__(self, image_bgr=None, image_hsv=None, image_bw=None):
         self.image_bgr = None
         self.image_hsv = None
-        if image_bgr is None and image_hsv is None:
+        self.image_bw = None
+        if image_bgr is None and image_hsv is None and image_bw is None:
             raise Exception('Cannot work with empty/none image')
+        if image_bw is None:
+            if image_bgr is not None:
+                self.image_bgr = image_bgr
+            else:
+                self.image_bgr = cv2.cvtColor(image_hsv, cv2.COLOR_HSV2BGR)
 
-        if image_bgr is not None:
-            self.image_bgr = image_bgr
-        else:
-            self.image_bgr = cv2.cvtColor(image_hsv, cv2.COLOR_HSV2BGR)
-
-        if image_hsv is not None:
-            self.image_hsv = image_hsv
-        else:
-            self.image_hsv = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2HSV)
+            if image_hsv is not None:
+                self.image_hsv = image_hsv
+            else:
+                self.image_hsv = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2HSV)
 
     def plot_hoop(self, hoop: Hoop, color: tuple = (255, 0, 0), thickness=2, with_dots=False):
         pic = cv2.circle(self.image_bgr, hoop.center, int(hoop.radius), color, thickness)
@@ -98,8 +99,11 @@ class Image:
             dir_path = dir_path + "/"
         os.makedirs(dir_path, exist_ok=True)
         # hsv has to be BGR2RGB converted, so the RGB result in png will be in correct order, open cv expects BGR
-        cv2.imwrite(dir_path + filename + "-hsv.png", cv2.cvtColor(self.image_hsv, cv2.COLOR_RGB2BGR))
-        cv2.imwrite(dir_path + filename + "-rgb.png", self.image_bgr)
+        if self.image_bw is None:
+            cv2.imwrite(dir_path + filename + "-hsv.png", cv2.cvtColor(self.image_hsv, cv2.COLOR_RGB2BGR))
+            cv2.imwrite(dir_path + filename + "-rgb.png", self.image_bgr)
+        else:
+            cv2.imwrite(dir_path + filename + ".png", self.image_bw)
 
     def color_split(self, dir_path, hsv_lower_bound, hsv_upper_bound, return_hsv=False):
         """ This method generates multiple pictures to separate different colored parts of the """
