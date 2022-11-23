@@ -18,7 +18,7 @@ class VideoStream:
         3: cv2.ROTATE_90_COUNTERCLOCKWISE,
     }
 
-    def __init__(self, resolution_no=2, framerate=30, rotation=0, as_hsv=True, wb_gains=None, faker_path=None):
+    def __init__(self, resolution_no=2, framerate=30, rotation=0, as_hsv=True, wb_gains=None, faker_path=None, **arg):
         resolution = self.resolutions[resolution_no]
         # initialize the camera and stream
         self.is_faked = faker_path is not None
