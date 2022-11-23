@@ -11,7 +11,7 @@ from src.serial import SerialCom
 
 
 class Server(Thread):
-    def __init__(self, server_ip, server_port, print_debug=False, use_serial=False):
+    def __init__(self, server_ip, server_port, serial_conf, print_debug=False):
         super().__init__()
         self.daemon = True  # kill it with parent
         self.server_ip = server_ip
@@ -21,7 +21,7 @@ class Server(Thread):
         self.sockets = []
         self.interrupt = threading.Event()
         self.print_debug = print_debug
-        self.serial = SerialCom(verbose=print_debug, use_serial=use_serial)
+        self.serial = SerialCom(verbose=print_debug, **serial_conf)
         self.values = {'localhost': {'angle': [], 'time': []}}
         print('Init Server')
 
@@ -124,11 +124,11 @@ class Client:
         return self.socket.recv(1024) == b'ok'
 
 
-def init_network(is_server: bool, server_ip: str, server_port: int, use_serial: bool = True, print_debug: bool = False):
+def init_network(is_server: bool, server_ip: str, server_port: int, serial, print_debug: bool = False):
     """ This function is a wrapper for dynamic construction of the Client or Server Class depending on the config
     file, some parameters are only relevant in a server context """
     if is_server:
-        return Server(server_ip, server_port, print_debug=print_debug, use_serial=use_serial)
+        return Server(server_ip, server_port, print_debug=print_debug, serial_conf=serial)
     else:
         return Client(server_ip, server_port)
 

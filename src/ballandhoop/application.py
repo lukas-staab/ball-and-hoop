@@ -103,9 +103,9 @@ class Application:
             self.print('|-> searching for ball / Testing color')
             ball_search_col = self.save_col_and_add_from_config('ball', ball_search_col)
             hoop = Hoop(**self.get_cfg('hoop'))
-            pic = helper.get_hsv_picture(self.get_cfg('hoop', 'faker_path'), self.local_config()['video']['wb_gains'])
-            ball = hoop.find_ball(frame=pic, cols=ball_search_col, iterations=1, dir_path='storage/calibration/')
-            im = Image(image_hsv=pic)
+            im = Image.create(self.get_cfg('hoop', 'faker_path'), self.local_config()['video']['wb_gains'])
+            im.save('storage/calibration', 'ball')
+            ball = hoop.find_ball(frame=im.image_hsv, cols=ball_search_col, iterations=1, dir_path='storage/calibration/')
             if ball is not None:
                 self.print("|-> Ball found @ " + str(ball.center) + " with r=" + str(ball.radius))
                 im = im.plot_ball(ball)
@@ -137,7 +137,7 @@ class Application:
             with self.network:
                 # start thread-worker pool,
                 pool = multiprocessing.Pool(processes=os.cpu_count())
-                # count the number of frames, this might be important to reconstruct original frame order
+                # count the number of frames, this will be important to reconstruct original frame order
                 i = 0
                 # iterate over the video frames
                 for frame in video:
