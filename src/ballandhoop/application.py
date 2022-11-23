@@ -169,6 +169,7 @@ class Application:
             video.close()
 
     def ball_search_error_callback(self, e):
+        print('Error')
         traceback.print_exception(type(e), e, e.__traceback__)
 
     def ball_found_async_callback(self, frame_number: int, ball: Ball):

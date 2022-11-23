@@ -76,7 +76,7 @@ class Hoop:
     def find_ball(self, frame, cols: dict, iterations=2, dir_path=None):
         mask_ball = cv2.inRange(frame, np.array(cols['lower']), np.array(cols['upper']))
         self.save_debug_pic(mask_ball, 'ball-mask', dir_path)
-        if iterations > 0:
+        if iterations is None or iterations > 0:
             mask_ball = cv2.dilate(mask_ball, None, iterations=iterations)
             self.save_debug_pic(mask_ball, 'ball-mask-dil', dir_path)
             mask_ball = cv2.erode(mask_ball, None, iterations=iterations)
