@@ -26,9 +26,9 @@ def get_bgr_picture(faker_path:str = None, wb_gains=None):
         return output.array
 
 
-def get_hsv_picture(faker_path:str = None):
+def get_hsv_picture(faker_path:str = None, wb_gains=None):
     """ See @get_bgr_picture - but transformed to HLS Colors """
-    return cv2.cvtColor(get_bgr_picture(faker_path), cv2.COLOR_BGR2HSV)
+    return cv2.cvtColor(get_bgr_picture(faker_path, wb_gains=wb_gains), cv2.COLOR_BGR2HSV)
 
 def reset_content_of_dir(dir_name : str):
     if os.path.exists(dir_name):

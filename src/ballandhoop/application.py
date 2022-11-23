@@ -99,7 +99,7 @@ class Application:
             self.print('|-> searching for ball / Testing color')
             ball_search_col = self.save_col_and_add_from_config('ball', ball_search_col)
             hoop = Hoop(**self.get_cfg('hoop'))
-            pic = helper.get_hsv_picture(self.get_cfg('hoop', 'faker_path'))
+            pic = helper.get_hsv_picture(self.get_cfg('hoop', 'faker_path'), self.local_config()['video']['wb_gains'])
             ball = hoop.find_ball(frame=pic, cols=ball_search_col, iterations=1, dir_path='storage/calibration/')
             im = Image(image_hsv=pic)
             if ball is not None:
