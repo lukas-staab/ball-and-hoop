@@ -43,8 +43,8 @@ rpi1:
 rpi2:
   ball:
     hsv:
-      lower: [110, 40, 0]
-      upper: [150, 100, 75]
+      lower: [ 110, 30, 30 ]
+      upper: [ 130, 120, 120 ]
   hoop:
     center: [159, 81]
     center_dots:
@@ -52,8 +52,8 @@ rpi2:
     - [273, 179]
     - [34, 162]
     hsv:
-      lower: [45, 200, 200]
-      upper: [55, 255, 255]
+      lower: [ 160, 100, 50 ]
+      upper: [ 180, 200, 200 ]
     radius: 149
     radius_dots: [5, 5, 5]
   network: {is_server: false, server_ip: 192.168.1.103, server_port: 9999}

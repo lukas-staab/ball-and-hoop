@@ -166,10 +166,11 @@ class Application:
             # break potential infinite loop
             pass
         finally:
+            print('Closing resources, worker and so on')
             video.close()
             pool.terminate()
             pool.close()
-            #pool.join()
+            # pool.join()
 
     def ball_search_error_callback(self, e):
         print('Error')
