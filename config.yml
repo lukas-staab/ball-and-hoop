@@ -25,7 +25,7 @@ lyoga:
 rpi1:
   ball:
     hsv:
-      lower: [ 110, 90, 50 ]
+      lower: [ 110, 40, 40 ]
       upper: [ 130, 120, 120 ]
     max_radius: 20
     min_radius: 5
@@ -60,7 +60,7 @@ rpi2:
   camera:
     wb_gains: [1.396570053475936, 1.8325647058823529]
   hoop:
-    angle_offset: 120
+    angle_offset: -8
     center: [159, 87]
     center_dots:
     - [122, 227]
@@ -76,7 +76,7 @@ rpi2:
 rpi3:
   ball:
     hsv:
-      lower: [110, 90, 50]
+      lower: [110, 50, 50]
       upper: [130, 120, 120]
     max_radius: 20
     min_radius: 5
