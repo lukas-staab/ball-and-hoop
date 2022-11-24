@@ -145,8 +145,9 @@ class Application:
                     i = i + 1
                     # log the time of frame delivery
                     self.timings[i] = time.time()
-                    # if in debugging mode save every 30th frame in this folder for that frame
+
                     debug_dir_path = None
+                    # if in debugging mode save every 30th frame in this folder for that frame
                     if self.verbose and i % 30 == 0:
                         debug_dir_path = './storage/debug/' + str(i) + "/"
                         os.makedirs(debug_dir_path, exist_ok=True)
