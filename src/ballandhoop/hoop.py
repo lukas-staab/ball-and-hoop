@@ -20,7 +20,8 @@ class Hoop:
         self.radius = int(radius)
         self.center_dots = list(center_dots)
         self.radius_dots = list(radius_dots)
-        self.angle_offset = angle_offset
+        self.angle_offset = int(angle_offset)
+        print("Offset: " + str(self.angle_offset))
 
     @staticmethod
     def create_from_image(hsv, image:Image, morph_iterations=0, debug_output_path=None, min_dots_radius=2, **kwargs):
@@ -61,7 +62,7 @@ class Hoop:
         return hoop
 
     def angle_in_hoop(self, p: tuple):
-        v1 = np.array((0, -self.radius))
+        v1 = np.array((0, self.radius))
         v2 = np.array(p) - np.array(self.center)
         return self.angle_of_vectors(v1, v2) + self.angle_offset
 
