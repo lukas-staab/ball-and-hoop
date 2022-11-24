@@ -110,7 +110,7 @@ class Application:
             ball = hoop.find_ball(frame=raw.image_hsv, **self.local_config()['ball'],
                                   dir_path='storage/calibration/')
             if ball is not None:
-                self.print("|-> Ball found @ " + str(ball.center) + " with r=" + str(ball.radius))
+                self.print("|-> Ball found @ " + str(ball.center) + " with r=" + str(ball.radius) + " + deg=" + ball.angle())
                 raw = raw.plot_ball(ball)
             else:
                 self.print("|-> NO BALL FOUND!")
