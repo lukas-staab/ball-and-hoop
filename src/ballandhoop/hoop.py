@@ -85,7 +85,13 @@ class Hoop:
             Image(image_bw=mask_ball).save(dir_path, 'ball-mask-dil')
             mask_ball = cv2.erode(mask_ball, None, iterations=morph_iterations)
             Image(image_bw=mask_ball).save(dir_path, 'ball-mask-dil-erode')
-        cnts = cv2.findContours(mask_ball.copy(), cv2.RETR_EXTERNAL,
+
+        mask_hoop = np.zeros_like(mask_ball)
+        mask_hoop = cv2.ellipse(mask_hoop, self.center, (self.radius, self.radius), 0, 0, math.pi, (255, 255, 255), -1)
+        Image(image_bw=mask_hoop).save(dir_path, 'ellipse-mask')
+        mask = cv2.bitwise_and(mask_hoop, mask_ball)
+
+        cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
                                 cv2.CHAIN_APPROX_SIMPLE)
         # this function only wraps the different opencv signatures, it does nothing else
         cnts = list(imutils.grab_contours(cnts))
