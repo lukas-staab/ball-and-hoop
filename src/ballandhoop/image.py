@@ -61,6 +61,8 @@ class Image:
         return Image(image_bgr=pic)
 
     def plot_angle(self, hoop: Hoop, ball: Ball):
+        if ball is None or hoop is None:
+            return self
         deg = hoop.angle_in_hoop(ball.center)
 
         img = self.plot_line(hoop.center, ball.center)
@@ -80,8 +82,9 @@ class Image:
         return Image(image_bgr=pic)
 
     def apply_hoop_cutting(self, hoop: Hoop):
+        # WIP
         mask = np.zeros(self.image_bgr.shape, dtype='uint8')
-        pic = cv2.circle(mask, hoop.center, hoop.radius, (255, 255, 255), -1)
+        mask = cv2.circle(mask, hoop.center, hoop.radius, (255, 255, 255), -1)
         pic = cv2.bitwise_and(self.image_bgr, self.image_bgr, mask=mask)
         return Image(image_bgr=pic)
 
