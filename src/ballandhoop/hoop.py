@@ -104,6 +104,9 @@ class Hoop:
                 continue
             # otherwise continue with the calculation
             m = cv2.moments(c)
+            if float(m['m00']) == 0.0:
+                # div 0
+                continue
             center_ball = (int(m["m10"] / m["m00"]), int(m["m01"] / m["m00"]))
             ball = Ball(self, center_ball, int(radius))
             # keep the first fitting ball and do not loop further
