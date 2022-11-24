@@ -54,7 +54,8 @@ class Server(Thread, NetworkInterface):
         self.write_value_lock = threading.Lock()
         self.print_debug = print_debug
         self.serial = SerialCom(verbose=print_debug, message_bytes=self.message_bytes, **serial)
-        self.values = {'localhost': {'angle': [], 'time': [], 'error': []}}
+        self.values = {}
+        self.host_map = {'local': socket.gethostname()}
         print('Init Server')
 
     def __enter__(self):
@@ -85,12 +86,16 @@ class Server(Thread, NetworkInterface):
                         # s is a client socket, so there is data
                         data = s.recv(1024)
                         if data:
-                            self.print(str(addr(s)) + ":" + str(float(data)))
+                            if addr(s) not in self.host_map:
+                                # first data is his hostname
+                                self.host_map[addr(s)] = data.decode()
+                            else:
+                                # save values for later
+                                data, is_error = self.preprocess_message(int(data.decode()))
+                                self.save_values(data, addr(s), is_error=is_error)
+                            # self.print(str(addr(s)) + ":" + str(float(data)))
                             # generic answer for each client, message confirmed
                             s.sendall('ok'.encode())
-                            # save values for later
-                            data, is_error = self.preprocess_message(int(data.decode()))
-                            self.save_values(data, addr(s), is_error=is_error)
                         else:
                             s.close()
                             self.sockets.remove(s)
@@ -114,18 +119,21 @@ class Server(Thread, NetworkInterface):
         for s in self.sockets:
             s.close()
 
-    def save_values(self, data, source, is_error:bool):
+    def save_values(self, data, address, is_error:bool):
+        hostname = self.host_map[address]
         with self.write_value_lock:
-            self.values[source]['time'].append(now())
+            if hostname not in self.values:
+                self.values[hostname] = {'time': [], 'angle': [], 'error': []}
+            self.values[hostname]['time'].append(now())
             if is_error:
-                self.values[source]['error'].append(data - self.max_precision + 10)
+                self.values[hostname]['error'].append(data - self.max_precision + 10)
                 prev_val = 0
-                if len(self.values[source]['angle']) > 0:
-                    prev_val = self.values[source]['angle'][-1]
-                self.values[source]['angle'].append(prev_val)
+                if len(self.values[hostname]['angle']) > 0:
+                    prev_val = self.values[hostname]['angle'][-1]
+                self.values[hostname]['angle'].append(prev_val)
             else:
-                self.values[source]['angle'].append(int(data))
-                self.values[source]['error'].append(0)
+                self.values[hostname]['angle'].append(int(data))
+                self.values[hostname]['error'].append(0)
 
     def latest_values(self):
         with self.write_value_lock:
@@ -134,7 +142,7 @@ class Server(Thread, NetworkInterface):
         val, is_error = self.preprocess_message(val)
         if not is_error or (is_error and self.send_errors):
             # save value history for later
-            self.save_values(val, 'localhost', is_error=is_error)
+            self.save_values(val, 'local', is_error=is_error)
             # vals = self.latest_values()
             self.serial.write(val)
 
@@ -150,6 +158,8 @@ class Client(NetworkInterface):
         self.socket.__enter__()
         try:
             self.socket.connect((self.server_ip, self.server_port))
+            self.socket.sendall(str(socket.gethostname()).encode())
+            return self.socket.recv(1024) == b'ok'
         except ConnectionRefusedError:
             print("Connection to server refused. Not yet running on this port/ip?")
             exit(1)
