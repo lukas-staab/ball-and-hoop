@@ -26,7 +26,7 @@ class NetworkInterface():
         self.ERROR = self.max_precision - 3
         self.LOST_CONNECTION = self.max_precision - 4
 
-    def preprocess_message(self, data: float | int ) -> (int, bool):
+    def preprocess_message(self, data:float ) -> (int, bool):
         if data >= self.max_precision - 10:
             # this is an error code
             if self.send_errors:
