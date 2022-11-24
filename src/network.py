@@ -132,8 +132,8 @@ class Server(Thread, NetworkInterface):
         if not is_error or (is_error and self.send_errors):
             # save value history for later
             self.save_values(val, 'localhost', is_error=is_error)
-            vals = self.latest_values()
-            self.serial.write(vals)
+            # vals = self.latest_values()
+            self.serial.write(val)
 
     def print(self, msg):
         """ Helper method which suppresses debug output if not configured """
@@ -163,12 +163,16 @@ class Client(NetworkInterface):
         self.socket.__exit__(exc_type, exc_val, exc_tb)
 
     def send(self, val):
-        val, is_error = self.preprocess_message(val)
-        if not is_error or (is_error and self.send_errors):
-            print("Sending: " + str(val))
-            self.socket.sendall(str(val).encode())
-            return self.socket.recv(1024) == b'ok'
-        return False
+        try:
+            val, is_error = self.preprocess_message(val)
+            if not is_error or (is_error and self.send_errors):
+                print("Sending: " + str(val))
+                self.socket.sendall(str(val).encode())
+                return self.socket.recv(1024) == b'ok'
+            return False
+        except ConnectionResetError:
+            print('Server wurde beendet')
+            exit(1)
 
 
 def init_network(is_server: bool, server_ip: str, server_port: int = 9999, **kwargs) -> NetworkInterface:
