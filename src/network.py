@@ -26,7 +26,7 @@ class NetworkInterface():
         self.ERROR = self.max_precision - 3
         self.LOST_CONNECTION = self.max_precision - 4
 
-    def preprocess_message(self, data:float ) -> (int, bool):
+    def preprocess_message(self, data: float) -> (int, bool):
         if data >= self.max_precision - 10:
             # this is an error code
             if self.send_errors:
@@ -89,7 +89,7 @@ class Server(Thread, NetworkInterface):
                             # generic answer for each client, message confirmed
                             s.sendall('ok'.encode())
                             # save values for later
-                            data, is_error = self.preprocess_message(data)
+                            data, is_error = self.preprocess_message(int(str(data)))
                             self.save_values(data, addr(s), is_error=is_error)
                         else:
                             s.close()
