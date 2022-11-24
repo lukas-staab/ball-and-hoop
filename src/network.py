@@ -169,7 +169,6 @@ class Client(NetworkInterface):
         try:
             val, is_error = self.preprocess_message(val)
             if not is_error or (is_error and self.send_errors):
-                print("Sending: " + str(val))
                 self.socket.sendall(str(val).encode())
                 return self.socket.recv(1024) == b'ok'
             return False
