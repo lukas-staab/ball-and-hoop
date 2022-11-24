@@ -54,7 +54,7 @@ class Server(Thread, NetworkInterface):
         self.write_value_lock = threading.Lock()
         self.print_debug = print_debug
         self.serial = SerialCom(verbose=print_debug, message_bytes=self.message_bytes, **serial)
-        self.values = {'localhost': {'angle': [], 'time': []}}
+        self.values = {'localhost': {'angle': [], 'time': [], 'error': []}}
         print('Init Server')
 
     def __enter__(self):
@@ -78,7 +78,7 @@ class Server(Thread, NetworkInterface):
                         # s is the server, so there is a new connection
                         client_socket, address = self.server.accept()
                         client_socket.__enter__()
-                        self.values[addr(client_socket)] = {'angle': [], 'time': []}
+                        self.values[addr(client_socket)] = {'angle': [], 'time': [], 'error': []}
                         self.sockets.append(client_socket)
                         print("Connection from: " + str(address))
                     else:
