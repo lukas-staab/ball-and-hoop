@@ -150,9 +150,6 @@ class Application:
                     if self.verbose and i % 30 == 0:
                         debug_dir_path = './storage/debug/' + str(i) + "/"
                         os.makedirs(debug_dir_path, exist_ok=True)
-                        cv2.imwrite(debug_dir_path + 'raw-hsv.png', frame)
-                        # cv2 expects bgr format as default
-                        cv2.imwrite(debug_dir_path + 'raw-rgb.png', cv2.cvtColor(frame, cv2.COLOR_HSV2BGR))
                     # normal loop:
                     # send the task to the next available thread-worker, from the pool
                     # the threads will call hoop.find_ball(frame=frame, cols=ball_search_col, iterations=0)

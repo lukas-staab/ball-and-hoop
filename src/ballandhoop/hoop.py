@@ -76,6 +76,7 @@ class Hoop:
         return frame_number, ball
 
     def find_ball(self, frame, hsv, morph_iterations=1, min_radius=5, max_radius=20, dir_path=None, **kwargs):
+        Image(image_hsv=frame).save(dir_path, 'raw')
         mask_ball = cv2.inRange(frame, np.array(hsv['lower']), np.array(hsv['upper']))
         Image(image_bw=mask_ball).save(dir_path, 'ball-mask')
         if morph_iterations > 0:
