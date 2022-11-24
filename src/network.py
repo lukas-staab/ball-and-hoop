@@ -89,7 +89,7 @@ class Server(Thread, NetworkInterface):
                             # generic answer for each client, message confirmed
                             s.sendall('ok'.encode())
                             # save values for later
-                            data, is_error = self.preprocess_message(int(str(data)))
+                            data, is_error = self.preprocess_message(int(data.decode()))
                             self.save_values(data, addr(s), is_error=is_error)
                         else:
                             s.close()
