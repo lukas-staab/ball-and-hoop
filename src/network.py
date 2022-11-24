@@ -119,7 +119,10 @@ class Server(Thread, NetworkInterface):
             self.values[source]['time'].append(now())
             if is_error:
                 self.values[source]['error'].append(data - self.max_precision + 10)
-                self.values[source]['angle'].append(self.values[source]['angle'][-1])
+                prev_val = 0
+                if not self.values[source]['angle'].empty():
+                    prev_val = self.values[source]['angle'][-1]
+                self.values[source]['angle'].append(prev_val)
             else:
                 self.values[source]['angle'].append(int(data))
                 self.values[source]['error'].append(0)
