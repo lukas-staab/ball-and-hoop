@@ -33,7 +33,7 @@ rpi1:
   camera:
     wb_gains: [1.4144569518716577, 1.7191847593582887]
   hoop:
-    angle_offset: 240
+    angle_offset: 320
     center: [185, 79]
     center_dots:
     - [247, 206]
@@ -60,7 +60,7 @@ rpi2:
   camera:
     wb_gains: [1.396570053475936, 1.8325647058823529]
   hoop:
-    angle_offset: -8
+    angle_offset: 0
     center: [159, 87]
     center_dots:
     - [122, 227]
