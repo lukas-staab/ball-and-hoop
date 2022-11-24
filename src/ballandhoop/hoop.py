@@ -12,7 +12,7 @@ from src.ballandhoop import helper, Ball, Image
 
 class Hoop:
 
-    def __init__(self,center: list, radius: int, center_dots: list, radius_dots: list, angle_offset=0, fov=120, **kwargs):
+    def __init__(self,center: list, radius: int, center_dots: list, radius_dots: list, angle_offset=0, fov=(90,270), **kwargs):
         self.center = center,
         # i do not know why i need this line, input is ok, self. ist not
         self.center = list(self.center[0])
@@ -21,7 +21,7 @@ class Hoop:
         self.center_dots = list(center_dots)
         self.radius_dots = list(radius_dots)
         self.angle_offset = int(angle_offset)
-        self.fov = int(fov)
+        self.fov = fov
 
     @staticmethod
     def create_from_image(hsv, image:Image, morph_iterations=0, debug_output_path=None, min_dots_radius=2, **kwargs):
@@ -87,7 +87,7 @@ class Hoop:
             Image(image_bw=mask_ball).save(dir_path, 'ball-mask-dil-erode')
 
         mask_hoop = np.zeros_like(mask_ball)
-        mask_hoop = cv2.ellipse(mask_hoop, self.center, (self.radius, self.radius), 0, 90 - self.fov/2, 90 + self.fov/2 , (255, 255, 255), -1)
+        mask_hoop = cv2.ellipse(mask_hoop, self.center, (self.radius, self.radius), 0, self.fov[0] - 90, self.fov[1] - 90, (255, 255, 255), -1)
         Image(image_bw=mask_hoop).save(dir_path, 'segment-mask')
         mask = cv2.bitwise_and(mask_hoop, mask_ball)
         Image(image_bw=mask).save(dir_path, 'final-mask')
