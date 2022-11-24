@@ -132,10 +132,9 @@ class Application:
         video = VideoStream(**self.get_cfg('camera'))
         # the network needs object context for better access in the async callback method from the workers
         self.network = init_network(**self.get_cfg('network'))
-
-        try:
-            # start network
-            with self.network:
+        # start network
+        with self.network:
+            try:
                 # start thread-worker pool,
                 pool = multiprocessing.Pool(processes=os.cpu_count())
                 # count the number of frames, this will be important to reconstruct original frame order
@@ -162,15 +161,16 @@ class Application:
                                      args=(i, frame, self.local_config()['ball'], debug_dir_path),
                                      callback=self.ball_found_async_callback,
                                      error_callback=self.ball_search_error_callback)
-        except KeyboardInterrupt:
-            # break potential infinite loop
-            pass
-        finally:
-            print('Closing resources, worker and so on')
-            video.close()
-            pool.terminate()
-            pool.close()
-            # pool.join()
+            except KeyboardInterrupt:
+                # break potential infinite loop
+                pass
+
+            finally:
+                print('Closing resources, worker and so on')
+                video.close()
+                pool.terminate()
+                pool.close()
+                # pool.join()
 
     def ball_search_error_callback(self, e):
         print('Error')

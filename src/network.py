@@ -11,7 +11,7 @@ from src.serial import SerialCom
 
 
 class NetworkInterface():
-    def __init__(self, send_errors: bool = True, precision: int = 360, message_bytes: int = 2):
+    def __init__(self, send_errors: bool = True, precision: int = 360, message_bytes: int = 2, **kwargs):
         self.precision = int(precision)
         self.send_errors = send_errors
         self.message_bytes = message_bytes
@@ -145,14 +145,18 @@ class Client(NetworkInterface):
 
     def __enter__(self):
         self.socket.__enter__()
-        self.socket.connect((self.server_ip, self.server_port))
+        try:
+            self.socket.connect((self.server_ip, self.server_port))
+        except ConnectionRefusedError:
+            print("Connection to server refused. Not yet running on this port/ip?")
+            exit(1)
         return self
 
     def __init__(self, server_ip, server_port, **kwargs):
         NetworkInterface.__init__(self, **kwargs)
         self.server_ip = server_ip
         self.server_port = server_port
-        print('Verbindungsaubau zu: ' + str(self.server_ip) + ':' + str(self.server_port))
+        print('Connecting to: ' + str(self.server_ip) + ':' + str(self.server_port))
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
