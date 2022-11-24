@@ -79,7 +79,6 @@ class Server(Thread, NetworkInterface):
                         # s is the server, so there is a new connection
                         client_socket, address = self.server.accept()
                         client_socket.__enter__()
-                        self.values[addr(client_socket)] = {'angle': [], 'time': [], 'error': []}
                         self.sockets.append(client_socket)
                         print("Connection from: " + str(address))
                     else:
@@ -87,7 +86,7 @@ class Server(Thread, NetworkInterface):
                         data = s.recv(1024)
                         if data:
                             if addr(s) not in self.host_map:
-                                # first data is his hostname
+                                # first data sent is his hostname - save for remapping the connection
                                 self.host_map[addr(s)] = data.decode()
                             else:
                                 # save values for later
@@ -159,11 +158,11 @@ class Client(NetworkInterface):
         try:
             self.socket.connect((self.server_ip, self.server_port))
             self.socket.sendall(str(socket.gethostname()).encode())
-            return self.socket.recv(1024) == b'ok'
+            if self.socket.recv(1024) == b'ok':
+                return self
         except ConnectionRefusedError:
             print("Connection to server refused. Not yet running on this port/ip?")
             exit(1)
-        return self
 
     def __init__(self, server_ip, server_port, **kwargs):
         NetworkInterface.__init__(self, **kwargs)
