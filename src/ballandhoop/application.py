@@ -78,18 +78,19 @@ class Application:
             self.print('|-> Start White Balancing Calibration')
             self.local_config()['camera']['wb_gains'] = WhiteBalancing(verboseOutput=False).calculate(cropping=True)
         self.print('|-> Using white balancing Gains: ' + str(self.get_cfg('camera', 'wb_gains')))
+        raw = Image.create(self.get_cfg('hoop', 'faker_path'), wb_gains=self.local_config()['camera']['wb_gains'])
+        raw.save('./storage/calibration/', 'raw')
         if search_hoop:
             self.print('|-> Searching Hoop in new picture')
             hoop_search_col = self.save_col_and_add_from_config('hoop', hoop_search_col)
-            image = Image.create(self.get_cfg('hoop', 'faker_path'), wb_gains=self.local_config()['camera']['wb_gains'])
-            image.save('./storage/calibration/', 'hoop')
-            image.color_split('storage/calibration/hoop-colsplit-bgr', hoop_search_col['lower'],
+
+            raw.color_split('storage/calibration/hoop-colsplit-bgr', hoop_search_col['lower'],
                               hoop_search_col['upper'],
                               return_hsv=False)
-            image.color_split('storage/calibration/hoop-colsplit-hsv', hoop_search_col['lower'],
+            raw.color_split('storage/calibration/hoop-colsplit-hsv', hoop_search_col['lower'],
                               hoop_search_col['upper'],
                               return_hsv=True)
-            hoop = Hoop.create_from_image(image=image, debug_output_path='./storage/calibration/',
+            hoop = Hoop.create_from_image(image=raw, debug_output_path='./storage/calibration/',
                                           **self.get_cfg('hoop'))
             if hoop is not None:
                 self.local_config()['hoop']['radius'] = hoop.radius
@@ -97,7 +98,7 @@ class Application:
                 self.local_config()['hoop']['center_dots'] = hoop.center_dots
                 self.local_config()['hoop']['radius_dots'] = hoop.radius_dots
                 self.print('|-> Hoop found @ ' + str(self.get_cfg('hoop', 'center')))
-                image.plot_hoop(hoop, with_dots=True).save('./storage/calibration/', 'hoop-result')
+                raw.plot_hoop(hoop, with_dots=True).save('./storage/calibration/', 'hoop-result')
             else:
                 self.print('|-> NO HOOP FOUND! - see in storage/calibration/ for debug pictures')
         self.print('|-> Using Hoop @ ' + str(self.get_cfg('hoop', 'center')) + " with r=" +
@@ -106,21 +107,19 @@ class Application:
             self.print('|-> searching for ball / Testing color')
             ball_search_col = self.save_col_and_add_from_config('ball', ball_search_col)
             hoop = Hoop(**self.get_cfg('hoop'))
-            im = Image.create(self.get_cfg('hoop', 'faker_path'), self.local_config()['camera']['wb_gains'])
-            im.save('storage/calibration', 'ball')
-            ball = hoop.find_ball(frame=im.image_hsv, cols=ball_search_col, iterations=1,
+            ball = hoop.find_ball(frame=raw.image_hsv, **self.local_config()['ball'],
                                   dir_path='storage/calibration/')
             if ball is not None:
                 self.print("|-> Ball found @ " + str(ball.center) + " with r=" + str(ball.radius))
-                im = im.plot_ball(ball)
+                raw = raw.plot_ball(ball)
             else:
                 self.print("|-> NO BALL FOUND!")
             self.print('Save debug images to storage/calibration/')
-            im.color_split('storage/calibration/ball-colsplit-bgr', ball_search_col['lower'], ball_search_col['upper'],
+            raw.color_split('storage/calibration/ball-colsplit-bgr', ball_search_col['lower'], ball_search_col['upper'],
                            return_hsv=False)
-            im.color_split('storage/calibration/ball-colsplit-hsv', ball_search_col['lower'], ball_search_col['upper'],
+            raw.color_split('storage/calibration/ball-colsplit-hsv', ball_search_col['lower'], ball_search_col['upper'],
                            return_hsv=True)
-            im.save('storage/calibration', 'ball-result')
+            raw.save('storage/calibration', 'ball-result')
 
         self.print('=== End Calibration')
         self.save_config_to_disk()
