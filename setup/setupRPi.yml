@@ -55,6 +55,7 @@
     block:
     - name: Enable Camera
       shell: "raspi-config nonint do_legacy 0"
+      # vcgencmd get_camera
     - name: Request reboot
       set_fact:
         need_reboot: True
@@ -63,17 +64,17 @@
         msg: "{{ ansible_facts.need_reboot }}"
 
   - name: Activate Pi Camera
-      when: camera_status.stdout != '0'
-      become: True
-      block:
-        - name: Enable Camera
-          shell: "raspi-config nonint do_legacy 0"
-        - name: Request reboot
-          set_fact:
-            need_reboot: True
-        - name: Access Set Fact
-          debug:
-            msg: "{{ ansible_facts.need_reboot }}"
+    when: camera_status.stdout != '0'
+    become: True
+    block:
+      - name: Enable Camera
+        shell: "raspi-config nonint do_legacy 0"
+      - name: Request reboot
+        set_fact:
+          need_reboot: True
+      - name: Access Set Fact
+        debug:
+          msg: "{{ ansible_facts.need_reboot }}"
 
 
   - name: Do Reboot

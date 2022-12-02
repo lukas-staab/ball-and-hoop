@@ -297,8 +297,8 @@ def addr(s: socket.socket):
     """
     A helper method to get a unique string per connection
 
-    :param s: the socket
-    :return:
+    :param s: the socket object
+    :return: a unique string per connection
     """
     return 's' + str(s.getpeername()[1])
 
