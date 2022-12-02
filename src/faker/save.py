@@ -3,7 +3,17 @@ import shutil
 import os
 import cv2
 
+
 def savePictures(dir_name, amount: int = 10, fps: int = 60, resolution_no: int = 1, wb_gains=None):
+    """
+    Saves multiple video like images with ascending file names in a given folder, starting with 0.png
+    :param str dir_name: name of the (new) directory inside `storage/faker/`, directory will be cleared out at the start
+    :param amount: amount of pictures taken
+    :param fps: the framerate in which the video frames will be fetched
+    :param resolution_no: the resolution number which will be used, see :py:property`VideoStream.resolutions`
+    :param wb_gains: the gains for white balancing, see :py:class`VideoStream`
+    :return:
+    """
     dir_base = "storage/faker/"
     dir_name = dir_base + dir_name + "/"
     if os.path.exists(dir_name):

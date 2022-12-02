@@ -1,21 +1,25 @@
-
-import utils
+from src.chessboard import utils
 import cv2
 
-[camera_matrix, dist_matrix] = utils.load_coefficients(
-    '../../storage/chessboard-calibration/calibration_chessboard.yml')
 
-img = cv2.imread("./storage/chessboard-calibration/" + input("Chessboard Number: ") + ".png")
+def main():
+    [camera_matrix, dist_matrix] = utils.load_coefficients(
+        '../../storage/chessboard-calibration/calibration_chessboard.yml')
 
-height, width = img.shape[:2]
+    img = cv2.imread("./storage/chessboard-calibration/" + input("Chessboard Number: ") + ".png")
 
-newcameramatrix, _ = cv2.getOptimalNewCameraMatrix(
-    camera_matrix, dist_matrix, (width, height), 0.5, (width, height)
-)
+    height, width = img.shape[:2]
 
-print(img.shape[:2])
+    newcameramatrix, _ = cv2.getOptimalNewCameraMatrix(
+        camera_matrix, dist_matrix, (width, height), 0.5, (width, height)
+    )
 
-corrected_img = cv2.undistort(img, camera_matrix, dist_matrix, None, newcameramatrix)
+    print(img.shape[:2])
 
-cv2.imwrite("undistort.png", corrected_img)
+    corrected_img = cv2.undistort(img, camera_matrix, dist_matrix, None, newcameramatrix)
 
+    cv2.imwrite("undistort.png", corrected_img)
+
+
+if __name__ == '__main__':
+    main()

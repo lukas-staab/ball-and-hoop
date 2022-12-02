@@ -1,24 +1,41 @@
 import multiprocessing
 import os
 import shutil
+import socket
 import time
 import traceback
 
-import cv2
-
-from src.ballandhoop import WhiteBalancing, Hoop, Ball, helper, Image
-import socket
-import yaml
 import scipy.io
+import yaml
 
-from src.network import init_network
+from src.ballandhoop import WhiteBalancing, Hoop, helper, Image
 from src.ballandhoop.videostream import VideoStream
+from src.network import init_network
 
 
 class Application:
-    """loads config, starts network, starts tracking"""
+    """
+    The main class to run the software. loads and saves config, loads resources with config parameters.
+    This class is called out of runner.py and calibration.py with different methods.
 
-    def __init__(self, force_hostname=None, verbose_output=False):
+    :param force_hostname: if unset socket.gethostname() will be used to search the for the config
+    :type force_hostname: str, optional, default=None
+    :param verbose_output: optional argument, if True there will be (more) output to the console, none if False
+    :type verbose_output: bool, optional, default=False
+
+    :ivar cfg: the config loaded and saved to `config.yml` (saved also to `config.mat`)
+    :ivar hostname: the local hostname by either `socket.gethostname() or `force_hostname`
+    :ivar network: either the server or client instance, using the :py:class:`.NetworkInterface`
+    :ivar timings: a fifo dict, which saved the in time of the frame, old entries are removed after the frame calc
+    :ivar latest_frame_number: remembers which is the newest frame with a result to discard older results
+    :ivar result_lock: manages the thread safe access to the :py:attr:`latest_frame_number`
+    :type result_lock: multiprocessing.Lock()
+    """
+
+    def __init__(self, force_hostname: str = None, verbose_output: bool = False):
+        """
+        Constructor Method, see class for signature
+        """
         self.verbose = verbose_output
         self.cfg = self.load_config_from_disk('yml')
         if force_hostname is None:
@@ -35,7 +52,14 @@ class Application:
             shutil.rmtree('storage/debug/')
         os.makedirs('storage/debug/')
 
-    def load_config_from_disk(self, file_type='yml'):
+    def load_config_from_disk(self, file_type: str = 'yml'):
+        """
+        Loads the config file from the disk to the attribute
+
+        :param file_type: the file type of the config file, can either be 'yml' or 'mat'
+        :type file_type: str, optional, default='yml'
+        :return: dictionary of the config content
+        """
         cfg = None
         if file_type == 'yml':
             with open('config.yml') as cfgFile:
@@ -48,9 +72,21 @@ class Application:
         return cfg
 
     def local_config(self):
+        """
+        Wrapper Method to get the config for this hostname. The hostname might be forged in the constructor.
+        Do not call this method for getting the config, just for setting it. Use :method `get_cfg`  instead
+
+        :return: dictionary of the local config
+        """
         return self.cfg[self.hostname]
 
     def get_cfg(self, *arg):
+        """
+        Helper method to get
+
+        :param arg: there can be unlimited amount of arguments
+        :type arg: str[]
+        """
         cfg = self.local_config()
         for key in arg:
             try:
@@ -62,6 +98,9 @@ class Application:
         return cfg
 
     def save_config_to_disk(self) -> None:
+        """
+        Saves the self.cfg back to config.yml and config.mat files.
+        """
         self.print("Try to update config files - if this fails, remove keys with empty values from source config")
         self.print(self.cfg)
         with open('config.yml', 'w') as outfile:
@@ -70,8 +109,22 @@ class Application:
         self.print('Updated config file(s)')
 
     def run_calibration(self, calc_wb_gains: bool,
-                        search_hoop: bool, hoop_search_col: dict,
-                        search_ball: bool, ball_search_col: dict):
+                        search_hoop: bool, hoop_hsv: dict,
+                        search_ball: bool, ball_hsv: dict):
+        """
+        Runs the calibration method.
+
+        :param calc_wb_gains: If this flag is set the white calibration is called
+        :type calc_wb_gains: bool
+        :param search_hoop: If this flag is set the hoop border points are searched
+        :type search_hoop: bool
+        :param hoop_hsv: a dictionary with keys `lower` and `upper`
+        :type hoop_hsv: dict
+        :param search_ball:
+        :type search_ball: bool
+        :param ball_hsv:
+        :type ball_hsv: dict
+        """
         helper.reset_content_of_dir('./storage/calibration/')
         self.print('=== Start Calibration')
         if calc_wb_gains:
@@ -82,14 +135,14 @@ class Application:
         raw.save('./storage/calibration/', 'raw')
         if search_hoop:
             self.print('|-> Searching Hoop in new picture')
-            hoop_search_col = self.save_col_and_add_from_config('hoop', hoop_search_col)
+            hoop_hsv = self.save_col_and_add_from_config('hoop', hoop_hsv)
 
-            raw.color_split('storage/calibration/hoop-colsplit-bgr', hoop_search_col['lower'],
-                              hoop_search_col['upper'],
-                              return_hsv=False)
-            raw.color_split('storage/calibration/hoop-colsplit-hsv', hoop_search_col['lower'],
-                              hoop_search_col['upper'],
-                              return_hsv=True)
+            raw.color_split('storage/calibration/hoop-colsplit-bgr', hoop_hsv['lower'],
+                            hoop_hsv['upper'],
+                            return_hsv=False)
+            raw.color_split('storage/calibration/hoop-colsplit-hsv', hoop_hsv['lower'],
+                            hoop_hsv['upper'],
+                            return_hsv=True)
             hoop = Hoop.create_from_image(image=raw, debug_output_path='./storage/calibration/',
                                           **self.get_cfg('hoop'))
             if hoop is not None:
@@ -105,7 +158,7 @@ class Application:
                    str(self.get_cfg('hoop', 'radius')))
         if search_ball and self.get_cfg('hoop', 'center') is not None:
             self.print('|-> searching for ball / Testing color')
-            ball_search_col = self.save_col_and_add_from_config('ball', ball_search_col)
+            ball_hsv = self.save_col_and_add_from_config('ball', ball_hsv)
             hoop = Hoop(**self.get_cfg('hoop'))
             ball = hoop.find_ball(frame=raw.image_hsv, **self.local_config()['ball'],
                                   dir_path='storage/calibration/')
@@ -116,16 +169,27 @@ class Application:
             else:
                 self.print("|-> NO BALL FOUND!")
             self.print('Save debug images to storage/calibration/')
-            raw.color_split('storage/calibration/ball-colsplit-bgr', ball_search_col['lower'], ball_search_col['upper'],
-                           return_hsv=False)
-            raw.color_split('storage/calibration/ball-colsplit-hsv', ball_search_col['lower'], ball_search_col['upper'],
-                           return_hsv=True)
+            raw.color_split('storage/calibration/ball-colsplit-bgr', ball_hsv['lower'], ball_hsv['upper'],
+                            return_hsv=False)
+            raw.color_split('storage/calibration/ball-colsplit-hsv', ball_hsv['lower'], ball_hsv['upper'],
+                            return_hsv=True)
             raw.save('storage/calibration', 'ball-result')
 
         self.print('=== End Calibration')
         self.save_config_to_disk()
 
-    def run(self, ball_search_col: dict):
+    def run(self, ball_hsv: dict):
+        """
+        This method runs the main loop method for tracking and network init. Administers the thread-workers and gives
+        them jobs. Each core gets one thread-worker. They will calculate the results of the frames after each other.
+        The thread-workers are especially needed if the application is running under high per frame cpu,
+        which can happen with high fps or high resolution settings.
+
+        :param ball_hsv: if this parameter is set, the ball hsv in config is overwritten
+        :type ball_hsv: dict
+        """
+        # saves the new colors to the config
+        self.save_col_and_add_from_config('ball', ball_hsv)
         # give config to object constructors to initialize like defined in config
         # ** does flatten the array to arguments, with their corresponding keys as argument names
         hoop = Hoop(**self.get_cfg('hoop'))
@@ -153,7 +217,7 @@ class Application:
                         os.makedirs(debug_dir_path, exist_ok=True)
                     # normal loop:
                     # send the task to the next available thread-worker, from the pool
-                    # the threads will call hoop.find_ball(frame=frame, cols=ball_search_col, iterations=0)
+                    # the threads will call hoop.find_ball(frame=frame, cols=ball_hsv, iterations=0)
                     # search for the ball in the frame with the given color borders
                     pool.apply_async(hoop.find_ball_async,
                                      args=(i, frame, self.local_config()['ball'], debug_dir_path),
@@ -171,10 +235,24 @@ class Application:
                 # pool.join()
 
     def ball_search_error_callback(self, e):
-        print('Error')
-        traceback.print_exception(type(e), e, e.__traceback__)
+        """
+        This is the callback method which is provided to the thread-worker. It is called if there is an error in one of
+        the thread-workers. Without this method the thread-worker would fail silent.
+        It still does, if verbose flag is not set
+
+        :param e: The error
+        """
+        self.print('Error')
+        if self.verbose:
+            traceback.print_exception(type(e), e, e.__traceback__)
 
     def ball_found_async_callback(self, result):
+        """
+        The method which is called after the thread-worker run and did not fail
+
+        :param result: the result of the thread worker, can only be one argument, the thread-worker is not able to send a second one
+        :type result: tuple
+        """
         # callback merges all return values in one parameter, so unmerge it
         frame_number, ball = result
         # announce that you would like to do network stuff, and reserve the resources
@@ -196,21 +274,39 @@ class Application:
         self.print("Frame " + str(frame_number) + " took " + str(int((time.time() - start_time) * 1000)) + "ms")
 
     def print(self, msg: str):
+        """
+        Prints the message to stdout, if app is running with verbose flag, discards otherwise
+
+        :param msg: the message string
+        """
         if self.verbose:
             print(msg)
 
-    def save_col_and_add_from_config(self, type: str, input: dict):
+    def save_col_and_add_from_config(self, type_name: str, input_data: dict):
+        """
+        Saves the given parameters to config and reads config afterwards.
+        If parameters are None, then only the config is read.
+
+        :param type_name: a top level setting with a hsv child, like `ball` or `hoop`
+        :param input_data: the dictionary with the `upper` and `lower` color as dict keys, with value (H,S,V)
+        """
         ret = {}
-        if input['lower'] is not None:
-            self.local_config()[type]['hsv']['lower'] = input['lower']
-        ret['lower'] = self.get_cfg(type, 'hsv', 'lower')
-        if input['upper'] is not None:
-            self.local_config()[type]['hsv']['upper'] = input['upper']
-        ret['upper'] = self.get_cfg(type, 'hsv', 'upper')
+        if input_data['lower'] is not None:
+            self.local_config()[type_name]['hsv']['lower'] = input_data['lower']
+        ret['lower'] = self.get_cfg(type_name, 'hsv', 'lower')
+        if input_data['upper'] is not None:
+            self.local_config()[type_name]['hsv']['upper'] = input_data['upper']
+        ret['upper'] = self.get_cfg(type_name, 'hsv', 'upper')
         self.save_config_to_disk()
         return ret
 
     def debug(self, save_vid=None, wb_gains=None):
+        """
+        This method is here to generate fake video material, which can be used with the faker_path config
+
+        :param save_vid:
+        :param wb_gains: if not given, then the gains will be freshly calculated
+        """
         if wb_gains is None:
             wb_gains = WhiteBalancing(verboseOutput=False).calculate(cropping=True)
             self.print('Calced wb_gains: ' + str(wb_gains))

@@ -6,19 +6,36 @@ from imutils.video import FPS
 
 
 class VideoStream:
+    """
+    A wrapper for :py:class:`picamera.PiCamera`, so that config file input can be used
+
+    :param resolution_no: the resolution number which can be picked in sensor mode 7
+    :param framerate: the framerate, should be between 60 and 90 in sensor mode 7
+    :param rotation: the rotation
+    :param as_hsv: if output should be hsv or bgr
+    :param wb_gains: the white_balancing gains
+    :param faker_path: if this directory is set, the camera will not be used, but the pictures saved there. Can be recorded through debug.py
+    :param kwargs: catch-all parameter, so more entries in the config do not throw an error
+    """
     resolutions = {
         0: (160, 128),
         1: (320, 240),
         2: (640, 480),
     }
+    """
+    The available resolutions in sensor mode 7.`
+    """
 
     rotations = {
         1: cv2.ROTATE_90_CLOCKWISE,
         2: cv2.ROTATE_180,
         3: cv2.ROTATE_90_COUNTERCLOCKWISE,
     }
+    """
+    The available rotation numbers
+    """
 
-    def __init__(self, resolution_no=1, framerate=60, rotation=0, as_hsv=True, wb_gains=None, faker_path=None, **arg):
+    def __init__(self, resolution_no=1, framerate=60, rotation=0, as_hsv=True, wb_gains=None, faker_path=None, **kwargs):
         resolution = self.resolutions[resolution_no]
         # initialize the camera and stream
         self.is_faked = faker_path is not None
@@ -56,10 +73,19 @@ class VideoStream:
         self.fps = FPS()
 
     def __iter__(self):
+        """
+        Getting the iterator, starting the fps counter
+        :return: self
+        """
         self.fps.start()
         return self
 
     def __next__(self):
+        """
+        Called to get the next frame.
+
+        :return: frame array
+        """
         f = next(self.stream)
         if not self.is_faked:
             # reset pointer to first place (just to be sure)

@@ -1,7 +1,9 @@
 import repackage
 repackage.up()
+import numpy
 from src.chessboard.utils import load_coefficients
-yml = open('storage/chessboard-calibration/calibration_chessboard.yml', "r").read()
-print(yml)
-[camera_matrix, dist_matrix] = load_coefficients('storage/chessboard-calibration/calibration_chessboard.yml')
-print(camera_matrix)
+from src.ballandhoop import Image
+
+[Image.camera_matrix, Image.dist_matrix] = load_coefficients('storage/chessboard-calibration/calibration_chessboard.yml')
+im = Image.create('storage/chessboard-calibration/0.png')
+im.apply_undistort(demo=True).save('storage/undistort', 'chess-0')

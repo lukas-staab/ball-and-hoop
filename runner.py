@@ -26,7 +26,7 @@ from src.ballandhoop.application import Application
 
 start_time = time.time()
 app = Application(verbose_output=args['verbose'], force_hostname=args['host'])
-app.run(ball_search_col={'lower': args['lowercol'], 'upper': args['uppercol']})
+app.run(ball_hsv={'lower': args['lowercol'], 'upper': args['uppercol']})
 
 if args['time']:
     end_time = time.time()

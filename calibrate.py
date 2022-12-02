@@ -31,6 +31,6 @@ from src.ballandhoop.application import Application
 app = Application(verbose_output=args['verbose'], force_hostname=args['host'])
 app.run_calibration(calc_wb_gains=args['white_calibration'],
                     search_hoop=args['hoop_calibration'],
-                    hoop_search_col={'upper' : args['uppercol'], 'lower': args['lowercol']},
+                    hoop_hsv={'upper' : args['uppercol'], 'lower': args['lowercol']},
                     search_ball=args['ball_calibration'],
-                    ball_search_col={'upper': None, 'lower': None})
+                    ball_hsv={'upper': None, 'lower': None})

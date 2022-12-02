@@ -74,7 +74,7 @@ for (col_low, col_up) in ball_colors:
         # draw the circle and centroid on the frame,
         # then update the list of tracked points
         imc.plot_ball(ball)
-        imc.plot_angle(hoop, ball)
+        imc.plot_angle(ball)
 
 imc.save()
 print("dumped pic saves to dirName")
