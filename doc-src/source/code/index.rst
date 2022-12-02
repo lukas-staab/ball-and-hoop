@@ -1,19 +1,15 @@
-src package
+Code Index
 ===========
 
-Subpackages
------------
-
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 2
+   :hidden:
 
    src.ballandhoop
    src.chessboard
 
-Submodules
-----------
 
-src.network module
+network module
 ------------------
 
 .. automodule:: src.network
@@ -21,18 +17,10 @@ src.network module
    :undoc-members:
    :show-inheritance:
 
-src.serial module
+serial module
 -----------------
 
 .. automodule:: src.serial
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: src
    :members:
    :undoc-members:
    :show-inheritance:

@@ -1,4 +1,4 @@
-src.chessboard package
+chessboard package
 ======================
 
 Submodules

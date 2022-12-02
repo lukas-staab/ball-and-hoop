@@ -1,10 +1,7 @@
-src.ballandhoop package
+ballandhoop package
 =======================
 
-Submodules
-----------
-
-src.ballandhoop.application module
+Application module
 ----------------------------------
 
 .. automodule:: src.ballandhoop.application
@@ -12,7 +9,7 @@ src.ballandhoop.application module
    :undoc-members:
    :show-inheritance:
 
-src.ballandhoop.ball module
+Ball module
 ---------------------------
 
 .. automodule:: src.ballandhoop.ball
@@ -20,7 +17,7 @@ src.ballandhoop.ball module
    :undoc-members:
    :show-inheritance:
 
-src.ballandhoop.helper module
+Helper module
 -----------------------------
 
 .. automodule:: src.ballandhoop.helper
@@ -28,7 +25,7 @@ src.ballandhoop.helper module
    :undoc-members:
    :show-inheritance:
 
-src.ballandhoop.hoop module
+Hoop module
 ---------------------------
 
 .. automodule:: src.ballandhoop.hoop
@@ -36,7 +33,7 @@ src.ballandhoop.hoop module
    :undoc-members:
    :show-inheritance:
 
-src.ballandhoop.image module
+Image module
 ----------------------------
 
 .. automodule:: src.ballandhoop.image
@@ -44,7 +41,7 @@ src.ballandhoop.image module
    :undoc-members:
    :show-inheritance:
 
-src.ballandhoop.piHSVArray module
+PiHSVArray module
 ---------------------------------
 
 .. automodule:: src.ballandhoop.piHSVArray
@@ -52,7 +49,7 @@ src.ballandhoop.piHSVArray module
    :undoc-members:
    :show-inheritance:
 
-src.ballandhoop.videostream module
+Videostream module
 ----------------------------------
 
 .. automodule:: src.ballandhoop.videostream
@@ -60,7 +57,7 @@ src.ballandhoop.videostream module
    :undoc-members:
    :show-inheritance:
 
-src.ballandhoop.whiteBalancing module
+WhiteBalancing module
 -------------------------------------
 
 .. automodule:: src.ballandhoop.whiteBalancing
@@ -68,10 +65,3 @@ src.ballandhoop.whiteBalancing module
    :undoc-members:
    :show-inheritance:
 
-Module contents
----------------
-
-.. automodule:: src.ballandhoop
-   :members:
-   :undoc-members:
-   :show-inheritance:
