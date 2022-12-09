@@ -7,4 +7,5 @@ circle_fit
 PyYAML
 opencv-python
 scipy
+sphinx
 sphinx-rtd-theme
