@@ -1,7 +1,2 @@
 
-## Calibration 
-
-Get the ball analysis in `./storage/hoop/`
-``` 
-python calibrate.py -w -b -v 
-```
+For full documentation see [github-pages](https://lukas-staab.github.io/ball-and-hoop/)
