@@ -17,14 +17,17 @@ jobs:
     steps:
     - uses: actions/checkout@v1 # checks out git repo
     - uses: actions/setup-python@v4 # installing python and pip
-    - uses: ammaraskar/sphinx-action@master # builds sphinx html
-      with:
-        docs-folder: "docs/"
+    - name: Install dependencies
+      run: |
+        pip install sphinx sphinx_rtd_theme
+    - name: Sphinx build
+      run: |
+        sphinx-build docs/source docs/build
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
       with:
         publish_branch: gh-pages
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: _build/html
+        publish_dir: docs/build/html
         force_orphan: true
