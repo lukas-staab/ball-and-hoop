@@ -17,6 +17,13 @@ The network server and the retrieval of frames from the camera have their own th
 symbolised by the activity rectangle in the diagram.
 Each frame calculation also has its own thread, represented by the while block in the diagram.
 
+First the frame is taken from the video object via the implicit `__next__()` method with an iterator.
+Then the worker pool dispatches a worker with the frame and the `find_ball_async()` method.
+This worker returns to the callback `ball_found_async_callback()` after his job is done.
+The frame loop does not wait for the callback but continues with the `for` loop through the frames.
+
+The frame data arrays are delivered via the `piHSVArray` class inside `Videostream.__next__()` in HSV format.
+
 Here the full code of the diagram above for a more detailed deep dive:
 
 .. code-block:: python
