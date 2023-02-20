@@ -37,7 +37,6 @@ intersphinx_mapping = {
     'picamera': ('https://picamera.readthedocs.io/en/release-1.13/', None),
 }
 
-
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
