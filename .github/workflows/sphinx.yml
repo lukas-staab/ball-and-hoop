@@ -17,6 +17,8 @@ jobs:
     steps:
     - uses: actions/checkout@v1 # checks out git repo
     - uses: actions/setup-python@v4 # installing python and pip
+    - name: Setup Graphviz
+      uses: ts-graphviz/setup-graphviz@v1 # install graphviz (used in doc)
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
