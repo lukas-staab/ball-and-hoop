@@ -10,7 +10,7 @@ import yaml
 from src.serial import SerialCom
 
 
-class NetworkInterface():
+class NetworkInterface:
     """
     Abstracts the send method, and how to do the preprocessing of the data to send
 
@@ -26,6 +26,7 @@ class NetworkInterface():
     :ivar ERROR: max_precision - 3, an error code, for a general error
     :ivar LOST_CONNECTION: max_precision - 4, an error code, for a lost camera-pi
     """
+
     def __init__(self, send_errors: bool = True, precision: int = 360, message_bytes: int = 2, **kwargs):
 
         self.precision = int(precision)
@@ -83,6 +84,7 @@ class Server(Thread, NetworkInterface):
 
     :ivar serial: A object of the :py:class:`SerialCom`
     """
+
     def __init__(self, server_ip, server_port, serial, print_debug=False, **kwargs):
         NetworkInterface.__init__(self, **kwargs)
         Thread.__init__(self, daemon=True)  # init Thread, deamon=True: kill it if parent tread is killed
@@ -186,7 +188,7 @@ class Server(Thread, NetworkInterface):
         for s in self.sockets:
             s.close()
 
-    def save_values(self, data, address, is_error:bool):
+    def save_values(self, data, address, is_error: bool):
         """
         Saves the value (or error) in an value array, together with the time.
         The hostname is used as a a top level key.
@@ -213,17 +215,24 @@ class Server(Thread, NetworkInterface):
 
     def latest_values(self):
         """
-        WIP Gets the latest value
+        Returns only the last value from each host in each category time, angle and error as plain value
 
-        :return: an empty erray
+        :return: dict[hostname][category] : value
         """
+        # take the write log, so no other thread can write
         with self.write_value_lock:
-            return []
+            ret = {}
+            for host in self.values.keys():
+                v = self.values[host]
+                ret[host] = {'time': v['time'][-1], 'angle': v['angle'][-1], 'error': v['angle'][-1]}
+            return ret
+
     def send(self, val):
         """
-        does not send the data to the server, because this is the server allready.
+        does not send the data to the server, because this is the server already.
         So it justs saves the data and pipes the data through to the serial interface.
-        If you want to send something else then just the hostdata, you need to change this class
+        If you want to send something else then just the hostdata, like an average
+        from all 3 values, you need to change this method
 
         :param val:
         :return:
@@ -232,7 +241,9 @@ class Server(Thread, NetworkInterface):
         if not is_error or (is_error and self.send_errors):
             # save value history for later
             self.save_values(val, 'local', is_error=is_error)
-            # vals = self.latest_values()
+            # vals = self.latest_values() # get latest values
+            # use them somehow to calc a better val variable to send
+            # send to serial
             self.serial.write(val)
 
     def print(self, msg):
@@ -255,6 +266,12 @@ class Client(NetworkInterface):
             exit(1)
 
     def __init__(self, server_ip, server_port, **kwargs):
+        """
+        Uses the :py:class:`network.NetworkInterface` and overrides the send method placeholder.
+        Sends its angle data to the server on arrival via :py:meth:`send()`
+        Is initialized via :py:meth:`network.init_network()` Method and with config variables.
+
+        """
         NetworkInterface.__init__(self, **kwargs)
         self.server_ip = server_ip
         self.server_port = server_port

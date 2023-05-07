@@ -5,11 +5,15 @@ Local development and advanced debugging
 Understanding the Code
 =======================
 
-To understand the code a bit better a simplified sequence diagram is given.
+To understand the code a bit better two simplified diagrams are given. Fist the UML Sequence Diagram:
 
 .. image:: img/ablauf.drawio.png
    :align: center
    :height: 40em
+
+And also a Flow-Chart like clickable Call-Graph (you can zoom in the website to make it bigger):
+
+.. graphviz:: img/callgraph.gv
 
 It all starts with the `run()` entry point in the `Application` class.
 This call constructs and configures all the necessary resources and starts threads as required.

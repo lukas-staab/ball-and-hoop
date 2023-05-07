@@ -1,0 +1,130 @@
+digraph G {
+
+    subgraph cluster_server {
+        style=dashed;
+        penwidth=2;
+        color=black;
+        node [shape=record,color=grey,target="_blank"];
+        label = "Server Pi";
+        s_app [
+            label="{Start App and load config|runner.py|Application.run()}"
+            URL="https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#module-src.ballandhoop.application"
+        ]
+        s_network_start[
+            label="{Init Network and wait for clients |init_network()|Server.__init__()}"
+            URL="https://lukas-staab.github.io/ball-and-hoop/code/index.html#src.network.Server"
+        ]
+        s_network_serial_start[
+            label="{Init Serial to D-Space|Serial.__init__()}"
+            URL="https://lukas-staab.github.io/ball-and-hoop/code/index.html#src.serial.SerialCom"
+        ]
+        s_network_serial_send[
+            label="{Send Serial to D-Space|Serial.write()}"
+            URL="https://lukas-staab.github.io/ball-and-hoop/code/index.html#src.serial.SerialCom.write"
+        ]
+        s_video_start [
+            label="{Start Camera| Videostream.__init__()}"
+            URL="https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#module-src.ballandhoop.videostream"
+        ]
+        s_video_get_pic [
+            label="{Recieve picture| Videostream.__next__()}"
+            URL="https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#module-src.ballandhoop.videostream"
+        ]
+        s_find_ball [
+            label="{Find ball and calc angle in given frame|hoop.find_ball()}"
+            URL="https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#src.ballandhoop.hoop.Hoop.find_ball"
+        ]
+        s_network_send[
+            label="{'Send' Message to save|<pre>NetworkInterface.preprocess_message()|<send>Server.send()}"
+            URL="https://lukas-staab.github.io/ball-and-hoop/code/index.html#src.network.Server.send"
+        ]
+        s_network_receive[
+            label="{Wait for messages|Server.__init__()|Server.run()|s.recv(1024)}"
+            URL="https://lukas-staab.github.io/ball-and-hoop/code/index.html#src.network.Server.run"
+        ]
+        s_workerpool [
+            label="{Init Workerpool|multiprocessing.Pool()}"
+            URL="https://docs.python.org/3/library/multiprocessing.html"
+        ]
+        s_worker_dispatch [
+            label="{Dispatch Worker| pool.apply_async()|hoop.find_ball_async()}"
+            URL="https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#src.ballandhoop.hoop.Hoop.find_ball_async"
+        ]
+
+        s_app -> s_network_start  -> s_network_send -> s_network_serial_send
+        s_network_start -> s_network_serial_start -> s_network_serial_send
+        s_network_start-> s_network_receive -> s_network_serial_send
+        s_app -> s_workerpool -> s_worker_dispatch -> s_find_ball -> s_network_send
+        s_app -> s_video_start -> s_video_get_pic -> s_worker_dispatch
+    }
+
+    subgraph cluster_client {
+        style=dashed;
+        penwidth=2;
+        color=black;
+        label = "Client Pi";
+
+        node [shape=record,color=grey,target="_blank"];
+
+        c_app [
+            label="{Start App and load config|runner.py|Application.run()}"
+            URL="https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#module-src.ballandhoop.application"
+        ]
+        c_network_start[
+            label="{Init Network and Connect to Server|init_network()|Client.__init__()}"
+            URL="https://lukas-staab.github.io/ball-and-hoop/code/index.html#src.network.Client"
+        ]
+        c_video_start [
+            label="{Start Camera| Videostream.__init__()}"
+            URL="https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#module-src.ballandhoop.videostream"
+        ]
+        c_video_get_pic [
+            label="{Recieve picture| Videostream.__next__()}"
+            URL="https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#module-src.ballandhoop.videostream"
+        ]
+        c_find_ball [
+            label="{Find ball and calc angle in given frame|hoop.find_ball()}"
+            URL="https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#src.ballandhoop.hoop.Hoop.find_ball"
+        ]
+        c_network_send[
+            label="{Send Message to Server|<pre>NetworkInterface.preprocess_message()|<send>Client.send()}"
+            URL="https://lukas-staab.github.io/ball-and-hoop/code/index.html#src.network.Client.send"
+        ]
+        c_workerpool [
+            label="{Init Workerpool|multiprocessing.Pool()}"
+            URL="https://docs.python.org/3/library/multiprocessing.html"
+        ]
+        c_worker_dispatch [
+            label="{Dispatch Worker| pool.apply_async()|hoop.find_ball_async()}"
+            URL="https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#src.ballandhoop.hoop.Hoop.find_ball_async"
+        ]
+
+        c_app -> c_network_start  -> c_network_send
+        c_app -> c_workerpool -> c_worker_dispatch -> c_find_ball -> c_network_send
+        c_app -> c_video_start -> c_video_get_pic -> c_worker_dispatch
+    }
+
+    subgraph cluster_lab {
+        style=dashed;
+        penwidth=2;
+        color=black;
+        label = "Lab Computer";
+        start [shape=Mdiamond];
+
+        node [shape=record,color=grey,target="_blank"];
+        l_config [
+            label="{Find Hoop and save to config|calibrate.py}"
+            URL="https://lukas-staab.github.io/ball-and-hoop/config.html"
+        ]
+        start -> l_config [label="optional", constraint=false]
+        l_config -> start
+        l_pid [label="{Start Matlab Simulink Model}"]
+    }
+    start -> c_app
+    start -> s_app
+    start -> l_pid
+    s_network_serial_send -> l_pid
+    c_network_send:send -> s_network_receive [constraint=false]
+    c_network_start -> s_network_start
+
+}

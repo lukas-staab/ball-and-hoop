@@ -103,3 +103,5 @@ Do all the above steps for all 3 pis. Then first run the pi which has the serial
 
 Afterwards use the runner on the other 2 pis. If the clients disconnect at some point you can close the application
 and restart it. They can reconnect.
+
+
