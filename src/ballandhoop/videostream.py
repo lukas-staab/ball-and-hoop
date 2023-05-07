@@ -17,6 +17,7 @@ class VideoStream:
     :param faker_path: if this directory is set, the camera will not be used, but the pictures saved there. Can be recorded through debug.py
     :param kwargs: catch-all parameter, so more entries in the config do not throw an error
     """
+
     resolutions = {
         0: (160, 128),
         1: (320, 240),
@@ -74,15 +75,17 @@ class VideoStream:
 
     def __iter__(self):
         """
-        Getting the iterator, starting the fps counter
+        Returning the iterator e.g. in a for loop and starting the fps counter
         :return: self
+        :meta public:
         """
         self.fps.start()
         return self
 
     def __next__(self):
         """
-        Called to get the next frame.
+        Automatically called to get the next frame e.g. in a for loop with this class as iterator
+        Can rotate the image before returning. Updates the fps counter
 
         :return: frame array
         """
@@ -104,6 +107,9 @@ class VideoStream:
         return f
 
     def close(self):
+        """
+        Stops the FPS counter and closes the resources if needed
+        """
         self.fps.stop()
         if not self.is_faked:
             self.stream.close()
@@ -111,6 +117,11 @@ class VideoStream:
             self.camera.close()
 
     def faker_stream_generator(self, faker_path):
+        """
+        Takes the faker path from the config and delivers the png pictures there as the videostream. Good for debugging
+        to get a reliable input
+        """
+
         idx = 1  # 0th pic is sometimes weird
         file = faker_path + "/" + str(idx) + ".png"
         while os.path.isfile(file):

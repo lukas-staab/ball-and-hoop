@@ -36,6 +36,7 @@ templates_path = ['_templates']
 exclude_patterns = []
 autodoc_mock_imports = ['picamera', 'picamera.array']
 
+
 intersphinx_mapping = {
     'picamera': ('https://picamera.readthedocs.io/en/release-1.13/', None),
 }
@@ -58,3 +59,12 @@ html_theme_options = {
     'includehidden': True,
     'titles_only': False,
 }
+
+# small hack to make __iter__ and __next__() visible but not the other ones
+def skip(app, what, name, obj, would_skip, options):
+    if name == "__iter__" or name == '__next__':
+        return False
+    return would_skip
+
+def setup(app):
+    app.connect("autodoc-skip-member", skip)
