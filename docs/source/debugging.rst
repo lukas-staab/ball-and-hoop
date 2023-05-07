@@ -11,10 +11,6 @@ To understand the code a bit better two simplified diagrams are given. Fist the 
    :align: center
    :height: 40em
 
-And also a Flow-Chart like clickable Call-Graph (you can zoom in the website to make it bigger):
-
-.. graphviz:: img/callgraph.gv
-
 It all starts with the `run()` entry point in the `Application` class.
 This call constructs and configures all the necessary resources and starts threads as required.
 The network server and the retrieval of frames from the camera have their own thread,
@@ -27,6 +23,13 @@ This worker returns to the callback `ball_found_async_callback()` after his job 
 The frame loop does not wait for the callback but continues with the `for` loop through the frames.
 
 The frame data arrays are delivered via the `piHSVArray` class inside `Videostream.__next__()` in HSV format.
+
+Call-Graph
+==========
+
+This can also shown in a Flow-Chart-like clickable Call-Graph (you can zoom in the website to make it bigger):
+
+.. graphviz:: img/callgraph.gv
 
 Here the full code of the diagram above for a more detailed deep dive:
 

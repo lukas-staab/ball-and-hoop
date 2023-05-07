@@ -28,7 +28,7 @@ digraph G {
         ]
         s_video_get_pic [
             label="{Recieve picture| Videostream.__next__()}"
-            URL="https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#module-src.ballandhoop.videostream"
+            URL="https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#module-src.ballandhoop.videostream.Videostream.__next__"
         ]
         s_find_ball [
             label="{Find ball and calc angle in given frame|hoop.find_ball()}"
@@ -80,7 +80,7 @@ digraph G {
         ]
         c_video_get_pic [
             label="{Recieve picture| Videostream.__next__()}"
-            URL="https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#module-src.ballandhoop.videostream"
+            URL="https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#module-src.ballandhoop.videostream.Videostream.__next__"
         ]
         c_find_ball [
             label="{Find ball and calc angle in given frame|hoop.find_ball()}"
