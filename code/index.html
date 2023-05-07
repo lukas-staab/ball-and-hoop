@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Code Index &mdash; lukas-staab/ball-and-hoop 2022 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ballandhoop package" href="src.ballandhoop.html" />
+    <link rel="prev" title="Local development and advanced debugging" href="../debugging.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            lukas-staab/ball-and-hoop
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../setup.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#hardware-setup">Hardware Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#hoop">Hoop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#raspberry-pis">Raspberry Pis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#network">Network</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#software">Software</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#install-operating-system">Install Operating System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#deploy-via-ansible">Deploy via Ansible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#deploy-via-manual-installation">Deploy via manual installation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../usage.html#calibration">Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage.html#white-calibration">White-calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../usage.html#hoop-or-ball-not-found">Hoop or ball not found</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../usage.html#camera-out-of-memory-error">Camera out of memory error</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../usage.html#run-application">Run application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage.html#run-application-on-all-3-pis">Run application on all 3 pis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../config.html">Configuration</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../debugging.html">Local development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../debugging.html#understanding-the-code">Understanding the Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../debugging.html#call-graph">Call-Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../debugging.html#local-development">Local development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../debugging.html#getting-mocked-video-material">Getting Mocked Video material</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Full code API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src.ballandhoop.html">ballandhoop package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.ballandhoop.html#module-src.ballandhoop.application">Application module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.ballandhoop.html#module-src.ballandhoop.ball">Ball module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.ballandhoop.html#module-src.ballandhoop.helper">Helper module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.ballandhoop.html#module-src.ballandhoop.hoop">Hoop module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.ballandhoop.html#module-src.ballandhoop.image">Image module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.ballandhoop.html#module-src.ballandhoop.piHSVArray">PiHSVArray module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.ballandhoop.html#module-src.ballandhoop.videostream">Videostream module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.ballandhoop.html#module-src.ballandhoop.whiteBalancing">WhiteBalancing module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.chessboard.html">chessboard package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.chessboard.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.chessboard.html#module-src.chessboard.calibrate_chessboard">src.chessboard.calibrate_chessboard module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.chessboard.html#module-src.chessboard.chessboard">src.chessboard.chessboard module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.chessboard.html#module-src.chessboard.undistort">src.chessboard.undistort module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.chessboard.html#module-src.chessboard.utils">src.chessboard.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.chessboard.html#module-src.chessboard">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-src.network">network module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#src.network.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.network.NetworkInterface"><code class="docutils literal notranslate"><span class="pre">NetworkInterface</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.network.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.network.addr"><code class="docutils literal notranslate"><span class="pre">addr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.network.init_network"><code class="docutils literal notranslate"><span class="pre">init_network()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.network.now"><code class="docutils literal notranslate"><span class="pre">now()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-src.serial">serial module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#src.serial.SerialCom"><code class="docutils literal notranslate"><span class="pre">SerialCom</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">lukas-staab/ball-and-hoop</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Code Index</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/code/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="code-index">
+<h1>Code Index<a class="headerlink" href="#code-index" title="Permalink to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="module-src.network">
+<span id="network-module"></span><h2>network module<a class="headerlink" href="#module-src.network" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.network.Client">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.network.</span></span><span class="sig-name descname"><span class="pre">Client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">server_ip</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server_port</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.network.Client" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.network.NetworkInterface" title="src.network.NetworkInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetworkInterface</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.network.Client.send">
+<span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.network.Client.send" title="Permalink to this definition"></a></dt>
+<dd><p>Sends the data to the server</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>val</strong> – the angle or the error</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.network.NetworkInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.network.</span></span><span class="sig-name descname"><span class="pre">NetworkInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">send_errors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">360</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message_bytes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.network.NetworkInterface" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Abstracts the send method, and how to do the preprocessing of the data to send</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>send_errors</strong> – flag if errors should be sent or only logged</p></li>
+<li><p><strong>precision</strong> (<em>int</em>) – the base degree of the angle, defaults to 360</p></li>
+<li><p><strong>message_bytes</strong> – how many bytes the data should have in ethernet and serial, 2^(8*message_bytes) has to be bigger than precission, defaults to 2</p></li>
+<li><p><strong>kwargs</strong> – a catch-all argument, so constructor can be filled by config</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>max_precision</strong> – equals 2^(8 * message_bytes), the highest 10 values are reserved for error codes</p></li>
+<li><p><strong>NOT_FOUND</strong> – max_precision - 1, an error code for a not found ball</p></li>
+<li><p><strong>WRONG_ORDER</strong> – max_precision - 2, an error code for a failed race condition</p></li>
+<li><p><strong>ERROR</strong> – max_precision - 3, an error code, for a general error</p></li>
+<li><p><strong>LOST_CONNECTION</strong> – max_precision - 4, an error code, for a lost camera-pi</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.network.NetworkInterface.preprocess_message">
+<span class="sig-name descname"><span class="pre">preprocess_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data:</span> <span class="pre">float)</span> <span class="pre">-&gt;</span> <span class="pre">(&lt;class</span> <span class="pre">'int'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'bool'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.network.NetworkInterface.preprocess_message" title="Permalink to this definition"></a></dt>
+<dd><p>Rebases the data from 360 degree to the given precision.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>float</em>) – the date which should be converted</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the angle in the new base cast to int and if this is an error</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(int, bool)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.network.NetworkInterface.send">
+<span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.network.NetworkInterface.send" title="Permalink to this definition"></a></dt>
+<dd><p>A placeholder which will be overwritten by its parents</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>val</strong> – the data</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.network.Server">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.network.</span></span><span class="sig-name descname"><span class="pre">Server</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">server_ip</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server_port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">serial</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.network.Server" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Thread</span></code>, <a class="reference internal" href="#src.network.NetworkInterface" title="src.network.NetworkInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetworkInterface</span></code></a></p>
+<p>The server class. Manages the incoming connections from clients, pipes data to the serial port and is logging
+the values for a later plotting usage</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>server_ip</strong> – the ip of the server (has to be localhost)</p></li>
+<li><p><strong>server_port</strong> – the port we are waiting for connections</p></li>
+<li><p><strong>serial</strong> – the configuration for the serial class</p></li>
+<li><p><strong>print_debug</strong> – a flag if debug output should be printed or discarded</p></li>
+<li><p><strong>kwargs</strong> – a catch-all parameter for additional config given</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>serial</strong> – A object of the <code class="xref py py-class docutils literal notranslate"><span class="pre">SerialCom</span></code></p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.network.Server.latest_values">
+<span class="sig-name descname"><span class="pre">latest_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.network.Server.latest_values" title="Permalink to this definition"></a></dt>
+<dd><p>Returns only the last value from each host in each category time, angle and error as plain value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[hostname][category] : value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.network.Server.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.network.Server.print" title="Permalink to this definition"></a></dt>
+<dd><p>Helper method which suppresses debug output if not configured</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.network.Server.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#src.network.Server.run" title="Permalink to this definition"></a></dt>
+<dd><p>Runs the network server. This method is started in a separate thread
+It iterates through all connection sockets, including the server, watching for new data or connections.
+The first given data is the hostname, so a reconnect with the same hostname is possible server vice</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.network.Server.save_values">
+<span class="sig-name descname"><span class="pre">save_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.network.Server.save_values" title="Permalink to this definition"></a></dt>
+<dd><p>Saves the value (or error) in an value array, together with the time.
+The hostname is used as a a top level key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – the data</p></li>
+<li><p><strong>address</strong> – connection address, where the hostname can be deducted from</p></li>
+<li><p><strong>is_error</strong> – a flag if this data is an error code, so we do nat have to check here</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.network.Server.send">
+<span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.network.Server.send" title="Permalink to this definition"></a></dt>
+<dd><p>does not send the data to the server, because this is the server already.
+So it justs saves the data and pipes the data through to the serial interface.
+If you want to send something else then just the hostdata, like an average
+from all 3 values, you need to change this method</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>val</strong> – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.network.Server.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.network.Server.stop" title="Permalink to this definition"></a></dt>
+<dd><p>Saves the data which was sent in a result.mat and result.yml file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.network.addr">
+<span class="sig-prename descclassname"><span class="pre">src.network.</span></span><span class="sig-name descname"><span class="pre">addr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">socket</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.network.addr" title="Permalink to this definition"></a></dt>
+<dd><p>A helper method to get a unique string per connection</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> – the socket object</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a unique string per connection</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.network.init_network">
+<span class="sig-prename descclassname"><span class="pre">src.network.</span></span><span class="sig-name descname"><span class="pre">init_network</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_server</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server_ip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server_port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">9999</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.network.NetworkInterface" title="src.network.NetworkInterface"><span class="pre">NetworkInterface</span></a></span></span><a class="headerlink" href="#src.network.init_network" title="Permalink to this definition"></a></dt>
+<dd><p>This function is a wrapper for dynamic construction of the Client or Server Class depending on the config
+file, some parameters are only relevant in a server context</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.network.now">
+<span class="sig-prename descclassname"><span class="pre">src.network.</span></span><span class="sig-name descname"><span class="pre">now</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.network.now" title="Permalink to this definition"></a></dt>
+<dd><p>A helper method to get an integer value which can be used as a time axis</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a time integer in ms, repeats every 10.000 seconds</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-src.serial">
+<span id="serial-module"></span><h2>serial module<a class="headerlink" href="#module-src.serial" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.serial.SerialCom">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.serial.</span></span><span class="sig-name descname"><span class="pre">SerialCom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">com</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/dev/serial0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baud</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9600</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">active</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message_bytes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">send_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">send_errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.serial.SerialCom" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Organizes the serial communication to the dspace card</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>verbose</strong> – flag if more output should be given, defaults to false</p></li>
+<li><p><strong>com</strong> – the com port to use, on linux a file, defaults to ‘/dev/serial0’ (rpi v4)</p></li>
+<li><p><strong>baud</strong> – the baud rate</p></li>
+<li><p><strong>active</strong> – flag if serial connection should be established, usefull for mockup usage, defaults to True</p></li>
+<li><p><strong>message_bytes</strong> – the length in bytes of the send message per given data, defaults to 2</p></li>
+<li><p><strong>send_mode</strong> – the send mode (not yet implemented)</p></li>
+<li><p><strong>send_errors</strong> – flag if errors should be transmitted, defaults to False (not yet implemented)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.serial.SerialCom.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.serial.SerialCom.write" title="Permalink to this definition"></a></dt>
+<dd><p>The method to call to write an int over the serial line</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>angle</strong> – the angle in int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../debugging.html" class="btn btn-neutral float-left" title="Local development and advanced debugging" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="src.ballandhoop.html" class="btn btn-neutral float-right" title="ballandhoop package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Lukas Staab, MIT Licence.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

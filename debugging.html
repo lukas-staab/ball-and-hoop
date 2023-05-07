@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Local development and advanced debugging &mdash; lukas-staab/ball-and-hoop 2022 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Code Index" href="code/index.html" />
+    <link rel="prev" title="Configuration" href="config.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            lukas-staab/ball-and-hoop
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="setup.html#hardware-setup">Hardware Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#hoop">Hoop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#raspberry-pis">Raspberry Pis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#network">Network</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html#software">Software</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#install-operating-system">Install Operating System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#deploy-via-ansible">Deploy via Ansible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#deploy-via-manual-installation">Deploy via manual installation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#calibration">Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#white-calibration">White-calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#hoop-or-ball-not-found">Hoop or ball not found</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#camera-out-of-memory-error">Camera out of memory error</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#run-application">Run application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#run-application-on-all-3-pis">Run application on all 3 pis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Local development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#understanding-the-code">Understanding the Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#call-graph">Call-Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#local-development">Local development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-mocked-video-material">Getting Mocked Video material</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="code/index.html">Full code API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code/src.ballandhoop.html">ballandhoop package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.application">Application module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.ball">Ball module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.helper">Helper module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.hoop">Hoop module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.image">Image module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.piHSVArray">PiHSVArray module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.videostream">Videostream module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.whiteBalancing">WhiteBalancing module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="code/src.chessboard.html">chessboard package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#module-src.chessboard.calibrate_chessboard">src.chessboard.calibrate_chessboard module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#module-src.chessboard.chessboard">src.chessboard.chessboard module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#module-src.chessboard.undistort">src.chessboard.undistort module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#module-src.chessboard.utils">src.chessboard.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#module-src.chessboard">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="code/index.html#module-src.network">network module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.NetworkInterface"><code class="docutils literal notranslate"><span class="pre">NetworkInterface</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.addr"><code class="docutils literal notranslate"><span class="pre">addr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.init_network"><code class="docutils literal notranslate"><span class="pre">init_network()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.now"><code class="docutils literal notranslate"><span class="pre">now()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="code/index.html#module-src.serial">serial module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.serial.SerialCom"><code class="docutils literal notranslate"><span class="pre">SerialCom</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">lukas-staab/ball-and-hoop</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Local development and advanced debugging</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/debugging.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="local-development-and-advanced-debugging">
+<h1>Local development and advanced debugging<a class="headerlink" href="#local-development-and-advanced-debugging" title="Permalink to this heading"></a></h1>
+<section id="understanding-the-code">
+<h2>Understanding the Code<a class="headerlink" href="#understanding-the-code" title="Permalink to this heading"></a></h2>
+<p>To understand the code a bit better two simplified diagrams are given. Fist the UML Sequence Diagram:</p>
+<a class="reference internal image-reference" href="_images/ablauf.drawio.png"><img alt="_images/ablauf.drawio.png" class="align-center" src="_images/ablauf.drawio.png" style="height: 40em;" /></a>
+<p>It all starts with the <cite>run()</cite> entry point in the <cite>Application</cite> class.
+This call constructs and configures all the necessary resources and starts threads as required.
+The network server and the retrieval of frames from the camera have their own thread,
+symbolised by the activity rectangle in the diagram.
+Each frame calculation also has its own thread, represented by the while block in the diagram.</p>
+<p>First the frame is taken from the video object via the implicit <cite>__next__()</cite> method with an iterator.
+Then the worker pool dispatches a worker with the frame and the <cite>find_ball_async()</cite> method.
+This worker returns to the callback <cite>ball_found_async_callback()</cite> after his job is done.
+The frame loop does not wait for the callback but continues with the <cite>for</cite> loop through the frames.</p>
+<p>The frame data arrays are delivered via the <cite>piHSVArray</cite> class inside <cite>Videostream.__next__()</cite> in HSV format.</p>
+</section>
+<section id="call-graph">
+<h2>Call-Graph<a class="headerlink" href="#call-graph" title="Permalink to this heading"></a></h2>
+<p>This can also shown in a Flow-Chart-like clickable Call-Graph (you can zoom in the website to make it bigger):</p>
+<div class="graphviz"><object data="_images/graphviz-39e8fe6308dfa052a6fca25e4f7d364e66ec183b.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph G {
+
+    subgraph cluster_server {
+        style=dashed;
+        penwidth=2;
+        color=black;
+        node [shape=record,color=grey,target=&quot;_blank&quot;];
+        label = &quot;Server Pi&quot;;
+        s_app [
+            label=&quot;{Start App and load config|runner.py|Application.run()}&quot;
+            URL=&quot;https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#module-src.ballandhoop.application&quot;
+        ]
+        s_network_start[
+            label=&quot;{Init Network and wait for clients |init_network()|Server.__init__()}&quot;
+            URL=&quot;https://lukas-staab.github.io/ball-and-hoop/code/index.html#src.network.Server&quot;
+        ]
+        s_network_serial_start[
+            label=&quot;{Init Serial to D-Space|Serial.__init__()}&quot;
+            URL=&quot;https://lukas-staab.github.io/ball-and-hoop/code/index.html#src.serial.SerialCom&quot;
+        ]
+        s_network_serial_send[
+            label=&quot;{Send Serial to D-Space|Serial.write()}&quot;
+            URL=&quot;https://lukas-staab.github.io/ball-and-hoop/code/index.html#src.serial.SerialCom.write&quot;
+        ]
+        s_video_start [
+            label=&quot;{Start Camera| Videostream.__init__()}&quot;
+            URL=&quot;https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#module-src.ballandhoop.videostream&quot;
+        ]
+        s_video_get_pic [
+            label=&quot;{Recieve picture| Videostream.__next__()}&quot;
+            URL=&quot;https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#src.ballandhoop.videostream.VideoStream.__next__&quot;
+        ]
+        s_find_ball [
+            label=&quot;{Find ball and calc angle in given frame|hoop.find_ball()}&quot;
+            URL=&quot;https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#src.ballandhoop.hoop.Hoop.find_ball&quot;
+        ]
+        s_network_send[
+            label=&quot;{'Send' Message to save|&lt;pre&gt;NetworkInterface.preprocess_message()|&lt;send&gt;Server.send()}&quot;
+            URL=&quot;https://lukas-staab.github.io/ball-and-hoop/code/index.html#src.network.Server.send&quot;
+        ]
+        s_network_receive[
+            label=&quot;{Wait for messages|Server.__init__()|Server.run()|s.recv(1024)}&quot;
+            URL=&quot;https://lukas-staab.github.io/ball-and-hoop/code/index.html#src.network.Server.run&quot;
+        ]
+        s_workerpool [
+            label=&quot;{Init Workerpool|multiprocessing.Pool()}&quot;
+            URL=&quot;https://docs.python.org/3/library/multiprocessing.html&quot;
+        ]
+        s_worker_dispatch [
+            label=&quot;{Dispatch Worker| pool.apply_async()|hoop.find_ball_async()}&quot;
+            URL=&quot;https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#src.ballandhoop.hoop.Hoop.find_ball_async&quot;
+        ]
+
+        s_app -&gt; s_network_start  -&gt; s_network_send -&gt; s_network_serial_send
+        s_network_start -&gt; s_network_serial_start -&gt; s_network_serial_send
+        s_network_start-&gt; s_network_receive -&gt; s_network_serial_send
+        s_app -&gt; s_workerpool -&gt; s_worker_dispatch -&gt; s_find_ball -&gt; s_network_send
+        s_app -&gt; s_video_start -&gt; s_video_get_pic -&gt; s_worker_dispatch
+    }
+
+    subgraph cluster_client {
+        style=dashed;
+        penwidth=2;
+        color=black;
+        label = &quot;Client Pi&quot;;
+
+        node [shape=record,color=grey,target=&quot;_blank&quot;];
+
+        c_app [
+            label=&quot;{Start App and load config|runner.py|Application.run()}&quot;
+            URL=&quot;https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#module-src.ballandhoop.application&quot;
+        ]
+        c_network_start[
+            label=&quot;{Init Network and Connect to Server|init_network()|Client.__init__()}&quot;
+            URL=&quot;https://lukas-staab.github.io/ball-and-hoop/code/index.html#src.network.Client&quot;
+        ]
+        c_video_start [
+            label=&quot;{Start Camera| Videostream.__init__()}&quot;
+            URL=&quot;https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#module-src.ballandhoop.videostream&quot;
+        ]
+        c_video_get_pic [
+            label=&quot;{Recieve picture| Videostream.__next__()}&quot;
+            URL=&quot;https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#src.ballandhoop.videostream.VideoStream.__next__&quot;
+        ]
+        c_find_ball [
+            label=&quot;{Find ball and calc angle in given frame|hoop.find_ball()}&quot;
+            URL=&quot;https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#src.ballandhoop.hoop.Hoop.find_ball&quot;
+        ]
+        c_network_send[
+            label=&quot;{Send Message to Server|&lt;pre&gt;NetworkInterface.preprocess_message()|&lt;send&gt;Client.send()}&quot;
+            URL=&quot;https://lukas-staab.github.io/ball-and-hoop/code/index.html#src.network.Client.send&quot;
+        ]
+        c_workerpool [
+            label=&quot;{Init Workerpool|multiprocessing.Pool()}&quot;
+            URL=&quot;https://docs.python.org/3/library/multiprocessing.html&quot;
+        ]
+        c_worker_dispatch [
+            label=&quot;{Dispatch Worker| pool.apply_async()|hoop.find_ball_async()}&quot;
+            URL=&quot;https://lukas-staab.github.io/ball-and-hoop/code/src.ballandhoop.html#src.ballandhoop.hoop.Hoop.find_ball_async&quot;
+        ]
+
+        c_app -&gt; c_network_start  -&gt; c_network_send
+        c_app -&gt; c_workerpool -&gt; c_worker_dispatch -&gt; c_find_ball -&gt; c_network_send
+        c_app -&gt; c_video_start -&gt; c_video_get_pic -&gt; c_worker_dispatch
+    }
+
+    subgraph cluster_lab {
+        style=dashed;
+        penwidth=2;
+        color=black;
+        label = &quot;Lab Computer&quot;;
+        start [shape=Mdiamond];
+
+        node [shape=record,color=grey,target=&quot;_blank&quot;];
+        l_config [
+            label=&quot;{Find Hoop and save to config|calibrate.py}&quot;
+            URL=&quot;https://lukas-staab.github.io/ball-and-hoop/config.html&quot;
+        ]
+        start -&gt; l_config [label=&quot;optional&quot;, constraint=false]
+        l_config -&gt; start
+        l_pid [label=&quot;{Start Matlab Simulink Model}&quot;]
+    }
+    start -&gt; c_app
+    start -&gt; s_app
+    start -&gt; l_pid
+    s_network_serial_send -&gt; l_pid
+    c_network_send:send -&gt; s_network_receive [constraint=false]
+    c_network_start -&gt; s_network_start
+
+}</p></object></div>
+<p>Here the full code of the diagram above for a more detailed deep dive:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ball_hsv</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This method runs the main loop method for tracking and network init. Administers the thread-workers and gives</span>
+<span class="sd">    them jobs. Each core gets one thread-worker. They will calculate the results of the frames after each other.</span>
+<span class="sd">    The thread-workers are especially needed if the application is running under high per frame cpu,</span>
+<span class="sd">    which can happen with high fps or high resolution settings.</span>
+<span class="sd">    :param ball_hsv: if this parameter is set, the ball hsv in config is overwritten</span>
+<span class="sd">    :type ball_hsv: dict</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># saves the new colors to the config</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">save_col_and_add_from_config</span><span class="p">(</span><span class="s1">&#39;ball&#39;</span><span class="p">,</span> <span class="n">ball_hsv</span><span class="p">)</span>
+    <span class="c1"># give config to object constructors to initialize like defined in config</span>
+    <span class="c1"># ** does flatten the array to arguments, with their corresponding keys as argument names</span>
+    <span class="n">hoop</span> <span class="o">=</span> <span class="n">Hoop</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">get_cfg</span><span class="p">(</span><span class="s1">&#39;hoop&#39;</span><span class="p">))</span>
+    <span class="n">video</span> <span class="o">=</span> <span class="n">VideoStream</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">get_cfg</span><span class="p">(</span><span class="s1">&#39;camera&#39;</span><span class="p">))</span>
+    <span class="c1"># the network needs object context for better access in the async callback method from the workers</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">network</span> <span class="o">=</span> <span class="n">init_network</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">get_cfg</span><span class="p">(</span><span class="s1">&#39;network&#39;</span><span class="p">))</span>
+    <span class="c1"># start network</span>
+    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># start thread-worker pool</span>
+            <span class="n">pool</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">())</span>
+            <span class="c1"># count the number of frames, this will be important to reconstruct original frame order</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="c1"># iterate over the video frames (most likely infinitely)</span>
+            <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">video</span><span class="p">:</span>
+                <span class="c1"># increase frame counter</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="c1"># log the time of frame start (and delivery later)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">timings</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+                <span class="n">debug_dir_path</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="c1"># if in debugging mode save every 30th frame in this folder for that frame</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">30</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">debug_dir_path</span> <span class="o">=</span> <span class="s1">&#39;./storage/debug/&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">debug_dir_path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="c1"># normal loop:</span>
+                <span class="c1"># send the task to the next available thread-worker, from the pool</span>
+                <span class="c1"># the threads will call hoop.find_ball(frame=frame, cols=ball_hsv, iterations=0)</span>
+                <span class="c1"># search for the ball in the frame with the given color borders</span>
+                <span class="n">pool</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">hoop</span><span class="o">.</span><span class="n">find_ball_async</span><span class="p">,</span>
+                                 <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_config</span><span class="p">()[</span><span class="s1">&#39;ball&#39;</span><span class="p">],</span> <span class="n">debug_dir_path</span><span class="p">),</span>
+                                 <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ball_found_async_callback</span><span class="p">,</span>
+                                 <span class="n">error_callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ball_search_error_callback</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+            <span class="c1"># break potential infinite loop</span>
+            <span class="k">pass</span>
+
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Closing resources, worker and so on&#39;</span><span class="p">)</span>
+            <span class="n">video</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">pool</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+            <span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="local-development">
+<h2>Local development<a class="headerlink" href="#local-development" title="Permalink to this heading"></a></h2>
+<p>to be able to develope this codebase on a local (non-pi) machine you need to do some extra steps.</p>
+<ul class="simple">
+<li><p>make sure you have a Serial port, or a deactivated serial communication (see <a class="reference internal" href="config.html"><span class="doc">Configuration</span></a>)</p></li>
+<li><p>make sure you have mocked video material from a pi to make your calculations on (more on that later)</p></li>
+</ul>
+<p>If you want better code completion it is advised also to install the <cite>picamera</cite> module.
+Usually this is not possible, but there is a way to achieve it.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">READTHEDOCS</span><span class="o">=</span>True
+pip<span class="w"> </span>install<span class="w"> </span>picamera<span class="w"> </span><span class="c1"># should work now</span>
+</pre></div>
+</div>
+</section>
+<section id="getting-mocked-video-material">
+<h2>Getting Mocked Video material<a class="headerlink" href="#getting-mocked-video-material" title="Permalink to this heading"></a></h2>
+<p>To record a ‘video’ there is the <cite>debug.py</cite> file, to take a video you can use the following command:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>debug.py<span class="w"> </span>--vid<span class="w"> </span>dirname<span class="w"> </span><span class="m">300</span><span class="w"> </span><span class="m">60</span><span class="w"> </span><span class="m">1</span>
+</pre></div>
+</div>
+<p>Where</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>dirname is the name of the directory in <cite>storage/faker/</cite></p></li>
+<li><p>300 is the amount of frames which will be collected, defaults to 10</p></li>
+<li><p>60 is the framerate the frames will be collected, defaults to 60</p></li>
+<li><p>1 is the resolution_no the pictures will be taken in, defaults to 1 (320x240)</p></li>
+</ul>
+</div></blockquote>
+<p>To use this <cite>videos</cite> (only a lot of pictures which will be interpreted as a raw video stream) add the following config:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">lyoga</span><span class="p">:</span><span class="w"> </span><span class="c1"># my pc hostname</span>
+<span class="w">  </span><span class="c1"># some parts omitted</span>
+<span class="w">   </span><span class="nt">camera</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">faker_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fetch/rpi3.lan/faker/runtest</span><span class="w"> </span><span class="c1"># loads this video directory instead of the camera (for the ball search)</span>
+<span class="w">      </span><span class="c1"># some parts omitted</span>
+<span class="w">   </span><span class="nt">hoop</span><span class="p">:</span>
+<span class="w">      </span><span class="c1"># some parts omitted</span>
+<span class="w">      </span><span class="nt">faker_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">storage/cheat2.png</span><span class="w"> </span><span class="c1"># one picture which will be used for the configure routine (hoop+ball once)</span>
+<span class="w">   </span><span class="nt">network</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">is_server</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">serial</span><span class="p">:</span>
+<span class="w">         </span><span class="nt">active</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"> </span><span class="c1"># has to be false if you do not have a serial com</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="config.html" class="btn btn-neutral float-left" title="Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="code/index.html" class="btn btn-neutral float-right" title="Code Index" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Lukas Staab, MIT Licence.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

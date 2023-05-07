@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Setup &mdash; lukas-staab/ball-and-hoop 2022 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Usage" href="usage.html" />
+    <link rel="prev" title="Introduction" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            lukas-staab/ball-and-hoop
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#hardware-setup">Hardware Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hoop">Hoop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#raspberry-pis">Raspberry Pis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#network">Network</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#software">Software</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#install-operating-system">Install Operating System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deploy-via-ansible">Deploy via Ansible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deploy-via-manual-installation">Deploy via manual installation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#calibration">Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#white-calibration">White-calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#hoop-or-ball-not-found">Hoop or ball not found</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#camera-out-of-memory-error">Camera out of memory error</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#run-application">Run application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#run-application-on-all-3-pis">Run application on all 3 pis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="debugging.html">Local development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html#understanding-the-code">Understanding the Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html#call-graph">Call-Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html#local-development">Local development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html#getting-mocked-video-material">Getting Mocked Video material</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="code/index.html">Full code API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code/src.ballandhoop.html">ballandhoop package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.application">Application module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.ball">Ball module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.helper">Helper module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.hoop">Hoop module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.image">Image module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.piHSVArray">PiHSVArray module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.videostream">Videostream module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.whiteBalancing">WhiteBalancing module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="code/src.chessboard.html">chessboard package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#module-src.chessboard.calibrate_chessboard">src.chessboard.calibrate_chessboard module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#module-src.chessboard.chessboard">src.chessboard.chessboard module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#module-src.chessboard.undistort">src.chessboard.undistort module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#module-src.chessboard.utils">src.chessboard.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#module-src.chessboard">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="code/index.html#module-src.network">network module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.NetworkInterface"><code class="docutils literal notranslate"><span class="pre">NetworkInterface</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.addr"><code class="docutils literal notranslate"><span class="pre">addr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.init_network"><code class="docutils literal notranslate"><span class="pre">init_network()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.now"><code class="docutils literal notranslate"><span class="pre">now()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="code/index.html#module-src.serial">serial module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.serial.SerialCom"><code class="docutils literal notranslate"><span class="pre">SerialCom</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">lukas-staab/ball-and-hoop</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Setup</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/setup.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="setup">
+<h1>Setup<a class="headerlink" href="#setup" title="Permalink to this heading"></a></h1>
+<section id="hardware-setup">
+<h2>Hardware Setup<a class="headerlink" href="#hardware-setup" title="Permalink to this heading"></a></h2>
+<section id="hoop">
+<h3>Hoop<a class="headerlink" href="#hoop" title="Permalink to this heading"></a></h3>
+<p>The construction of the hoop and the electrics are out of scope for this documentation.</p>
+<a class="reference internal image-reference" href="_images/1.jpg"><img alt="_images/1.jpg" class="align-center" src="_images/1.jpg" style="height: 40em;" /></a>
+</section>
+<section id="raspberry-pis">
+<h3>Raspberry Pis<a class="headerlink" href="#raspberry-pis" title="Permalink to this heading"></a></h3>
+<p>For the project 3 Raspberry PIs Model 4 with 4 GB RAM have been used.
+8 GB Flash drive probably would have been sufficient, a bit more will not hurt.
+Each with one Raspberry Pi Cameras Model v1.
+The Cameras are arranged evently on the circle like here</p>
+<img alt="_images/close.png" class="align-center" src="_images/close.png" />
+</section>
+<section id="network">
+<h3>Network<a class="headerlink" href="#network" title="Permalink to this heading"></a></h3>
+<p>A normal router has been used, where all RPis (+ your local development machine) are connected.
+The router should have internet access during development and deployment, but not afterwards.
+If you keep the internet make sure the access to the raspberry pis is secured accordingly.</p>
+<p>One of the pis has to be connected with the serial gpio pins to the dspace card.</p>
+<p>The pc acts as a command and control entity in the setup,
+which announces what the pis should do and manages the dspace programming.</p>
+<img alt="_images/com-architecture.drawio.png" class="align-center" src="_images/com-architecture.drawio.png" />
+</section>
+</section>
+<section id="software">
+<h2>Software<a class="headerlink" href="#software" title="Permalink to this heading"></a></h2>
+<section id="install-operating-system">
+<h3>Install Operating System<a class="headerlink" href="#install-operating-system" title="Permalink to this heading"></a></h3>
+<p>Install on every Raspberry Pi SD Card, which shall be used, Raspian OS.
+Details for installation can be found on their <a class="reference external" href="https://www.raspberrypi.com/software/">webiste</a>.</p>
+<section id="install-via-raspi-imager">
+<h4>Install via raspi-imager<a class="headerlink" href="#install-via-raspi-imager" title="Permalink to this heading"></a></h4>
+<p>Pick OS -&gt; Other -&gt; Raspberry Pi OS lite (no Desktop) or just pick the recommended (with Desktop)
+Press Strg+Shift+X for Advanced Options (or press the gear):</p>
+<ul class="simple">
+<li><p>Hostname: rpi[1-3].local (pick one of the numbers)</p></li>
+<li><p>Activate SSH and pick one of your SSH-Keys if wanted (recommended instead of password auth)</p></li>
+<li><p>Set username and password if wanted (you have to fixup these in ansible!)</p></li>
+<li><p>Pick timezone and keyboard layout to your liking</p></li>
+</ul>
+<p>Pick your SD card and write the image!</p>
+</section>
+<section id="manuel-set">
+<h4>Manuel set<a class="headerlink" href="#manuel-set" title="Permalink to this heading"></a></h4>
+<p>Make sure the ssh server is enabled, and you know the password or can login via <a class="reference external" href="https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server-de">ssh-key</a>.
+The SSH-Server will be activated at boot if there is a (empty) file with the name <cite>ssh</cite> on the boot partition.
+Via commandline this can be done with:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>touch<span class="w"> </span>ssh
+</pre></div>
+</div>
+<p>in the boot partition.</p>
+<p>Also make sure the used password on the PIs is not the default, especially if they are exposed in the (local) network later and an activated SSH-Server.
+And make sure your public key is copied to the raspberry pi. This can be done with the following command.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>ssh-copy-id<span class="w"> </span>pi@&lt;your-ip-adress-or-hostname-here&gt;
+</pre></div>
+</div>
+<p>The default password of the pi is <cite>rapsberry</cite>. Please change it with the <cite>passwd</cite> command</p>
+</section>
+</section>
+<section id="deploy-via-ansible">
+<h3>Deploy via Ansible<a class="headerlink" href="#deploy-via-ansible" title="Permalink to this heading"></a></h3>
+<p>Make sure you have ansible installed on your local machine, and the RPis are in the same Network, and you know their IP address.
+Enter the hostnames in <cite>setup/hosts.yml</cite> and use the following command to install it on all hosts</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>ansible-playbook<span class="w"> </span>setup/setupRPi.yml<span class="w"> </span>-i<span class="w"> </span>setup/hosts.yml
+</pre></div>
+</div>
+<p>or instead one of the following single hosts</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>ansible-playbook<span class="w"> </span>setup/setupRPi.yml<span class="w"> </span>-i<span class="w"> </span>rpi1
+ansible-playbook<span class="w"> </span>setup/setupRPi.yml<span class="w"> </span>-i<span class="w"> </span>&lt;your-ip-here&gt;
+</pre></div>
+</div>
+</section>
+<section id="deploy-via-manual-installation">
+<h3>Deploy via manual installation<a class="headerlink" href="#deploy-via-manual-installation" title="Permalink to this heading"></a></h3>
+<p>(if you used ansible you can skip this section)</p>
+<section id="install-this-repo-and-python">
+<h4>Install this repo and python<a class="headerlink" href="#install-this-repo-and-python" title="Permalink to this heading"></a></h4>
+<p>Install the following packages via the system packet manager on the RPis:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>git<span class="w"> </span>python3<span class="w"> </span>python3-opencv<span class="w"> </span>python3-picamera
+</pre></div>
+</div>
+<p>clone this git repo locally</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/lukas-staab/ball-and-hoop.git
+</pre></div>
+</div>
+<p>install the pip requirements (you need only one of the commands)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">pip3</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+</section>
+<section id="configure-interfaces">
+<h4>Configure Interfaces<a class="headerlink" href="#configure-interfaces" title="Permalink to this heading"></a></h4>
+<p>activate the legacy camera and the serial com in</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>raspi-config
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="usage.html" class="btn btn-neutral float-right" title="Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Lukas Staab, MIT Licence.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

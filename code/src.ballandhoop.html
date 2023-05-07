@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ballandhoop package &mdash; lukas-staab/ball-and-hoop 2022 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="chessboard package" href="src.chessboard.html" />
+    <link rel="prev" title="Code Index" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            lukas-staab/ball-and-hoop
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../setup.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#hardware-setup">Hardware Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#hoop">Hoop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#raspberry-pis">Raspberry Pis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#network">Network</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#software">Software</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#install-operating-system">Install Operating System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#deploy-via-ansible">Deploy via Ansible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#deploy-via-manual-installation">Deploy via manual installation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../usage.html#calibration">Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage.html#white-calibration">White-calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../usage.html#hoop-or-ball-not-found">Hoop or ball not found</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../usage.html#camera-out-of-memory-error">Camera out of memory error</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../usage.html#run-application">Run application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage.html#run-application-on-all-3-pis">Run application on all 3 pis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../config.html">Configuration</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../debugging.html">Local development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../debugging.html#understanding-the-code">Understanding the Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../debugging.html#call-graph">Call-Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../debugging.html#local-development">Local development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../debugging.html#getting-mocked-video-material">Getting Mocked Video material</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Full code API</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ballandhoop package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-src.ballandhoop.application">Application module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-src.ballandhoop.ball">Ball module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-src.ballandhoop.helper">Helper module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-src.ballandhoop.hoop">Hoop module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-src.ballandhoop.image">Image module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-src.ballandhoop.piHSVArray">PiHSVArray module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-src.ballandhoop.videostream">Videostream module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-src.ballandhoop.whiteBalancing">WhiteBalancing module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.chessboard.html">chessboard package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.chessboard.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.chessboard.html#module-src.chessboard.calibrate_chessboard">src.chessboard.calibrate_chessboard module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.chessboard.html#module-src.chessboard.chessboard">src.chessboard.chessboard module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.chessboard.html#module-src.chessboard.undistort">src.chessboard.undistort module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.chessboard.html#module-src.chessboard.utils">src.chessboard.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.chessboard.html#module-src.chessboard">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#module-src.network">network module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="index.html#src.network.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="index.html#src.network.NetworkInterface"><code class="docutils literal notranslate"><span class="pre">NetworkInterface</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="index.html#src.network.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="index.html#src.network.addr"><code class="docutils literal notranslate"><span class="pre">addr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="index.html#src.network.init_network"><code class="docutils literal notranslate"><span class="pre">init_network()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="index.html#src.network.now"><code class="docutils literal notranslate"><span class="pre">now()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#module-src.serial">serial module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="index.html#src.serial.SerialCom"><code class="docutils literal notranslate"><span class="pre">SerialCom</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">lukas-staab/ball-and-hoop</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Code Index</a></li>
+      <li class="breadcrumb-item active">ballandhoop package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/code/src.ballandhoop.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ballandhoop-package">
+<h1>ballandhoop package<a class="headerlink" href="#ballandhoop-package" title="Permalink to this heading"></a></h1>
+<section id="module-src.ballandhoop.application">
+<span id="application-module"></span><h2>Application module<a class="headerlink" href="#module-src.ballandhoop.application" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.ballandhoop.application.Application">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.ballandhoop.application.</span></span><span class="sig-name descname"><span class="pre">Application</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">force_hostname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose_output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.application.Application" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The main class to run the software. loads and saves config, loads resources with config parameters.
+This class is called out of runner.py and calibration.py with different methods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>force_hostname</strong> (<em>str</em><em>, </em><em>optional</em><em>, </em><em>default=None</em>) – if unset socket.gethostname() will be used to search the for the config</p></li>
+<li><p><strong>verbose_output</strong> (<em>bool</em><em>, </em><em>optional</em><em>, </em><em>default=False</em>) – optional argument, if True there will be (more) output to the console, none if False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>cfg</strong> – the config loaded and saved to <cite>config.yml</cite> (saved also to <cite>config.mat</cite>)</p></li>
+<li><p><strong>hostname</strong> – the local hostname by either <cite>socket.gethostname() or `force_hostname</cite></p></li>
+<li><p><strong>network</strong> – either the server or client instance, using the <a class="reference internal" href="index.html#src.network.NetworkInterface" title="src.network.NetworkInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetworkInterface</span></code></a></p></li>
+<li><p><strong>timings</strong> – a fifo dict, which saved the in time of the frame, old entries are removed after the frame calc</p></li>
+<li><p><strong>latest_frame_number</strong> – remembers which is the newest frame with a result to discard older results</p></li>
+<li><p><strong>result_lock</strong> – manages the thread safe access to the <code class="xref py py-attr docutils literal notranslate"><span class="pre">latest_frame_number</span></code></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.application.Application.ball_found_async_callback">
+<span class="sig-name descname"><span class="pre">ball_found_async_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.application.Application.ball_found_async_callback" title="Permalink to this definition"></a></dt>
+<dd><p>The method which is called after the thread-worker run and did not fail</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>result</strong> (<em>tuple</em>) – the result of the thread worker, can only be one argument, the thread-worker is not able to send a second one</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.application.Application.ball_search_error_callback">
+<span class="sig-name descname"><span class="pre">ball_search_error_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.application.Application.ball_search_error_callback" title="Permalink to this definition"></a></dt>
+<dd><p>This is the callback method which is provided to the thread-worker. It is called if there is an error in one of
+the thread-workers. Without this method the thread-worker would fail silent.
+It still does, if verbose flag is not set</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>e</strong> – The error</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.application.Application.debug">
+<span class="sig-name descname"><span class="pre">debug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_vid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wb_gains</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.application.Application.debug" title="Permalink to this definition"></a></dt>
+<dd><p>This method is here to generate fake video material, which can be used with the faker_path config</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>save_vid</strong> – </p></li>
+<li><p><strong>wb_gains</strong> – if not given, then the gains will be freshly calculated</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.application.Application.get_cfg">
+<span class="sig-name descname"><span class="pre">get_cfg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.application.Application.get_cfg" title="Permalink to this definition"></a></dt>
+<dd><p>Helper method to get</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>arg</strong> (<em>str</em><em>[</em><em>]</em>) – there can be unlimited amount of arguments</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.application.Application.load_config_from_disk">
+<span class="sig-name descname"><span class="pre">load_config_from_disk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'yml'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.application.Application.load_config_from_disk" title="Permalink to this definition"></a></dt>
+<dd><p>Loads the config file from the disk to the attribute</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_type</strong> (<em>str</em><em>, </em><em>optional</em><em>, </em><em>default='yml'</em>) – the file type of the config file, can either be ‘yml’ or ‘mat’</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>dictionary of the config content</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.application.Application.local_config">
+<span class="sig-name descname"><span class="pre">local_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.application.Application.local_config" title="Permalink to this definition"></a></dt>
+<dd><p>Wrapper Method to get the config for this hostname. The hostname might be forged in the constructor.
+Do not call this method for getting the config, just for setting it. Use :method <cite>get_cfg</cite>  instead</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dictionary of the local config</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.application.Application.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.application.Application.print" title="Permalink to this definition"></a></dt>
+<dd><p>Prints the message to stdout, if app is running with verbose flag, discards otherwise</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>msg</strong> – the message string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.application.Application.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ball_hsv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.application.Application.run" title="Permalink to this definition"></a></dt>
+<dd><p>This method runs the main loop method for tracking and network init. Administers the thread-workers and gives
+them jobs. Each core gets one thread-worker. They will calculate the results of the frames after each other.
+The thread-workers are especially needed if the application is running under high per frame cpu,
+which can happen with high fps or high resolution settings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ball_hsv</strong> (<em>dict</em>) – if this parameter is set, the ball hsv in config is overwritten</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.application.Application.run_calibration">
+<span class="sig-name descname"><span class="pre">run_calibration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calc_wb_gains</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_hoop</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hoop_hsv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_ball</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ball_hsv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.application.Application.run_calibration" title="Permalink to this definition"></a></dt>
+<dd><p>Runs the calibration method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>calc_wb_gains</strong> (<em>bool</em>) – If this flag is set the white calibration is called</p></li>
+<li><p><strong>search_hoop</strong> (<em>bool</em>) – If this flag is set the hoop border points are searched</p></li>
+<li><p><strong>hoop_hsv</strong> (<em>dict</em>) – a dictionary with keys <cite>lower</cite> and <cite>upper</cite></p></li>
+<li><p><strong>search_ball</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>ball_hsv</strong> (<em>dict</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.application.Application.save_col_and_add_from_config">
+<span class="sig-name descname"><span class="pre">save_col_and_add_from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.application.Application.save_col_and_add_from_config" title="Permalink to this definition"></a></dt>
+<dd><p>Saves the given parameters to config and reads config afterwards.
+If parameters are None, then only the config is read.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type_name</strong> – a top level setting with a hsv child, like <cite>ball</cite> or <cite>hoop</cite></p></li>
+<li><p><strong>input_data</strong> – the dictionary with the <cite>upper</cite> and <cite>lower</cite> color as dict keys, with value (H,S,V)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.application.Application.save_config_to_disk">
+<span class="sig-name descname"><span class="pre">save_config_to_disk</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#src.ballandhoop.application.Application.save_config_to_disk" title="Permalink to this definition"></a></dt>
+<dd><p>Saves the self.cfg back to config.yml and config.mat files.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.ballandhoop.ball">
+<span id="ball-module"></span><h2>Ball module<a class="headerlink" href="#module-src.ballandhoop.ball" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.ballandhoop.ball.Ball">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.ballandhoop.ball.</span></span><span class="sig-name descname"><span class="pre">Ball</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hoop</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.ballandhoop.hoop.Hoop" title="src.ballandhoop.hoop.Hoop"><span class="pre">Hoop</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.ball.Ball" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class is a data structure for the ball element</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hoop</strong> – the hoop this ball belongs to</p></li>
+<li><p><strong>center</strong> – the tuple of coordinates from the center of the ball</p></li>
+<li><p><strong>radius</strong> – the radius of the ball</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.ball.Ball.angle">
+<span class="sig-name descname"><span class="pre">angle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.ball.Ball.angle" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the angle the ball has inside the hoop</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the angle in float, calculated by his parent hoop <a class="reference internal" href="#src.ballandhoop.hoop.Hoop.angle_in_hoop" title="src.ballandhoop.hoop.Hoop.angle_in_hoop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Hoop.angle_in_hoop()</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.ballandhoop.helper">
+<span id="helper-module"></span><h2>Helper module<a class="headerlink" href="#module-src.ballandhoop.helper" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.ballandhoop.helper.get_bgr_picture">
+<span class="sig-prename descclassname"><span class="pre">src.ballandhoop.helper.</span></span><span class="sig-name descname"><span class="pre">get_bgr_picture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faker_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wb_gains</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.helper.get_bgr_picture" title="Permalink to this definition"></a></dt>
+<dd><p>Gives a bgr picture from the camera or the image in the <cite>faker_path</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>faker_path</strong> – a path from which the image will be loaded if given, defaults to None</p></li>
+<li><p><strong>wb_gains</strong> (<em>tuple</em>) – if not given, it will be auto-calculated, if a picture is taken</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the image from file or from the camera</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.ballandhoop.helper.get_hsv_picture">
+<span class="sig-prename descclassname"><span class="pre">src.ballandhoop.helper.</span></span><span class="sig-name descname"><span class="pre">get_hsv_picture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faker_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wb_gains</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.helper.get_hsv_picture" title="Permalink to this definition"></a></dt>
+<dd><p>Same as <a class="reference internal" href="#src.ballandhoop.helper.get_bgr_picture" title="src.ballandhoop.helper.get_bgr_picture"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_bgr_picture()</span></code></a>, but transformed to HSV colorspace</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the picture as array in HSV color space</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.ballandhoop.helper.reset_content_of_dir">
+<span class="sig-prename descclassname"><span class="pre">src.ballandhoop.helper.</span></span><span class="sig-name descname"><span class="pre">reset_content_of_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.helper.reset_content_of_dir" title="Permalink to this definition"></a></dt>
+<dd><p>Small helper method which empties all files and folders inside a given folder</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dir_name</strong> – the path to the folder</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-src.ballandhoop.hoop">
+<span id="hoop-module"></span><h2>Hoop module<a class="headerlink" href="#module-src.ballandhoop.hoop" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.ballandhoop.hoop.Hoop">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.ballandhoop.hoop.</span></span><span class="sig-name descname"><span class="pre">Hoop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center_dots</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius_dots</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fov</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(90,</span> <span class="pre">270)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.hoop.Hoop" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class which represents the data holding of the hoop
+This constructor is usually populated by the config file entries</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> – the center of the hoop</p></li>
+<li><p><strong>radius</strong> – the radius of the hoop</p></li>
+<li><p><strong>center_dots</strong> – a list of the center of the hoop markers for finding the hoop</p></li>
+<li><p><strong>radius_dots</strong> – a list of the radius’ of the hoop markers for finding the hoop</p></li>
+<li><p><strong>angle_offset</strong> – a custom offset of angle, which will be added to each result of <a class="reference internal" href="#src.ballandhoop.hoop.Hoop.angle_in_hoop" title="src.ballandhoop.hoop.Hoop.angle_in_hoop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">angle_in_hoop()</span></code></a></p></li>
+<li><p><strong>fov</strong> – a 2-tuple of angles which will be used as starting and ending angles to cut off the picture mask outside this circle sector</p></li>
+<li><p><strong>kwargs</strong> – just a placeholder so if additional keys are given in config file, there will be no errors, because some config file attributes will be used in the methods</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.hoop.Hoop.angle_in_hoop">
+<span class="sig-name descname"><span class="pre">angle_in_hoop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.hoop.Hoop.angle_in_hoop" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the angle between a given point (e.g. the ball center) inside the hoop.
+The <code class="xref py py-attr docutils literal notranslate"><span class="pre">angle_offset</span></code> is added to the angle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>p</strong> (<em>tuple</em>) – the point which angle should be calculated</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The angle between (p - <code class="xref py py-attr docutils literal notranslate"><span class="pre">self.center</span></code>)  and (0, <code class="xref py py-attr docutils literal notranslate"><span class="pre">self.radius</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.hoop.Hoop.angle_of_vectors">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">angle_of_vectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.hoop.Hoop.angle_of_vectors" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the angle between two vectors
+:return: the angle between two vectors in degree
+:rtype: float</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.hoop.Hoop.create_from_image">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_from_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hsv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image"><span class="pre">Image</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">morph_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_output_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_dots_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.hoop.Hoop.create_from_image" title="Permalink to this definition"></a></dt>
+<dd><p>This method should be populated with the entries of the config file.
+It searches in range of the hsv colors for three or more hoop markers and builds a binary mask out of it.
+Depending on the <cite>morph_iterations</cite> amount the found mask will be eroded and dilated multiple times for noice reduction.
+If the radius of the markers is too small, it will not be used for the hoop calculation.
+The center of the remaining markers will be calculated and fitted to a circle.
+This circle radius and center are the center and radius of the returned hoop.
+If there are to less (remaining) markers, None will be returned instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hsv</strong> – the colors to search for. has a <cite>upper</cite> and <cite>lower</cite> key which each hold a (H,S,V) color</p></li>
+<li><p><strong>image</strong> (<a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image"><code class="xref py py-class docutils literal notranslate"><span class="pre">Image</span></code></a>) – the Image to search the hoop markers in</p></li>
+<li><p><strong>morph_iterations</strong> – amount of times the mask will be eroded and dilated. The higher the value, the more noice is removed</p></li>
+<li><p><strong>debug_output_path</strong> – the directory path where the debug pictures will be saved</p></li>
+<li><p><strong>min_dots_radius</strong> – the minimal radius of the markers</p></li>
+<li><p><strong>kwargs</strong> – a catch-all parameter, so if too many arguments are given, python will not throw an error</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The hoop if any was found</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#src.ballandhoop.hoop.Hoop" title="src.ballandhoop.hoop.Hoop"><code class="xref py py-class docutils literal notranslate"><span class="pre">Hoop</span></code></a> | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.hoop.Hoop.find_ball">
+<span class="sig-name descname"><span class="pre">find_ball</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hsv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">morph_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.hoop.Hoop.find_ball" title="Permalink to this definition"></a></dt>
+<dd><p>Tries to find the ball in the given picture. Therefore, the image is filtered with the given HSV colors to a mask.
+This mask is morphed, depending on the given iterations. There will be a dilatation and an erode afterwards (closure),
+to close holes in the found ball mask which will be there because of the physical hoop.
+All found mask points which are outside the given hoop <code class="xref py py-attr docutils literal notranslate"><span class="pre">Field</span> <span class="pre">of</span> <span class="pre">View</span></code> are removed.
+It will then loop through the biggest connected areas in the mask (the biggest first). If their radius is inside min_radius and
+max_radius the found ball will be returned or none if none of the connected areas are fitting the limits.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame</strong> – the array of the frame in HSV color space</p></li>
+<li><p><strong>hsv</strong> – a dictionary with <cite>upper</cite> and <cite>lower</cite> and (H,S,V) values, which the frame will be filtered to</p></li>
+<li><p><strong>morph_iterations</strong> – the amount of iterations to morph, defaults to 1</p></li>
+<li><p><strong>min_radius</strong> – the minimal radius a ball is allowed to have, defaults to 5</p></li>
+<li><p><strong>max_radius</strong> – the maximal radius a ball is allowed to have, defaults to 20</p></li>
+<li><p><strong>dir_path</strong> – the directory where debugging pictures will be saved, defaults to None</p></li>
+<li><p><strong>kwargs</strong> – just a catch-all for additional parameters from the config file, will be ignored</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the found ball, if any</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#src.ballandhoop.ball.Ball" title="src.ballandhoop.ball.Ball">Ball</a> | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.hoop.Hoop.find_ball_async">
+<span class="sig-name descname"><span class="pre">find_ball_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ball_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.hoop.Hoop.find_ball_async" title="Permalink to this definition"></a></dt>
+<dd><p>A wrapper function for the async call from the <code class="xref py py-class docutils literal notranslate"><span class="pre">Application</span></code> for <a class="reference internal" href="#src.ballandhoop.hoop.Hoop.find_ball" title="src.ballandhoop.hoop.Hoop.find_ball"><code class="xref py py-meth docutils literal notranslate"><span class="pre">find_ball()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame_number</strong> – the number of the frame, not used for calculation but important for the <a class="reference internal" href="#src.ballandhoop.application.Application.ball_found_async_callback" title="src.ballandhoop.application.Application.ball_found_async_callback"><code class="xref py py-meth docutils literal notranslate"><span class="pre">application</span> <span class="pre">callback</span></code></a></p></li>
+<li><p><strong>frame</strong> – the frame array in hsv color space</p></li>
+<li><p><strong>ball_config</strong> – the ball config, see <a class="reference internal" href="#src.ballandhoop.hoop.Hoop.find_ball" title="src.ballandhoop.hoop.Hoop.find_ball"><code class="xref py py-meth docutils literal notranslate"><span class="pre">find_ball()</span></code></a> for more info</p></li>
+<li><p><strong>dir_path</strong> – the directory where debugging pictures will be saved</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple of the given frame number and the found ball, if any</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(int, <a class="reference internal" href="#src.ballandhoop.ball.Ball" title="src.ballandhoop.ball.Ball">Ball</a>|None)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.ballandhoop.image">
+<span id="image-module"></span><h2>Image module<a class="headerlink" href="#module-src.ballandhoop.image" title="Permalink to this heading"></a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do not use this class too much in mission critical calculations.
+It is not optimized to work fast. Its just a convinient wrapper, which transform every bgr to hsv and vice versa.
+This happens afer every image processing step. You have been warned.</p>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.ballandhoop.image.Image">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.ballandhoop.image.</span></span><span class="sig-name descname"><span class="pre">Image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_bgr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_hsv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_bw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.image.Image" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>If this class is created with a bgr oder hsv array, the other one will be automatically generated</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image_bgr</strong> – the bgr frame array</p></li>
+<li><p><strong>image_hsv</strong> – the hsv frame array</p></li>
+<li><p><strong>image_bw</strong> – a monochrome frame array</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.image.Image.apply_blurring">
+<span class="sig-name descname"><span class="pre">apply_blurring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">blur_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">11</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image"><span class="pre">Image</span></a></span></span><a class="headerlink" href="#src.ballandhoop.image.Image.apply_blurring" title="Permalink to this definition"></a></dt>
+<dd><p>Blurs the image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>blur_radius</strong> – the blur radius, defaults to 11</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The new image instance</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image">Image</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.image.Image.apply_hoop_cutting">
+<span class="sig-name descname"><span class="pre">apply_hoop_cutting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hoop</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.ballandhoop.hoop.Hoop" title="src.ballandhoop.hoop.Hoop"><span class="pre">Hoop</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image"><span class="pre">Image</span></a></span></span><a class="headerlink" href="#src.ballandhoop.image.Image.apply_hoop_cutting" title="Permalink to this definition"></a></dt>
+<dd><p>WIP - blacks out everything outside the hoop</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hoop</strong> – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The new image instance</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image">Image</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.image.Image.apply_undistort">
+<span class="sig-name descname"><span class="pre">apply_undistort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">demo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image"><span class="pre">Image</span></a></span></span><a class="headerlink" href="#src.ballandhoop.image.Image.apply_undistort" title="Permalink to this definition"></a></dt>
+<dd><p>Undistort the image with the lens calibration from the chessboard</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>demo</strong> – flag if the image should be cutted or transformed with black border</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The new image instance</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image">Image</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.ballandhoop.image.Image.camera_matrix">
+<span class="sig-name descname"><span class="pre">camera_matrix</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#src.ballandhoop.image.Image.camera_matrix" title="Permalink to this definition"></a></dt>
+<dd><p>The camera matrix, loaded from the chessboard calibration</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.image.Image.color_split">
+<span class="sig-name descname"><span class="pre">color_split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hsv_lower_bound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hsv_upper_bound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_hsv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.image.Image.color_split" title="Permalink to this definition"></a></dt>
+<dd><p>This method generates multiple pictures to separate different colored parts of the image.
+Rotates through the H value with fixed S and V values</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dir_path</strong> – the dir path, can have a tailored <cite>/</cite>, but does not need to</p></li>
+<li><p><strong>hsv_lower_bound</strong> – lower hsv value, H will be rotated</p></li>
+<li><p><strong>hsv_upper_bound</strong> – upper hsv value, H will be rotated</p></li>
+<li><p><strong>return_hsv</strong> – flag if a hsv color space should be saved, or rgb, defaults to False (rgb)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.image.Image.create">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wb_gains</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image"><span class="pre">Image</span></a></span></span><a class="headerlink" href="#src.ballandhoop.image.Image.create" title="Permalink to this definition"></a></dt>
+<dd><p>Creates an Image instance, either from file or cam</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – the path, if not given take pic from cam</p></li>
+<li><p><strong>wb_gains</strong> – the wb_gains the cam will use if needed</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A new image instance</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image">Image</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.ballandhoop.image.Image.dist_matrix">
+<span class="sig-name descname"><span class="pre">dist_matrix</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#src.ballandhoop.image.Image.dist_matrix" title="Permalink to this definition"></a></dt>
+<dd><p>The dist matrix, loaded from the chessboard calibration</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.image.Image.plot_angle">
+<span class="sig-name descname"><span class="pre">plot_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ball</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.ballandhoop.ball.Ball" title="src.ballandhoop.ball.Ball"><span class="pre">Ball</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image"><span class="pre">Image</span></a></span></span><a class="headerlink" href="#src.ballandhoop.image.Image.plot_angle" title="Permalink to this definition"></a></dt>
+<dd><p>Plots the angle to the image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ball</strong> – the ball</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The new image instance</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image">Image</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.image.Image.plot_ball">
+<span class="sig-name descname"><span class="pre">plot_ball</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ball</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.ballandhoop.ball.Ball" title="src.ballandhoop.ball.Ball"><span class="pre">Ball</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_outline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0,</span> <span class="pre">255,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0,</span> <span class="pre">255,</span> <span class="pre">0)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image"><span class="pre">Image</span></a></span></span><a class="headerlink" href="#src.ballandhoop.image.Image.plot_ball" title="Permalink to this definition"></a></dt>
+<dd><p>Plots the outline and the center of a ball in the image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ball</strong> – The ball to plot</p></li>
+<li><p><strong>color_outline</strong> – the color of the outline, defaults to (0, 255, 0)</p></li>
+<li><p><strong>color_center</strong> – the color of the center, defaults to (0, 255, 0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The new image instance</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image">Image</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.image.Image.plot_ball_history">
+<span class="sig-name descname"><span class="pre">plot_ball_history</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">255)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image"><span class="pre">Image</span></a></span></span><a class="headerlink" href="#src.ballandhoop.image.Image.plot_ball_history" title="Permalink to this definition"></a></dt>
+<dd><p>Plots the ball history. The tail is getting less thick</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pts</strong> – the list of the points</p></li>
+<li><p><strong>color</strong> – the color</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The new image instance</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image">Image</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.image.Image.plot_hoop">
+<span class="sig-name descname"><span class="pre">plot_hoop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hoop</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.ballandhoop.hoop.Hoop" title="src.ballandhoop.hoop.Hoop"><span class="pre">Hoop</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(255,</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thickness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_dots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image"><span class="pre">Image</span></a></span></span><a class="headerlink" href="#src.ballandhoop.image.Image.plot_hoop" title="Permalink to this definition"></a></dt>
+<dd><p>Plots a hoop as a circle in the image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hoop</strong> (<a class="reference internal" href="#src.ballandhoop.hoop.Hoop" title="src.ballandhoop.hoop.Hoop"><em>Hoop</em></a>) – the hoop to plot</p></li>
+<li><p><strong>color</strong> – the color the circle will be plotted in, defaults to (255, 0, 0)</p></li>
+<li><p><strong>thickness</strong> – the thickness the circle will be plotted in, -1 for full fill, defaults to 2</p></li>
+<li><p><strong>with_dots</strong> (<em>bool</em>) – flag if the dots should be plotted as well</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The new image instance</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image">Image</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.image.Image.plot_line">
+<span class="sig-name descname"><span class="pre">plot_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(255,</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thickness</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image"><span class="pre">Image</span></a></span></span><a class="headerlink" href="#src.ballandhoop.image.Image.plot_line" title="Permalink to this definition"></a></dt>
+<dd><p>Plots a line in the image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p1</strong> – the first point</p></li>
+<li><p><strong>p2</strong> – the second point</p></li>
+<li><p><strong>color</strong> – the color, defaults to (255, 0, 0)</p></li>
+<li><p><strong>thickness</strong> – the thickness, defaults to 2</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The new image instance</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image">Image</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.image.Image.plot_rectangle">
+<span class="sig-name descname"><span class="pre">plot_rectangle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(255,</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thickness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image"><span class="pre">Image</span></a></span></span><a class="headerlink" href="#src.ballandhoop.image.Image.plot_rectangle" title="Permalink to this definition"></a></dt>
+<dd><p>Plots a rectangle in the image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – the x coordinate</p></li>
+<li><p><strong>y</strong> – the y coordinate</p></li>
+<li><p><strong>w</strong> – the width</p></li>
+<li><p><strong>h</strong> – the height</p></li>
+<li><p><strong>color</strong> – the color, defaults to (255, 0, 0)</p></li>
+<li><p><strong>thickness</strong> – the thickness, defaults to 3</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.image.Image.plot_text">
+<span class="sig-name descname"><span class="pre">plot_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(255,</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontScale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image"><span class="pre">Image</span></a></span></span><a class="headerlink" href="#src.ballandhoop.image.Image.plot_text" title="Permalink to this definition"></a></dt>
+<dd><p>Plots text to the image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> – the text,</p></li>
+<li><p><strong>pos</strong> – the position</p></li>
+<li><p><strong>color</strong> – the color, defaults to (255, 0, 0)</p></li>
+<li><p><strong>fontScale</strong> – the fontscale, defaults to 1</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The new image instance</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#src.ballandhoop.image.Image" title="src.ballandhoop.image.Image">Image</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.image.Image.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'image'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.image.Image.save" title="Permalink to this definition"></a></dt>
+<dd><p>Save the image to the given dir with the filename in rgb and hsv</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dir_path</strong> – the dir_path, if none, then nothing is saved</p></li>
+<li><p><strong>filename</strong> – the filename, will be suffixed with <cite>-hsv.png</cite> and <cite>-rgb.png</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.ballandhoop.piHSVArray">
+<span id="pihsvarray-module"></span><h2>PiHSVArray module<a class="headerlink" href="#module-src.ballandhoop.piHSVArray" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.ballandhoop.piHSVArray.PiHSVArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.ballandhoop.piHSVArray.</span></span><span class="sig-name descname"><span class="pre">PiHSVArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.piHSVArray.PiHSVArray" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://picamera.readthedocs.io/en/release-1.13/api_array.html#picamera.array.PiRGBArray" title="(in Picamera v1.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PiRGBArray</span></code></a></p>
+<p>A wraper class which extends <a class="reference external" href="https://picamera.readthedocs.io/en/release-1.13/api_array.html#picamera.array.PiRGBArray" title="(in Picamera v1.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">picamera.array.PiRGBArray</span></code></a> and converts the pixels to HSV color</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>camera</strong> (<a class="reference external" href="https://picamera.readthedocs.io/en/release-1.13/api_camera.html#picamera.PiCamera" title="(in Picamera v1.13)"><em>picamera.PiCamera</em></a>) – the camera object, see parent constructor</p></li>
+<li><p><strong>size</strong> – the size of the frame, see parent constructor</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>array</strong> – the frame data, inherited</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.piHSVArray.PiHSVArray.flush">
+<span class="sig-name descname"><span class="pre">flush</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.piHSVArray.PiHSVArray.flush" title="Permalink to this definition"></a></dt>
+<dd><p>This method is called after the data is fully written. It converts to HSV.
+Note: the picamera has to use bgr, not rgb otherwise this will produce weird results</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.ballandhoop.videostream">
+<span id="videostream-module"></span><h2>Videostream module<a class="headerlink" href="#module-src.ballandhoop.videostream" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.ballandhoop.videostream.VideoStream">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.ballandhoop.videostream.</span></span><span class="sig-name descname"><span class="pre">VideoStream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resolution_no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">framerate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_hsv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wb_gains</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faker_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.videostream.VideoStream" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A wrapper for <a class="reference external" href="https://picamera.readthedocs.io/en/release-1.13/api_camera.html#picamera.PiCamera" title="(in Picamera v1.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">picamera.PiCamera</span></code></a>, so that config file input can be used</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>resolution_no</strong> – the resolution number which can be picked in sensor mode 7</p></li>
+<li><p><strong>framerate</strong> – the framerate, should be between 60 and 90 in sensor mode 7</p></li>
+<li><p><strong>rotation</strong> – the rotation</p></li>
+<li><p><strong>as_hsv</strong> – if output should be hsv or bgr</p></li>
+<li><p><strong>wb_gains</strong> – the white_balancing gains</p></li>
+<li><p><strong>faker_path</strong> – if this directory is set, the camera will not be used, but the pictures saved there. Can be recorded through debug.py</p></li>
+<li><p><strong>kwargs</strong> – catch-all parameter, so more entries in the config do not throw an error</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.videostream.VideoStream.__iter__">
+<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.videostream.VideoStream.__iter__" title="Permalink to this definition"></a></dt>
+<dd><p>Returning the iterator e.g. in a for loop and starting the fps counter
+:return: self
+:meta public:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.videostream.VideoStream.__next__">
+<span class="sig-name descname"><span class="pre">__next__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.videostream.VideoStream.__next__" title="Permalink to this definition"></a></dt>
+<dd><p>Automatically called to get the next frame e.g. in a for loop with this class as iterator
+Can rotate the image before returning. Updates the fps counter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>frame array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.videostream.VideoStream.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.videostream.VideoStream.close" title="Permalink to this definition"></a></dt>
+<dd><p>Stops the FPS counter and closes the resources if needed</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.videostream.VideoStream.faker_stream_generator">
+<span class="sig-name descname"><span class="pre">faker_stream_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faker_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.videostream.VideoStream.faker_stream_generator" title="Permalink to this definition"></a></dt>
+<dd><p>Takes the faker path from the config and delivers the png pictures there as the videostream. Good for debugging
+to get a reliable input</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.ballandhoop.videostream.VideoStream.resolutions">
+<span class="sig-name descname"><span class="pre">resolutions</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{0:</span> <span class="pre">(160,</span> <span class="pre">128),</span> <span class="pre">1:</span> <span class="pre">(320,</span> <span class="pre">240),</span> <span class="pre">2:</span> <span class="pre">(640,</span> <span class="pre">480)}</span></em><a class="headerlink" href="#src.ballandhoop.videostream.VideoStream.resolutions" title="Permalink to this definition"></a></dt>
+<dd><p>The available resolutions in sensor mode 7.`</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.ballandhoop.videostream.VideoStream.rotations">
+<span class="sig-name descname"><span class="pre">rotations</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{1:</span> <span class="pre">0,</span> <span class="pre">2:</span> <span class="pre">1,</span> <span class="pre">3:</span> <span class="pre">2}</span></em><a class="headerlink" href="#src.ballandhoop.videostream.VideoStream.rotations" title="Permalink to this definition"></a></dt>
+<dd><p>The available rotation numbers</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.ballandhoop.whiteBalancing">
+<span id="whitebalancing-module"></span><h2>WhiteBalancing module<a class="headerlink" href="#module-src.ballandhoop.whiteBalancing" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.ballandhoop.whiteBalancing.WhiteBalancing">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.ballandhoop.whiteBalancing.</span></span><span class="sig-name descname"><span class="pre">WhiteBalancing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dirPath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'storage/awb/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verboseOutput</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.whiteBalancing.WhiteBalancing" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class organizes the white balancing and manual calculation of the wb_gains.
+It takes a picture with arbitrary gains, takes (optional) a region of interest [210:430, 150:320]
+in the middle of the image (cropping it) and averaging all red, blue and green values.
+The goal is to change the red and blue gain that way, that all means are equal.
+Works best with a well illuminated and white only background.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dirPath</strong> – the path where the debugging pictures are saved to, defaults to <cite>storage/awb</cite></p></li>
+<li><p><strong>delta</strong> – the accepted difference delta between the mean color values r,g,b, defaults to 2</p></li>
+<li><p><strong>verboseOutput</strong> – flag if more output should be given, defaults to False</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ballandhoop.whiteBalancing.WhiteBalancing.calculate">
+<span class="sig-name descname"><span class="pre">calculate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cropping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ballandhoop.whiteBalancing.WhiteBalancing.calculate" title="Permalink to this definition"></a></dt>
+<dd><p>Does the calculation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cropping</strong> – flag if roi [210:430, 150:320] should be cropped before the mean calculation</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(r_gain,b_gain)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(float, float) each between 0 and 8</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Code Index" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="src.chessboard.html" class="btn btn-neutral float-right" title="chessboard package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Lukas Staab, MIT Licence.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

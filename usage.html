@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Usage &mdash; lukas-staab/ball-and-hoop 2022 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Configuration" href="config.html" />
+    <link rel="prev" title="Setup" href="setup.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            lukas-staab/ball-and-hoop
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="setup.html#hardware-setup">Hardware Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#hoop">Hoop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#raspberry-pis">Raspberry Pis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#network">Network</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html#software">Software</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#install-operating-system">Install Operating System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#deploy-via-ansible">Deploy via Ansible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#deploy-via-manual-installation">Deploy via manual installation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#calibration">Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#white-calibration">White-calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hoop-or-ball-not-found">Hoop or ball not found</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#camera-out-of-memory-error">Camera out of memory error</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#run-application">Run application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-application-on-all-3-pis">Run application on all 3 pis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="debugging.html">Local development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html#understanding-the-code">Understanding the Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html#call-graph">Call-Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html#local-development">Local development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html#getting-mocked-video-material">Getting Mocked Video material</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="code/index.html">Full code API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code/src.ballandhoop.html">ballandhoop package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.application">Application module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.ball">Ball module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.helper">Helper module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.hoop">Hoop module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.image">Image module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.piHSVArray">PiHSVArray module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.videostream">Videostream module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.whiteBalancing">WhiteBalancing module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="code/src.chessboard.html">chessboard package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#module-src.chessboard.calibrate_chessboard">src.chessboard.calibrate_chessboard module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#module-src.chessboard.chessboard">src.chessboard.chessboard module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#module-src.chessboard.undistort">src.chessboard.undistort module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#module-src.chessboard.utils">src.chessboard.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#module-src.chessboard">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="code/index.html#module-src.network">network module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.NetworkInterface"><code class="docutils literal notranslate"><span class="pre">NetworkInterface</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.addr"><code class="docutils literal notranslate"><span class="pre">addr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.init_network"><code class="docutils literal notranslate"><span class="pre">init_network()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.now"><code class="docutils literal notranslate"><span class="pre">now()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="code/index.html#module-src.serial">serial module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.serial.SerialCom"><code class="docutils literal notranslate"><span class="pre">SerialCom</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">lukas-staab/ball-and-hoop</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Usage</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h1>
+<section id="calibration">
+<h2>Calibration<a class="headerlink" href="#calibration" title="Permalink to this heading"></a></h2>
+<p>To calibrate the application make sure you are in the project root folder in one of the pis and run</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>calibrate.py
+</pre></div>
+</div>
+<p>To get (more) console output the <cite>-v</cite> flag is needed. Together with a hoop-search <cite>-o</cite>, a ball-search <cite>-b</cite> and
+a white calibration <cite>-w</cite> the full command which you most of the time want to use is</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>calibrate.py<span class="w"> </span>-v<span class="w"> </span>-o<span class="w"> </span>-b<span class="w"> </span>-w
+</pre></div>
+</div>
+<p>You can also specify the hsv color (only for the hoop so far) via the other flags. To see all of the available flags use:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>calibrate.py<span class="w"> </span>--help
+</pre></div>
+</div>
+<p>If the <cite>-v</cite> flag is set, there will be debug pictures dumped to <cite>storage/calibration</cite></p>
+</section>
+<section id="white-calibration">
+<h2>White-calibration<a class="headerlink" href="#white-calibration" title="Permalink to this heading"></a></h2>
+<p>Usually a white calibration is necessary everytime the lights change. This can also be introduced
+through different sunlight intensity.</p>
+<p>The white calibration is tries to messure the green and blue gains to finetune the color values.
+Right now the white calibration takes a picture with arbitrary gains, takes a region of interest
+in the middle of the image (cropping it) and averaging all red, blue and green values.</p>
+<p>For best results the ROI of the picture should be very white, or at least grey. The white calibration
+tries to adjust the gains that way, that it measures a gray image, instead of one with a one color overshoot.</p>
+<p>For better convergence a p-controller is used to calculate the new gains to try.</p>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this heading"></a></h2>
+<section id="hoop-or-ball-not-found">
+<h3>Hoop or ball not found<a class="headerlink" href="#hoop-or-ball-not-found" title="Permalink to this heading"></a></h3>
+<p>If the hoop is not found have a look at the debug pictures <cite>raw-rgb.png</cite>, <cite>raw-hsv.png</cite>, <cite>hoop-mask.png</cite>
+and the <cite>hoop-colsplit</cite> directories and make sure the masks are clean enough and the hsv values are set correctly.</p>
+<p>See <a class="reference internal" href="code/src.ballandhoop.html#src.ballandhoop.image.Image.color_split" title="src.ballandhoop.image.Image.color_split"><code class="xref py py-meth docutils literal notranslate"><span class="pre">src.ballandhoop.image.Image.color_split()</span></code></a> for more information.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The HSV values are taken as openCV interprets them (H: 0-180, S and V: 0-255 range), other applications might use
+different ranges to convert rgb to hsv e.g. gimp. Most common different one is H: 0-360, S and V: 0-1 or 0-100 range)</p>
+<p>If you messure the ‘rgb’ values inside <cite>raw-hsv.png</cite> you do not have to convert the color. It is the same way as
+opencv/python expects it.</p>
+</div>
+<dl class="simple">
+<dt>There are markers in the mask, but the hoop is not found</dt><dd><p>Have a look at the min_radius attributes in the config file and ajust them</p>
+</dd>
+<dt>I have too much noice in the hoop search / wrong hoop found</dt><dd><p>Try to limiting your HSV range more, or increase the <cite>morph_iteratrions</cite> (opening operation) attribute in config file</p>
+</dd>
+<dt>The ball area mask is too split up</dt><dd><p>Try to increase the <cite>morph_iterations</cite> (closing operation) in config file - it will try to connect the areas together</p>
+</dd>
+</dl>
+</section>
+<section id="camera-out-of-memory-error">
+<h3>Camera out of memory error<a class="headerlink" href="#camera-out-of-memory-error" title="Permalink to this heading"></a></h3>
+<p>Double check if the camera is connected to the rpis and the interface is activated in legacy mode.</p>
+</section>
+</section>
+<section id="run-application">
+<h2>Run application<a class="headerlink" href="#run-application" title="Permalink to this heading"></a></h2>
+<p>To run the application make sure you are in the project root folder in one of the pis and run</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>runner.py
+</pre></div>
+</div>
+<p>To get (more) console output the <cite>-v</cite> flag is needed.</p>
+<p>You can also specify the ball color via the other flags. To see all of the available flags use:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>runner.py<span class="w"> </span>--help
+</pre></div>
+</div>
+<p>If the <cite>-v</cite> flag is set, there will be debug pictures dumped to <cite>storage/debug/</cite> from every 30th frame.</p>
+<p>You can terminate the application through pressing Ctrl+C multiple times. After the application is closed result files
+are written to <cite>storage/result.mat</cite> and <cite>storage/result.yml</cite> for easier plotting of the results (independent on <cite>-v</cite> flag).</p>
+</section>
+<section id="run-application-on-all-3-pis">
+<h2>Run application on all 3 pis<a class="headerlink" href="#run-application-on-all-3-pis" title="Permalink to this heading"></a></h2>
+<p>Do all the above steps for all 3 pis. Then first run the pi which has the serial connection and has the <cite>is_server</cite> flag.</p>
+<p>Afterwards use the runner on the other 2 pis. If the clients disconnect at some point you can close the application
+and restart it. They can reconnect.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="setup.html" class="btn btn-neutral float-left" title="Setup" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="config.html" class="btn btn-neutral float-right" title="Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Lukas Staab, MIT Licence.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Index &mdash; lukas-staab/ball-and-hoop 2022 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="#" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            lukas-staab/ball-and-hoop
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="setup.html#hardware-setup">Hardware Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#hoop">Hoop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#raspberry-pis">Raspberry Pis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#network">Network</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html#software">Software</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#install-operating-system">Install Operating System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#deploy-via-ansible">Deploy via Ansible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#deploy-via-manual-installation">Deploy via manual installation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#calibration">Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#white-calibration">White-calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#hoop-or-ball-not-found">Hoop or ball not found</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#camera-out-of-memory-error">Camera out of memory error</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#run-application">Run application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#run-application-on-all-3-pis">Run application on all 3 pis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="debugging.html">Local development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html#understanding-the-code">Understanding the Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html#call-graph">Call-Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html#local-development">Local development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html#getting-mocked-video-material">Getting Mocked Video material</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="code/index.html">Full code API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code/src.ballandhoop.html">ballandhoop package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.application">Application module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.ball">Ball module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.helper">Helper module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.hoop">Hoop module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.image">Image module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.piHSVArray">PiHSVArray module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.videostream">Videostream module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.ballandhoop.html#module-src.ballandhoop.whiteBalancing">WhiteBalancing module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="code/src.chessboard.html">chessboard package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#module-src.chessboard.calibrate_chessboard">src.chessboard.calibrate_chessboard module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#module-src.chessboard.chessboard">src.chessboard.chessboard module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#module-src.chessboard.undistort">src.chessboard.undistort module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#module-src.chessboard.utils">src.chessboard.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/src.chessboard.html#module-src.chessboard">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="code/index.html#module-src.network">network module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.NetworkInterface"><code class="docutils literal notranslate"><span class="pre">NetworkInterface</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.addr"><code class="docutils literal notranslate"><span class="pre">addr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.init_network"><code class="docutils literal notranslate"><span class="pre">init_network()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.network.now"><code class="docutils literal notranslate"><span class="pre">now()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="code/index.html#module-src.serial">serial module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code/index.html#src.serial.SerialCom"><code class="docutils literal notranslate"><span class="pre">SerialCom</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">lukas-staab/ball-and-hoop</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Index</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#_"><strong>_</strong></a>
+ | <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#F"><strong>F</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
+ 
+</div>
+<h2 id="_">_</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.videostream.VideoStream.__iter__">__iter__() (src.ballandhoop.videostream.VideoStream method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.videostream.VideoStream.__next__">__next__() (src.ballandhoop.videostream.VideoStream method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/index.html#src.network.addr">addr() (in module src.network)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.ball.Ball.angle">angle() (src.ballandhoop.ball.Ball method)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.hoop.Hoop.angle_in_hoop">angle_in_hoop() (src.ballandhoop.hoop.Hoop method)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.hoop.Hoop.angle_of_vectors">angle_of_vectors() (src.ballandhoop.hoop.Hoop static method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.application.Application">Application (class in src.ballandhoop.application)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.image.Image.apply_blurring">apply_blurring() (src.ballandhoop.image.Image method)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.image.Image.apply_hoop_cutting">apply_hoop_cutting() (src.ballandhoop.image.Image method)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.image.Image.apply_undistort">apply_undistort() (src.ballandhoop.image.Image method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.ball.Ball">Ball (class in src.ballandhoop.ball)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.application.Application.ball_found_async_callback">ball_found_async_callback() (src.ballandhoop.application.Application method)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.application.Application.ball_search_error_callback">ball_search_error_callback() (src.ballandhoop.application.Application method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.whiteBalancing.WhiteBalancing.calculate">calculate() (src.ballandhoop.whiteBalancing.WhiteBalancing method)</a>
+</li>
+      <li><a href="code/src.chessboard.html#src.chessboard.chessboard.calibrate_chessboard">calibrate_chessboard() (in module src.chessboard.chessboard)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.image.Image.camera_matrix">camera_matrix (src.ballandhoop.image.Image attribute)</a>
+</li>
+      <li><a href="code/index.html#src.network.Client">Client (class in src.network)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.videostream.VideoStream.close">close() (src.ballandhoop.videostream.VideoStream method)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.image.Image.color_split">color_split() (src.ballandhoop.image.Image method)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.image.Image.create">create() (src.ballandhoop.image.Image static method)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.hoop.Hoop.create_from_image">create_from_image() (src.ballandhoop.hoop.Hoop static method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.application.Application.debug">debug() (src.ballandhoop.application.Application method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.image.Image.dist_matrix">dist_matrix (src.ballandhoop.image.Image attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.videostream.VideoStream.faker_stream_generator">faker_stream_generator() (src.ballandhoop.videostream.VideoStream method)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.hoop.Hoop.find_ball">find_ball() (src.ballandhoop.hoop.Hoop method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.hoop.Hoop.find_ball_async">find_ball_async() (src.ballandhoop.hoop.Hoop method)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.piHSVArray.PiHSVArray.flush">flush() (src.ballandhoop.piHSVArray.PiHSVArray method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.helper.get_bgr_picture">get_bgr_picture() (in module src.ballandhoop.helper)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.application.Application.get_cfg">get_cfg() (src.ballandhoop.application.Application method)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.helper.get_hsv_picture">get_hsv_picture() (in module src.ballandhoop.helper)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.hoop.Hoop">Hoop (class in src.ballandhoop.hoop)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.image.Image">Image (class in src.ballandhoop.image)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/index.html#src.network.init_network">init_network() (in module src.network)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/index.html#src.network.Server.latest_values">latest_values() (src.network.Server method)</a>
+</li>
+      <li><a href="code/src.chessboard.html#src.chessboard.utils.load_coefficients">load_coefficients() (in module src.chessboard.utils)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.application.Application.load_config_from_disk">load_config_from_disk() (src.ballandhoop.application.Application method)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.application.Application.local_config">local_config() (src.ballandhoop.application.Application method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.chessboard.html#src.chessboard.calibrate_chessboard.main">main() (in module src.chessboard.calibrate_chessboard)</a>
+
+      <ul>
+        <li><a href="code/src.chessboard.html#src.chessboard.undistort.main">(in module src.chessboard.undistort)</a>
+</li>
+      </ul></li>
+      <li>
+    module
+
+      <ul>
+        <li><a href="code/src.ballandhoop.html#module-src.ballandhoop.application">src.ballandhoop.application</a>
+</li>
+        <li><a href="code/src.ballandhoop.html#module-src.ballandhoop.ball">src.ballandhoop.ball</a>
+</li>
+        <li><a href="code/src.ballandhoop.html#module-src.ballandhoop.helper">src.ballandhoop.helper</a>
+</li>
+        <li><a href="code/src.ballandhoop.html#module-src.ballandhoop.hoop">src.ballandhoop.hoop</a>
+</li>
+        <li><a href="code/src.ballandhoop.html#module-src.ballandhoop.image">src.ballandhoop.image</a>
+</li>
+        <li><a href="code/src.ballandhoop.html#module-src.ballandhoop.piHSVArray">src.ballandhoop.piHSVArray</a>
+</li>
+        <li><a href="code/src.ballandhoop.html#module-src.ballandhoop.videostream">src.ballandhoop.videostream</a>
+</li>
+        <li><a href="code/src.ballandhoop.html#module-src.ballandhoop.whiteBalancing">src.ballandhoop.whiteBalancing</a>
+</li>
+        <li><a href="code/src.chessboard.html#module-src.chessboard">src.chessboard</a>
+</li>
+        <li><a href="code/src.chessboard.html#module-src.chessboard.calibrate_chessboard">src.chessboard.calibrate_chessboard</a>
+</li>
+        <li><a href="code/src.chessboard.html#module-src.chessboard.chessboard">src.chessboard.chessboard</a>
+</li>
+        <li><a href="code/src.chessboard.html#module-src.chessboard.undistort">src.chessboard.undistort</a>
+</li>
+        <li><a href="code/src.chessboard.html#module-src.chessboard.utils">src.chessboard.utils</a>
+</li>
+        <li><a href="code/index.html#module-src.network">src.network</a>
+</li>
+        <li><a href="code/index.html#module-src.serial">src.serial</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/index.html#src.network.NetworkInterface">NetworkInterface (class in src.network)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/index.html#src.network.now">now() (in module src.network)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.piHSVArray.PiHSVArray">PiHSVArray (class in src.ballandhoop.piHSVArray)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.image.Image.plot_angle">plot_angle() (src.ballandhoop.image.Image method)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.image.Image.plot_ball">plot_ball() (src.ballandhoop.image.Image method)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.image.Image.plot_ball_history">plot_ball_history() (src.ballandhoop.image.Image method)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.image.Image.plot_hoop">plot_hoop() (src.ballandhoop.image.Image method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.image.Image.plot_line">plot_line() (src.ballandhoop.image.Image method)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.image.Image.plot_rectangle">plot_rectangle() (src.ballandhoop.image.Image method)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.image.Image.plot_text">plot_text() (src.ballandhoop.image.Image method)</a>
+</li>
+      <li><a href="code/index.html#src.network.NetworkInterface.preprocess_message">preprocess_message() (src.network.NetworkInterface method)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.application.Application.print">print() (src.ballandhoop.application.Application method)</a>
+
+      <ul>
+        <li><a href="code/index.html#src.network.Server.print">(src.network.Server method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.helper.reset_content_of_dir">reset_content_of_dir() (in module src.ballandhoop.helper)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.videostream.VideoStream.resolutions">resolutions (src.ballandhoop.videostream.VideoStream attribute)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.videostream.VideoStream.rotations">rotations (src.ballandhoop.videostream.VideoStream attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.application.Application.run">run() (src.ballandhoop.application.Application method)</a>
+
+      <ul>
+        <li><a href="code/index.html#src.network.Server.run">(src.network.Server method)</a>
+</li>
+      </ul></li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.application.Application.run_calibration">run_calibration() (src.ballandhoop.application.Application method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.image.Image.save">save() (src.ballandhoop.image.Image method)</a>
+</li>
+      <li><a href="code/src.chessboard.html#src.chessboard.utils.save_coefficients">save_coefficients() (in module src.chessboard.utils)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.application.Application.save_col_and_add_from_config">save_col_and_add_from_config() (src.ballandhoop.application.Application method)</a>
+</li>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.application.Application.save_config_to_disk">save_config_to_disk() (src.ballandhoop.application.Application method)</a>
+</li>
+      <li><a href="code/index.html#src.network.Server.save_values">save_values() (src.network.Server method)</a>
+</li>
+      <li><a href="code/index.html#src.network.Client.send">send() (src.network.Client method)</a>
+
+      <ul>
+        <li><a href="code/index.html#src.network.NetworkInterface.send">(src.network.NetworkInterface method)</a>
+</li>
+        <li><a href="code/index.html#src.network.Server.send">(src.network.Server method)</a>
+</li>
+      </ul></li>
+      <li><a href="code/index.html#src.serial.SerialCom">SerialCom (class in src.serial)</a>
+</li>
+      <li><a href="code/index.html#src.network.Server">Server (class in src.network)</a>
+</li>
+      <li>
+    src.ballandhoop.application
+
+      <ul>
+        <li><a href="code/src.ballandhoop.html#module-src.ballandhoop.application">module</a>
+</li>
+      </ul></li>
+      <li>
+    src.ballandhoop.ball
+
+      <ul>
+        <li><a href="code/src.ballandhoop.html#module-src.ballandhoop.ball">module</a>
+</li>
+      </ul></li>
+      <li>
+    src.ballandhoop.helper
+
+      <ul>
+        <li><a href="code/src.ballandhoop.html#module-src.ballandhoop.helper">module</a>
+</li>
+      </ul></li>
+      <li>
+    src.ballandhoop.hoop
+
+      <ul>
+        <li><a href="code/src.ballandhoop.html#module-src.ballandhoop.hoop">module</a>
+</li>
+      </ul></li>
+      <li>
+    src.ballandhoop.image
+
+      <ul>
+        <li><a href="code/src.ballandhoop.html#module-src.ballandhoop.image">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    src.ballandhoop.piHSVArray
+
+      <ul>
+        <li><a href="code/src.ballandhoop.html#module-src.ballandhoop.piHSVArray">module</a>
+</li>
+      </ul></li>
+      <li>
+    src.ballandhoop.videostream
+
+      <ul>
+        <li><a href="code/src.ballandhoop.html#module-src.ballandhoop.videostream">module</a>
+</li>
+      </ul></li>
+      <li>
+    src.ballandhoop.whiteBalancing
+
+      <ul>
+        <li><a href="code/src.ballandhoop.html#module-src.ballandhoop.whiteBalancing">module</a>
+</li>
+      </ul></li>
+      <li>
+    src.chessboard
+
+      <ul>
+        <li><a href="code/src.chessboard.html#module-src.chessboard">module</a>
+</li>
+      </ul></li>
+      <li>
+    src.chessboard.calibrate_chessboard
+
+      <ul>
+        <li><a href="code/src.chessboard.html#module-src.chessboard.calibrate_chessboard">module</a>
+</li>
+      </ul></li>
+      <li>
+    src.chessboard.chessboard
+
+      <ul>
+        <li><a href="code/src.chessboard.html#module-src.chessboard.chessboard">module</a>
+</li>
+      </ul></li>
+      <li>
+    src.chessboard.undistort
+
+      <ul>
+        <li><a href="code/src.chessboard.html#module-src.chessboard.undistort">module</a>
+</li>
+      </ul></li>
+      <li>
+    src.chessboard.utils
+
+      <ul>
+        <li><a href="code/src.chessboard.html#module-src.chessboard.utils">module</a>
+</li>
+      </ul></li>
+      <li>
+    src.network
+
+      <ul>
+        <li><a href="code/index.html#module-src.network">module</a>
+</li>
+      </ul></li>
+      <li>
+    src.serial
+
+      <ul>
+        <li><a href="code/index.html#module-src.serial">module</a>
+</li>
+      </ul></li>
+      <li><a href="code/index.html#src.network.Server.stop">stop() (src.network.Server method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.videostream.VideoStream">VideoStream (class in src.ballandhoop.videostream)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/src.ballandhoop.html#src.ballandhoop.whiteBalancing.WhiteBalancing">WhiteBalancing (class in src.ballandhoop.whiteBalancing)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/index.html#src.serial.SerialCom.write">write() (src.serial.SerialCom method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Lukas Staab, MIT Licence.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
